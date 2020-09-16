@@ -186,7 +186,7 @@ def runServer(options):
     bookingMngr = BookingMngr(clientMngr, game, bookingDB)
 
     # either forced reset, or uninitialized server
-    if options.reset or not gameDB.keys():
+    if options.reset or not list(gameDB.keys()):
         # reset game
         log.message('Resetting game \'%s\'...' % gameName)
         game.reset()

@@ -18,7 +18,7 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-import log
+from . import log
 import smtplib
 from email.mime.text import MIMEText
 

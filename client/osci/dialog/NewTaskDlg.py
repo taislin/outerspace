@@ -27,10 +27,10 @@ from ige.ospace import Rules
 import ige.ospace.Const as Const
 
 from osci import gdata, client, res
-from TechInfoDlg import TechInfoDlg
-from ConstructionDlg import ConstructionDlg
-from ConfirmDlg import ConfirmDlg
-import Utils
+from .TechInfoDlg import TechInfoDlg
+from .ConstructionDlg import ConstructionDlg
+from .ConfirmDlg import ConfirmDlg
+from . import Utils
 
 
 class NewTaskDlg:
@@ -125,7 +125,7 @@ class NewTaskDlg:
     def _showStructures(self):
         items = []
 
-        for techID in client.getPlayer().techs.keys():
+        for techID in list(client.getPlayer().techs.keys()):
             tech = client.getTechInfo(techID)
             if not tech.isStructure or tech.level not in self.showLevels or \
                (tech.isStructure and not self._filterStructure(tech)):
@@ -136,7 +136,7 @@ class NewTaskDlg:
 
     def _showProjects(self):
         items = []
-        for techID in client.getPlayer().techs.keys():
+        for techID in list(client.getPlayer().techs.keys()):
             tech = client.getTechInfo(techID)
             if tech.level not in self.showLevels or not tech.isProject:
                 continue
@@ -148,7 +148,7 @@ class NewTaskDlg:
         items = []
         player = client.getPlayer()
 
-        for designID in player.shipDesigns.keys():
+        for designID in list(player.shipDesigns.keys()):
             tech = player.shipDesigns[designID]
             if not self._filterShipSize(tech) or not self._filterShipMilitary(tech):
                 continue
@@ -253,7 +253,7 @@ class NewTaskDlg:
                         techs[struct[Const.STRUCT_IDX_TECHID]] = 1
                     else:
                         techs[struct[Const.STRUCT_IDX_TECHID]] += 1
-                for tech in techs.keys():
+                for tech in list(techs.keys()):
                     techInfo = client.getTechInfo(tech)
                     item = ui.Item("%s (%d)" % (techInfo.name, techs[tech]), techID=tech)
                     items.append(item)
@@ -322,7 +322,7 @@ class NewTaskDlg:
                     self.techID, self.quantity, self.targetID, self.techID < 1000,
                     self.win.vReportFin.checked, self.structToDemolish)
                 self.win.setStatus(_('Command has been executed.'))
-            except GameException, e:
+            except GameException as e:
                 self.win.setStatus(e.args[0])
                 return
         self.hide()

@@ -22,14 +22,14 @@ import os
 import hashlib
 import random
 import time
-import log
+from . import log
 import ige
 from ige import SecurityException
 from ige.Const import ADMIN_LOGIN
-import Authentication
-from account import Account, AIAccount, AdminAccount, passwordGen
+from . import Authentication
+from .account import Account, AIAccount, AdminAccount, passwordGen
 from ai_parser import AIList
-from IDataHolder import IDataHolder
+from .IDataHolder import IDataHolder
 
 class ClientMngr:
 
@@ -60,7 +60,7 @@ class ClientMngr:
         self.accounts.backup(basename)
 
     def exists(self, login):
-        return self.accounts.has_key(str(login))
+        return str(login) in self.accounts
 
     def __getitem__(self, login):
         return self.accounts[str(login)]
@@ -68,7 +68,7 @@ class ClientMngr:
     def _initAdminAccount(self):
         # create special key
 
-        if self.accounts.has_key(ADMIN_LOGIN):
+        if ADMIN_LOGIN in self.accounts:
             self.accounts[ADMIN_LOGIN].passwdHashed = False # Needs plaintext login from token
             password = passwordGen()
             self.accounts[ADMIN_LOGIN].setPassword(password)
@@ -98,7 +98,7 @@ class ClientMngr:
         if len(nick) < ige.Const.ACCOUNT_NICK_MIN_LEN:
             raise SecurityException('Nick is too short.')
         # check login, nick and uid
-        for key in self.accounts.keys():
+        for key in list(self.accounts.keys()):
             account = self.accounts[key]
             if account.login == login:
                 raise SecurityException('Login already used.')
@@ -115,7 +115,7 @@ class ClientMngr:
         return 1, None
 
     def createAIAccount(self, login, nick, aiType):
-        if self.accounts.has_key(login):
+        if login in self.accounts:
             log.message('AI account already exists, no work needed.', login, nick)
             password = self.accounts[login].passwd
             return password, None
@@ -134,7 +134,7 @@ class ClientMngr:
     def generateAIList(self):
         aiList = AIList(self.configDir)
         aiList.removeAll()
-        for login in self.accounts.keys():
+        for login in list(self.accounts.keys()):
             account = self.accounts[login]
             if not account.isAI:
                 continue
@@ -148,7 +148,7 @@ class ClientMngr:
         return 1, None
 
     def resetAIAccounts(self):
-        for login in self.accounts.keys():
+        for login in list(self.accounts.keys()):
             account = self.accounts[login]
             if account.isAI:
                 self.accounts.delete(login)
@@ -160,7 +160,7 @@ class ClientMngr:
         # create sort of cookie
         while 1:
             sid = hashlib.sha256(str(random.random())).hexdigest()
-            if not self.sessions.has_key(sid):
+            if sid not in self.sessions:
                 break
         challenge = Authentication.getWelcomeString(self.authMethod)
         session = Session(sid)
@@ -179,7 +179,7 @@ class ClientMngr:
         login = str(login)
         challenge = self.sessions[sid].challenge
         log.debug("Trying local login for user", login)
-        if not self.accounts.has_key(login):
+        if login not in self.accounts:
             raise SecurityException('Wrong login and/or password.')
         account = self.accounts[login]
         plainPassword = Authentication.unwrapUserPassword(safePassword, challenge)
@@ -207,7 +207,7 @@ class ClientMngr:
 
     def getSessionByCID(self, cid):
         # TODO more effective - used by GameMngr.sendMessage
-        for sid in self.sessions.keys():
+        for sid in list(self.sessions.keys()):
             session = self.sessions[sid]
             if session.cid == cid:
                 return session
@@ -247,7 +247,7 @@ class ClientMngr:
             log.debug('cleaning up sessions')
             now = time.time()
             deleted = 0
-            for id in self.sessions.keys():
+            for id in list(self.sessions.keys()):
                 if self.sessions[id].timeout < now:
                     log.debug("Deleting session", self.sessions[id].sid, getattr(self.sessions[id], "login", "<unknown>"))
                     del self.sessions[id]
@@ -264,14 +264,14 @@ class ClientMngr:
             raise SecurityException('You cannot issue this command.')
         # export accounts
         f = open(os.path.join(self.configDir,"accounts.txt"), "w")
-        for account in self.accounts.keys():
+        for account in list(self.accounts.keys()):
             account = self.accounts[account]
-            print >>f, "%s\t%s\t%s\t%s" % (
+            print("%s\t%s\t%s\t%s" % (
                 account.nick.encode("utf-8"),
                 account.login.encode("utf-8"),
                 account.passwd.encode("utf-8"),
                 account.email.encode("utf-8")
-            )
+            ), file=f)
         f.close()
         return None, None
 

@@ -40,7 +40,7 @@ class Item:
         self.background = None
         self.index = None
         self.enabled = 1
-        for key, value in kwargs.items():
+        for key, value in list(kwargs.items()):
             setattr(self, key, value)
 
     def getAsString(self, key):

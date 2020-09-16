@@ -16,19 +16,19 @@ import sys
 import time
 
 # async modules
-import asyncore
-import asynchat
+from . import asyncore
+from . import asynchat
 
 # medusa modules
-import http_date
-import producers
-import status_handler
-import logger
+from . import http_date
+from . import producers
+from . import status_handler
+from . import logger
 
 VERSION_STRING = "Outer Space"
 
-from counter import counter
-from urllib import unquote
+from .counter import counter
+from urllib.parse import unquote
 
 # ===========================================================================
 #                            Request Object
@@ -78,14 +78,11 @@ class http_request:
         return self.reply_headers[key]
 
     def has_key (self, key):
-        return self.reply_headers.has_key (key)
+        return key in self.reply_headers
 
     def build_reply_header (self):
         return string.join (
-            [self.response(self.reply_code)] + map (
-                lambda x: '%s: %s' % x,
-                self.reply_headers.items()
-                ),
+            [self.response(self.reply_code)] + ['%s: %s' % x for x in list(self.reply_headers.items())],
             '\r\n'
             ) + '\r\n\r\n'
 
@@ -103,7 +100,7 @@ class http_request:
         if self._split_uri is None:
             m = self.path_regex.match (self.uri)
             if m.end() != len(self.uri):
-                raise ValueError, "Broken URI"
+                raise ValueError("Broken URI")
             else:
                 self._split_uri = m.groups()
         return self._split_uri
@@ -118,7 +115,7 @@ class http_request:
     def get_header (self, header):
         header = string.lower (header)
         hc = self._header_cache
-        if not hc.has_key (header):
+        if header not in hc:
             h = header + ': '
             hl = len(h)
             for line in self.header:
@@ -196,7 +193,7 @@ class http_request:
 
         if self.version == '1.0':
             if connection == 'keep-alive':
-                if not self.has_key ('Content-Length'):
+                if 'Content-Length' not in self:
                     close_it = 1
                 else:
                     self['Connection'] = 'Keep-Alive'
@@ -205,8 +202,8 @@ class http_request:
         elif self.version == '1.1':
             if connection == 'close':
                 close_it = 1
-            elif not self.has_key ('Content-Length'):
-                if self.has_key ('Transfer-Encoding'):
+            elif 'Content-Length' not in self:
+                if 'Transfer-Encoding' in self:
                     if not self['Transfer-Encoding'] == 'chunked':
                         close_it = 1
                 elif self.use_chunked:
@@ -376,7 +373,7 @@ class http_channel (asynchat.async_chat):
 
     def kill_zombies (self):
         now = int (time.time())
-        for channel in asyncore.socket_map.values():
+        for channel in list(asyncore.socket_map.values()):
             if channel.__class__ == self.__class__:
                 if (now - channel.creation_time) > channel.zombie_timeout:
                     channel.close()
@@ -409,7 +406,7 @@ class http_channel (asynchat.async_chat):
     def handle_error (self):
         t, v = sys.exc_info()[:2]
         if t is SystemExit:
-            raise t, v
+            raise t(v)
         else:
             asynchat.async_chat.handle_error (self)
 
@@ -625,7 +622,7 @@ class http_server (asyncore.dispatcher):
         def nice_bytes (n):
             return string.join (status_handler.english_bytes (n))
 
-        handler_stats = filter (None, map (maybe_status, self.handlers))
+        handler_stats = [_f for _f in map (maybe_status, self.handlers) if _f]
 
         if self.total_clients:
             ratio = self.total_requests.as_long() / float(self.total_clients.as_long())
@@ -746,16 +743,16 @@ tz_for_log = compute_timezone_for_log()
 if __name__ == '__main__':
     import sys
     if len(sys.argv) < 2:
-        print 'usage: %s <root> <port>' % (sys.argv[0])
+        print('usage: %s <root> <port>' % (sys.argv[0]))
     else:
         import monitor
-        import filesys
-        import default_handler
-        import status_handler
+        from . import filesys
+        from . import default_handler
+        from . import status_handler
         import ftp_server
         import chat_server
         import resolver
-        import logger
+        from . import logger
         rs = resolver.caching_resolver ('127.0.0.1')
         lg = logger.file_logger (sys.stdout)
         ms = monitor.secure_monitor_server ('fnord', '127.0.0.1', 9999)

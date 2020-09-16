@@ -19,12 +19,12 @@
 #
 import time
 
-import Const
+from . import Const
 
 from ige import log
 from ige.IDataHolder import IDataHolder
 from ige.IObject import public
-from IPlayer import IPlayer
+from .IPlayer import IPlayer
 
 class INature(IPlayer):
 
@@ -33,7 +33,7 @@ class INature(IPlayer):
     def init(self, obj):
         IPlayer.init(self, obj)
         #
-        obj.name = u'NATURE'
+        obj.name = 'NATURE'
         obj.login = '*NATURE*'
 
     @public(Const.AL_ADMIN)

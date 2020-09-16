@@ -18,12 +18,12 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 import pygame
-import Const
-from Widget import registerWidget
-from MetaWidget import MetaWidget
+from . import Const
+from .Widget import registerWidget
+from .MetaWidget import MetaWidget
 
-from ArrowButton import ArrowButton
-from ScrollSlider import ScrollSlider
+from .ArrowButton import ArrowButton
+from .ScrollSlider import ScrollSlider
 
 class Scrollbar(MetaWidget):
 

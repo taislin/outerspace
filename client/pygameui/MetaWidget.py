@@ -19,8 +19,8 @@
 #
 
 import pygame.event
-import Const
-from Widget import Widget
+from . import Const
+from .Widget import Widget
 
 class MetaWidget(Widget):
 
@@ -93,7 +93,7 @@ class MetaWidget(Widget):
     def redraw(self, widget, redrawParent = 0):
         if widget.visible:
             self.redrawWidgets[widget] = None
-        elif self.redrawWidgets.has_key(widget):
+        elif widget in self.redrawWidgets:
             del self.redrawWidgets[widget]
         if not self._changeReported:
             self.parent.redraw(self)

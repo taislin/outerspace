@@ -26,22 +26,22 @@ import random
 from xml.dom.minidom import Node, parse
 
 import ige
-from IAIPlayer import IAIPlayer
-from IAIEDENPlayer import IAIEDENPlayer
-from IAIMutantPlayer import IAIMutantPlayer
-from IAIPiratePlayer import IAIPiratePlayer
-from IAIRenegadePlayer import IAIRenegadePlayer
-import Const
-import Rules
-import Scanner
-import Utils
+from .IAIPlayer import IAIPlayer
+from .IAIEDENPlayer import IAIEDENPlayer
+from .IAIMutantPlayer import IAIMutantPlayer
+from .IAIPiratePlayer import IAIPiratePlayer
+from .IAIRenegadePlayer import IAIRenegadePlayer
+from . import Const
+from . import Rules
+from . import Scanner
+from . import Utils
 
 from ige import log
 from ige.IObject import IObject
 from ige.IDataHolder import IDataHolder
 from ige.IObject import public
-from ISystem import ISystem
-from Rules import Tech
+from .ISystem import ISystem
+from .Rules import Tech
 
 
 class IGalaxy(IObject):
@@ -79,13 +79,13 @@ class IGalaxy(IObject):
         # check existence of all systems
         if 0:
             for systemID in obj.systems:
-                if not tran.db.has_key(systemID):
+                if systemID not in tran.db:
                     log.debug("CONSISTENCY - system %d from galaxy %d does not exists" % (systemID, obj.oid))
                 elif tran.db[systemID].type not in (Const.T_SYSTEM, Const.T_WORMHOLE):
                     log.debug("CONSISTENCY - system %d from galaxy %d is not a Const.T_SYSTEM or Const.T_WORMHOLE" % (systemID, obj.oid))
         # validate starting positions
         for planetID in obj.startingPos[:]:
-            if not tran.db.has_key(planetID):
+            if planetID not in tran.db:
                 log.debug("REMOVING nonexistent obj from start pos", planetID)
                 obj.startingPos.remove(planetID)
                 continue
@@ -94,7 +94,7 @@ class IGalaxy(IObject):
                 log.debug("REMOVING ??? from start pos", planetID)
                 obj.startingPos.remove(planetID)
         # check compOf
-        if not tran.db.has_key(obj.compOf) or tran.db[obj.compOf].type != Const.T_UNIVERSE:
+        if obj.compOf not in tran.db or tran.db[obj.compOf].type != Const.T_UNIVERSE:
             log.debug("CONSISTENCY invalid compOf for galaxy", obj.oid, obj.compOf)
 
     def getReferences(self, tran, obj):
@@ -166,7 +166,7 @@ class IGalaxy(IObject):
         # compute scanner for all objects on the map
         playerMap = Scanner.computeMap(self, tran, obj)
         # distribute map
-        for playerID, map in playerMap.iteritems():
+        for playerID, map in playerMap.items():
             player = tran.db[playerID]
             self.cmd(player).mergeScannerMap(tran, player, map)
         return
@@ -201,11 +201,11 @@ class IGalaxy(IObject):
         if turn % 6 == 0 and False:
             log.debug("Saving history for galaxy", obj.oid, obj.name)
             fh = open(os.path.join(tran.config.configDir,"history/galaxy%d-%06d.xml" % (obj.oid, turn), "w+"))
-            print >>fh, '<?xml version="1.0" encoding="UTF-8"?>'
-            print >>fh, '<history turn="%d" galaxy="%d" name="%s">' % (turn, obj.oid, obj.name)
+            print('<?xml version="1.0" encoding="UTF-8"?>', file=fh)
+            print('<history turn="%d" galaxy="%d" name="%s">' % (turn, obj.oid, obj.name), file=fh)
             # save systems and owners
             players = {}
-            print >>fh, '  <systems>'
+            print('  <systems>', file=fh)
             for systemID in obj.systems:
                 system = tran.db[systemID]
                 owners = {}
@@ -214,18 +214,18 @@ class IGalaxy(IObject):
                     if ownerID != Const.OID_NONE:
                         owners[ownerID] = tran.db[ownerID].name
                         players[ownerID] = None
-                print >>fh, '    <sys x="%.2f" y="%.2f" name="%s" owners="%s"/>' % (
+                print('    <sys x="%.2f" y="%.2f" name="%s" owners="%s"/>' % (
                     system.x,
                     system.y,
                     system.name,
-                    ",".join(owners.values())
-                )
-            print >>fh, '  </systems>'
+                    ",".join(list(owners.values()))
+                ), file=fh)
+            print('  </systems>', file=fh)
             # stats
-            print >>fh, '  <stats>'
+            print('  <stats>', file=fh)
             for playerID in players:
                 player = tran.db[playerID]
-                print >>fh, '    <pl name="%s" pop="%d" planets="%d" stucts="%d" cp="%d" mp="%d" rp="%d"/>'% (
+                print('    <pl name="%s" pop="%d" planets="%d" stucts="%d" cp="%d" mp="%d" rp="%d"/>'% (
                     player.name,
                     player.stats.storPop,
                     player.stats.planets,
@@ -233,9 +233,9 @@ class IGalaxy(IObject):
                     player.stats.prodProd,
                     player.stats.fleetPwr,
                     player.stats.prodSci,
-                )
-            print >>fh, '  </stats>'
-            print >>fh, '</history>'
+                ), file=fh)
+            print('  </stats>', file=fh)
+            print('</history>', file=fh)
 
 
     @public(Const.AL_ADMIN)

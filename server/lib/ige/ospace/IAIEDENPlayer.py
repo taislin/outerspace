@@ -20,14 +20,14 @@
 
 import time
 
-import Const
-import Rules
-import Utils
+from . import Const
+from . import Rules
+from . import Utils
 
 from ige import log
 from ige.IDataHolder import IDataHolder
 from ige.IObject import public
-from IPlayer import IPlayer
+from .IPlayer import IPlayer
 
 class IAIEDENPlayer(IPlayer):
 
@@ -36,7 +36,7 @@ class IAIEDENPlayer(IPlayer):
     def init(self, obj):
         IPlayer.init(self, obj)
         #
-        obj.name = u'E.D.E.N.'
+        obj.name = 'E.D.E.N.'
         obj.race = "e"
         obj.login = '*'
 
@@ -44,7 +44,7 @@ class IAIEDENPlayer(IPlayer):
         log.debug("Registering player", obj.oid)
         counter = 1
         while 1:
-            obj.name = u'E.D.E.N. %d' % counter
+            obj.name = 'E.D.E.N. %d' % counter
             obj.login = '*AIP*eden%d' % counter
             if galaxyID in tran.gameMngr.accountGalaxies(obj.login):
                 counter += 1

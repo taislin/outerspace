@@ -23,12 +23,12 @@ import types
 
 import pygame
 
-import Const
-from Widget import registerWidget
-from MetaWidget import MetaWidget
-from Scrollbar import Scrollbar
-from Entry import Entry
-from Button import Button
+from . import Const
+from .Widget import registerWidget
+from .MetaWidget import MetaWidget
+from .Scrollbar import Scrollbar
+from .Entry import Entry
+from .Button import Button
 
 class Listbox(MetaWidget):
 
@@ -69,7 +69,7 @@ class Listbox(MetaWidget):
             label = Button(self, action = 'onSortByColumn')
             label.subscribeAction('*', self)
             self._buttons.append(label)
-            for i in xrange(0, rows):
+            for i in range(0, rows):
                 label = Button(self, action = 'onItemSelect', rmbAction = "onRmbItemSelect", hoverAction = "onItemHighlight", style = "listitem", toggle = 1)
                 label.subscribeAction('*', self)
                 self._labels.append(label)
@@ -104,7 +104,7 @@ class Listbox(MetaWidget):
                 x += width * gx
                 remains -= width
             startRow = 1
-        for row in xrange(startRow, rows):
+        for row in range(startRow, rows):
             rowLabels = []
             y = row * gy
             x = 0
@@ -209,11 +209,11 @@ class Listbox(MetaWidget):
         value = widget.text
         t = type(getattr(widget.data, widget._listboxColumn))
         try:
-            if t == types.IntType: value = int(value)
-            elif t == types.FloatType: value = float(value)
-            elif t == types.StringType: value = str(value)
-            elif t == types.UnicodeType: pass
-            elif t == types.LongType: value = long(value)
+            if t == int: value = int(value)
+            elif t == float: value = float(value)
+            elif t == bytes: value = str(value)
+            elif t == str: pass
+            elif t == int: value = int(value)
             else:
                 self._setListIndex(widget.data.index, widget.data)
                 return
@@ -266,7 +266,7 @@ class Listbox(MetaWidget):
         """
 
         convert = lambda text: int(text) if text.isdigit() else text.lower()
-        alphaNum = lambda key: [ convert(c) for c in re.split('([0-9]+)', unicode(key)) ]
+        alphaNum = lambda key: [ convert(c) for c in re.split('([0-9]+)', str(key)) ]
         keyF = lambda a: alphaNum(getattr(a, attr))
         items.sort(key=keyF, reverse = reverse)
 

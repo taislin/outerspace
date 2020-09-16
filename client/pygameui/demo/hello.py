@@ -81,6 +81,6 @@ while 1:
     if app.needsUpdate():
         screen.fill((0, 0, 0))
         rects = app.draw(screen)
-        print "UPDATE", rects
+        print("UPDATE", rects)
         #pygame.display.update()
         pygame.display.update(rects)

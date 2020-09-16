@@ -18,8 +18,8 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-import Const
-from Widget import Widget, registerWidget
+from . import Const
+from .Widget import Widget, registerWidget
 
 class Title(Widget):
 

@@ -19,13 +19,13 @@
 #
 import time
 
-import Rules
-import ShipUtils
-import Utils
+from . import Rules
+from . import ShipUtils
+from . import Utils
 
-import Const
+from . import Const
 from ige import log
-from IPlayer import IPlayer
+from .IPlayer import IPlayer
 from ige.IObject import public
 from ige.IDataHolder import IDataHolder
 
@@ -37,7 +37,7 @@ class IAIMutantPlayer(IPlayer):
     def init(self, obj):
         IPlayer.init(self, obj)
         #
-        obj.name = u'Mutant'
+        obj.name = 'Mutant'
         obj.race = "m"
         obj.login = '*'
 
@@ -45,7 +45,7 @@ class IAIMutantPlayer(IPlayer):
         log.debug("Registering player", obj.oid)
         counter = 1
         while 1:
-            obj.name = u'Mutant faction %d' % counter
+            obj.name = 'Mutant faction %d' % counter
             obj.login = '*AIP*mutant%d' % counter
             if galaxyID in tran.gameMngr.accountGalaxies(obj.login):
                 counter += 1

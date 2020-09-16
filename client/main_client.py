@@ -25,6 +25,7 @@ import random
 import re
 import time
 import sys
+import importlib
 
 """
 To save people trouble with installing PyGame, which might be a bit of
@@ -39,13 +40,13 @@ except ImportError:
     print("Outer Space client requires PyGame to work properly.")
     print("PyGame will be installed in 10 seconds")
     print("You can cancel the installation by pressing CTRL+C or by closing this window")
-    for i in xrange(10,0,-1):
-        print i
+    for i in range(10,0,-1):
+        print(i)
         time.sleep(1)
     pip.main(['install','pygame','--user'])
     # reload needs to happen, so we can import right away
     import site
-    reload(site)
+    importlib.reload(site)
     import pygame
 
 import pygame.image, pygame.ftfont, pygame.time, pygame.version
@@ -193,12 +194,12 @@ def runClient(options):
     first = True
     #while running:
     if not first:
-        reload(osci)
+        importlib.reload(osci)
     # parse configuration
     if first:
         import osci.gdata as gdata
     else:
-        reload(gdata)
+        importlib.reload(gdata)
 
     gdata.config = Config(os.path.join(options.configDir, options.configFilename))
     gdata.config.game.server = options.server
@@ -219,7 +220,7 @@ def runClient(options):
             log.message('OSCI', 'Installing null translations')
             tran = gettext.NullTranslations()
 
-    tran.install(unicode = 1)
+    tran.install(str = 1)
 
 
     #initialize pygame and prepare screen
@@ -273,7 +274,7 @@ def runClient(options):
     if first:
             import pygameui as ui
     else:
-            reload(ui)
+            importlib.reload(ui)
 
     setSkinTheme(gdata, ui)
 
@@ -303,15 +304,15 @@ def runClient(options):
             import osci.client, osci.handler
             from igeclient.IClient import IClientException
         else:
-            reload(osci.client)
-            reload(osci.handler)
+            importlib.reload(osci.client)
+            importlib.reload(osci.handler)
         osci.client.initialize(gdata.config.game.server, osci.handler, options)
 
         # create initial dialogs
         if first:
             import osci.dialog
         else:
-            reload(osci.dialog)
+            importlib.reload(osci.dialog)
         gdata.savePassword = gdata.config.game.lastpasswordcrypted != None
 
         if options.login and options.password:
@@ -383,17 +384,17 @@ def runClient(options):
                     osci.client.saveDB()
                     lastSave = time.clock();
 
-            except IClientException, e:
+            except IClientException as e:
                 osci.client.reinitialize()
                 gdata.app.setStatus(e.args[0])
                 loginDlg.display(message = e.args[0])
-            except Exception, e:
+            except Exception as e:
                 log.warning('OSCI', 'Exception in event loop')
                 if not isinstance(e, SystemExit) and not isinstance(e, KeyboardInterrupt):
                     log.debug("Processing exception")
                     # handle exception
-                    import traceback, StringIO
-                    fh = StringIO.StringIO()
+                    import traceback, io
+                    fh = io.StringIO()
                     exctype, value, tb = sys.exc_info()
                     funcs = [entry[2] for entry in traceback.extract_tb(tb)]
                     faultID = "%06d-%03d" % (
@@ -402,11 +403,11 @@ def runClient(options):
                     )
                     del tb
                     # high level info
-                    print >>fh, "Exception ID:", faultID
-                    print >>fh
-                    print >>fh, "%s: %s" % (exctype, value)
-                    print >>fh
-                    print >>fh, "--- EXCEPTION DATA ---"
+                    print("Exception ID:", faultID, file=fh)
+                    print(file=fh)
+                    print("%s: %s" % (exctype, value), file=fh)
+                    print(file=fh)
+                    print("--- EXCEPTION DATA ---", file=fh)
                     # dump exception
                     traceback.print_exc(file = fh)
                     excDlg = osci.dialog.ExceptionDlg(gdata.app)
@@ -421,7 +422,7 @@ def runClient(options):
         log.debug("Saving configuration.")
         # Save highlights
         hl = ""
-        for playerID in gdata.playersHighlightColors.keys():
+        for playerID in list(gdata.playersHighlightColors.keys()):
             color = gdata.playersHighlightColors[playerID]
             r = hex(color[0])
             g = hex(color[1])
@@ -430,7 +431,7 @@ def runClient(options):
         gdata.config.defaults.colors = hl
         # Save objects
         of = ""
-        for keyNum in gdata.objectFocus.keys():
+        for keyNum in list(gdata.objectFocus.keys()):
             objid = gdata.objectFocus[keyNum]
             of = "%s %s:%s" % (of,keyNum,objid)
         gdata.config.defaults.objectkeys = of

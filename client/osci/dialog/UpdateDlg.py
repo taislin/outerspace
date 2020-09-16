@@ -27,7 +27,7 @@ import pygameui as ui
 import re
 import shutil
 import sys
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import tarfile
 
 class UpdateDlg:
@@ -74,9 +74,9 @@ class UpdateDlg:
         # get file
         try:
             # open URL
-            opener = urllib2.build_opener(urllib2.ProxyHandler(proxies))
+            opener = urllib.request.build_opener(urllib.request.ProxyHandler(proxies))
             # it unfortunately is not completely reliable
-            for i in xrange(1,5):
+            for i in range(1,5):
                 try:
                     ifh = opener.open(self.url)
                     log.debug("Retrieving URL", ifh.geturl())
@@ -106,7 +106,7 @@ class UpdateDlg:
             ifh.close()
             ofh.close()
             return filename
-        except urllib2.URLError, e:
+        except urllib.error.URLError as e:
             log.warning("Cannot download file")
             self.reportFailure(_("Cannot finish download: %(s)") % str(e.reason))
             return None
@@ -180,7 +180,7 @@ class UpdateDlg:
 
     def onRestart(self, widget, action, data):
         if os.name == 'nt':
-            quoted = map(lambda x: '"' + str(x) + '"', sys.argv)
+            quoted = ['"' + str(x) + '"' for x in sys.argv]
             os.execl(sys.executable, sys.executable, *quoted)
         else:
             os.execl(sys.executable, sys.executable, *sys.argv)

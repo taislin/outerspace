@@ -21,24 +21,24 @@
 import pygameui as ui
 from osci import client, res, gdata
 from osci.SystemMapWidget import SystemMapWidget
-from NewTaskDlg import NewTaskDlg
-from StructTaskDlg import StructTaskDlg
-from RenameSysDlg import RenameSysDlg
-from TechInfoDlg import TechInfoDlg
-from ConfirmDlg import ConfirmDlg
-from BuoyDlg import BuoyDlg
-from ConstructionDlg import ConstructionDlg
-from FleetRedirectionDlg import FleetRedirectionDlg
-from FleetMassRedirectionDlg import FleetMassRedirectionDlg
-from MinefieldDlg import MinefieldDlg
-from ChangeQtyDlg import ChangeQtyDlg
-from LocateDlg import LocateDlg
+from .NewTaskDlg import NewTaskDlg
+from .StructTaskDlg import StructTaskDlg
+from .RenameSysDlg import RenameSysDlg
+from .TechInfoDlg import TechInfoDlg
+from .ConfirmDlg import ConfirmDlg
+from .BuoyDlg import BuoyDlg
+from .ConstructionDlg import ConstructionDlg
+from .FleetRedirectionDlg import FleetRedirectionDlg
+from .FleetMassRedirectionDlg import FleetMassRedirectionDlg
+from .MinefieldDlg import MinefieldDlg
+from .ChangeQtyDlg import ChangeQtyDlg
+from .LocateDlg import LocateDlg
 import ige
 import ige.ospace.Const as Const
 from ige.ospace import Rules
 from ige import log
 import math
-import Utils
+from . import Utils
 
 INFO_NONE = 0
 INFO_TASK = 1
@@ -626,7 +626,7 @@ class StarSystemDlg:
             self.win.vSMassRedirect.enabled = 0
 
         if hasattr(player, "buoys"):
-            if self.systemID in player.buoys.keys():
+            if self.systemID in list(player.buoys.keys()):
                 self.win.vSBuoy.text = _("Edit buoy")
                 self.win.vSDeleteBuoy.enabled = 1
             else:
@@ -935,7 +935,7 @@ class StarSystemDlg:
             self.showPlanet()
             self.win.vPSlots.selectItem(self.win.vPSlots.items[self.plInfoData])
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(e.args[0])
             return
 
@@ -955,7 +955,7 @@ class StarSystemDlg:
             self.showPlanet()
             self.win.vPSlots.selectItem(self.win.vPSlots.items[self.plInfoData])
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(e.args[0])
             return
 
@@ -969,7 +969,7 @@ class StarSystemDlg:
             self.showPlanet()
             self.win.vPSlots.selectItem(self.win.vPSlots.items[self.plInfoData])
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(e.args[0])
             return
 
@@ -986,7 +986,7 @@ class StarSystemDlg:
             self.plInfoData = self.plInfoDataSelected = None
             self.win.vPSlots.selectItem(None)
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(e.args[0])
             return
         self.showPlanet()
@@ -1012,7 +1012,7 @@ class StarSystemDlg:
             self.showPlanet()
             self.win.vPQueue.selectItem(self.win.vPQueue.items[self.plInfoData])
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(e.args[0])
             return
 
@@ -1026,7 +1026,7 @@ class StarSystemDlg:
             self.showPlanet()
             self.win.vPQueue.selectItem(self.win.vPQueue.items[self.plInfoData])
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(e.args[0])
             return
 
@@ -1048,7 +1048,7 @@ class StarSystemDlg:
                 planet.prodQueue, player.stratRes = client.cmdProxy.changeConstruction(self.planetID, self.plInfoData, self.changeQtyDlg.quantity)
                 self.showPlanet()
                 self.win.setStatus(_('Command has been executed.'))
-            except ige.GameException, e:
+            except ige.GameException as e:
                 self.win.setStatus(e.args[0])
                 return
 
@@ -1063,7 +1063,7 @@ class StarSystemDlg:
             self.win.vPQueue.selectItem(None)
             self.showPlanet()
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(e.args[0])
             return
 
@@ -1106,7 +1106,7 @@ class StarSystemDlg:
         buoyType = Const.BUOY_PRIVATE
         player = client.getPlayer()
         if hasattr(player, "buoys"):
-            if self.systemID in player.buoys.keys():
+            if self.systemID in list(player.buoys.keys()):
                 buoyText = player.buoys[self.systemID][0]
                 buoyType = player.buoys[self.systemID][1]
         self.buoyDlg.display(buoyText, buoyType, self.onBuoyConfirmed)
@@ -1120,7 +1120,7 @@ class StarSystemDlg:
             self.win.vSystemMap.computeBuoy()
             self.showSystem()
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(e.args[0])
             return
 
@@ -1133,7 +1133,7 @@ class StarSystemDlg:
             self.win.vSystemMap.computeBuoy()
             self.showSystem()
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(e.args[0])
             return
 
@@ -1145,7 +1145,7 @@ class StarSystemDlg:
 
     def onGlobalQueuesMenu(self, widget, action, data):
         items = []
-        for queue in xrange(5):
+        for queue in range(5):
             items.append(ui.Item(res.globalQueueName(queue),tQue = queue))
         self.queueWin.vGlobalQueues.items = items
         self.queueWin.vGlobalQueues.itemsChanged()
@@ -1165,7 +1165,7 @@ class StarSystemDlg:
             self.queueWin.hide()
             self.win.setStatus(_('Command has been executed.'))
             self.update()
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(e.args[0])
             return
 

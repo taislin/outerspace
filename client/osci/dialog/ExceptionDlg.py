@@ -21,7 +21,7 @@
 import pygameui as ui
 from osci import gdata, client
 from ige.version import versionString
-import xmlrpclib, time, os, pygame, sys
+import xmlrpc.client, time, os, pygame, sys
 
 class ExceptionDlg:
 
@@ -74,7 +74,7 @@ class ExceptionDlg:
         # post exception text
         # TODO support proxies
         url = "http://%s/RPC2" % gdata.config.game.server
-        server = xmlrpclib.ServerProxy(url)
+        server = xmlrpc.client.ServerProxy(url)
         server.issuemngr.reportIssue(self.faultID, self.excText)
         self.win.vSend.enabled = 0
 

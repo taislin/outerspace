@@ -164,7 +164,7 @@ class FleetSpecsDlg:
                     designs[designID] = 1
                     designHPs[designID] = hp
                     designSHs[designID] = shield
-            for designID in designs.keys():
+            for designID in list(designs.keys()):
                 size = self.calcDesign(designID,designs[designID],self.showMaxHPs)
                 if not self.showMaxHPs:
                     if size==0:

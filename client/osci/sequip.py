@@ -101,9 +101,9 @@ def getShortDescr(techID, myDetail = SHORT):
                 if not filter:
                     result.append(_(text))
                 elif eff:
-                    result.append(_(text) % filter(techEff * getattr(tech, attr)))
+                    result.append(_(text) % list(filter(techEff * getattr(tech, attr))))
                 else:
-                    result.append(_(text) % filter(getattr(tech, attr)))
+                    result.append(_(text) % list(filter(getattr(tech, attr))))
     # general
     for detail, attr, text, filter, eff in descr["*"]:
         if tech.isDefault(attr):
@@ -112,9 +112,9 @@ def getShortDescr(techID, myDetail = SHORT):
             if not filter:
                 result.append(_(text))
             elif eff:
-                result.append(_(text) % filter(techEff * getattr(tech, attr)))
+                result.append(_(text) % list(filter(techEff * getattr(tech, attr))))
             else:
-                result.append(_(text) % filter(getattr(tech, attr)))
+                result.append(_(text) % list(filter(getattr(tech, attr))))
     if result:
         return string.join(result, ", ")
     else:

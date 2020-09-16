@@ -19,10 +19,10 @@
 #
 import pygame
 
-import Const
-from Widget import widgets, registerWidget
-from MetaWidget import MetaWidget
-from Button import Button
+from . import Const
+from .Widget import widgets, registerWidget
+from .MetaWidget import MetaWidget
+from .Button import Button
 
 class Window(MetaWidget):
 

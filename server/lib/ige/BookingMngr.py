@@ -25,7 +25,7 @@ import time
 
 import data
 import ige
-import log
+from . import log
 
 from ige.ClientMngr import Session
 from ige.ospace import Const
@@ -104,7 +104,7 @@ class BookingMngr(object):
                 bookings.append(book)
 
         # cleanup of those not used anymore
-        for bookID in self.db.keys():
+        for bookID in list(self.db.keys()):
             gal_type = self.db[bookID].gal_type
             if gal_type not in self.offerings:
                 del self.db[bookID]
@@ -127,7 +127,7 @@ class BookingMngr(object):
 
     def _get_type_bookings(self, gal_type):
         bookings = []
-        for bookID in self.db.keys():
+        for bookID in list(self.db.keys()):
             book = self.db[bookID]
             if book.gal_type == gal_type:
                 bookings.append(book)
@@ -155,7 +155,7 @@ class BookingMngr(object):
         answer.maxPlanets = template.maxPlanets
         answer.radius = template.radius
         answer.players = template.players
-        answer.resources = template.resources.keys()
+        answer.resources = list(template.resources.keys())
         answer.challenges = self._get_challenges(template)
 
         if not template.startR[0] or not template.startR[1]:
@@ -186,7 +186,7 @@ class BookingMngr(object):
     def _get_booking_answers(self, sid):
         login = self.clientMngr.getSession(sid).login
         answers = {}
-        for bookID in self.db.keys():
+        for bookID in list(self.db.keys()):
             book = self.db[bookID]
             if not self._is_valid_offer(sid, book.gal_type):
                 continue
@@ -220,7 +220,7 @@ class BookingMngr(object):
 
     def _private_bookings_limit(self, login):
         no_books = 0
-        for bookID in self.db.keys():
+        for bookID in list(self.db.keys()):
             book = self.db[bookID]
             if book.owner == login:
                 no_books += 1

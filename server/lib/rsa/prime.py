@@ -134,7 +134,7 @@ def are_relatively_prime(a, b):
     return (d == 1)
 
 if __name__ == '__main__':
-    print 'Running doctests 1000x or until failure'
+    print('Running doctests 1000x or until failure')
     import doctest
 
     for count in range(1000):
@@ -143,6 +143,6 @@ if __name__ == '__main__':
             break
 
         if count and count % 100 == 0:
-            print '%i times' % count
+            print('%i times' % count)
 
-    print 'Doctests done'
+    print('Doctests done')

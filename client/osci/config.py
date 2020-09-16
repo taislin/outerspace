@@ -19,7 +19,7 @@
 #
 
 import os.path
-from ConfigParser import ConfigParser
+from configparser import ConfigParser
 
 class Config:
     """Encapsulation of ConfigParser class.

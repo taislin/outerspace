@@ -24,7 +24,7 @@ import math
 import os
 import re
 
-import gdata, client
+from . import gdata, client
 import pygame, pygame.image
 from osci import gdata
 import ige.ospace.Const as Const
@@ -166,7 +166,7 @@ def loadResources(progress_dlg=None):
 
 
 def prepareUIIcons(color):
-    for image in ui_icons.values():
+    for image in list(ui_icons.values()):
         image.fill((0, 0, 0, 255), None, pygame.BLEND_RGBA_MULT)
         image.fill(color[0:3] + (0, ), None, pygame.BLEND_RGBA_ADD)
 
@@ -333,7 +333,7 @@ def getPlayerColor(owner, onlyDiplo = False):
         return getFFColorCode(Const.REL_UNDEF)
     if not onlyDiplo:
         if gdata.config.defaults.highlights == 'yes':
-            if gdata.playersHighlightColors.has_key(owner):
+            if owner in gdata.playersHighlightColors:
                 return gdata.playersHighlightColors[owner]
     rel = min(Const.REL_UNDEF, client.getRelationTo(owner))
     return getFFColorCode(rel)
@@ -344,7 +344,7 @@ def getControlColor(owner, onlyDiplo = False):
         return False
     if not onlyDiplo:
         if gdata.config.defaults.highlights == 'yes':
-            if gdata.playersHighlightColors.has_key(owner):
+            if owner in gdata.playersHighlightColors:
                 return fadeDarkColor(gdata.playersHighlightColors[owner])
     rel = min(Const.REL_UNDEF, client.getRelationTo(owner))
     return fadeDarkColor(getFFColorCode(rel))

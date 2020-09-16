@@ -22,7 +22,7 @@ from pygameui.Widget import Widget, registerWidget
 import ige.ospace.Const as Const
 import pygame, pygame.draw
 from ige import log
-import res, client
+from . import res, client
 
 borderColor = (0x00, 0x00, 0x90)
 rectColor = (29, 118, 229)
@@ -54,7 +54,7 @@ class MiniMap:
         galaxy = client.get(galaxy_id, noUpdate = 1)
         minX, maxX = galaxy.x - galaxy.radius, galaxy.x + galaxy.radius
         minY, maxY = galaxy.y - galaxy.radius, galaxy.y + galaxy.radius
-        for objID in client.db.keys():
+        for objID in list(client.db.keys()):
             if objID < Const.OID_FREESTART:
                 continue
             obj = client.get(objID, noUpdate = 1)

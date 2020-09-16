@@ -20,8 +20,8 @@
 
 import pygame
 
-import Const
-from Widget import Widget, registerWidget
+from . import Const
+from .Widget import Widget, registerWidget
 
 # keys mapping
 mapping = {
@@ -37,7 +37,7 @@ class Entry(Widget):
     def __init__(self, parent, **kwargs):
         Widget.__init__(self, parent)
         # data
-        self.__dict__['text'] = u''
+        self.__dict__['text'] = ''
         self.__dict__['cursorPos'] = 0
         self.__dict__['action'] = None
         self.__dict__['showChar'] = None
@@ -86,12 +86,12 @@ class Entry(Widget):
             if self.cursorPos < len(self.text): self.cursorPos += 1
         elif evt.key == pygame.K_TAB:
             pass
-        elif hasattr(evt, 'unicode') and evt.unicode:
+        elif hasattr(evt, 'unicode') and evt.str:
             # TODO this is ugly windows only hack needed for Win 9x and XP
             # char = unicode(chr(ord(evt.unicode)), 'cp1250')
-            char = evt.unicode
+            char = evt.str
             if self.text:
-                self.text = u'%s%c%s' % (
+                self.text = '%s%c%s' % (
                     self.text[:self.cursorPos], char, self.text[self.cursorPos:]
                 )
             else:

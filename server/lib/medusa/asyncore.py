@@ -46,7 +46,7 @@ many of the difficult problems for you, making the task of building
 sophisticated high-performance network servers and clients a snap.
 """
 
-import exceptions
+import builtins
 import select
 import socket
 import string
@@ -68,7 +68,7 @@ try:
 except NameError:
     socket_map = {}
 
-class ExitNow (exceptions.Exception):
+class ExitNow (builtins.Exception):
     pass
 
 DEBUG = 0
@@ -79,7 +79,7 @@ def poll (timeout=0.0, map=None):
         map = socket_map
     if map:
         r = []; w = []; e = []
-        for fd, obj in map.items():
+        for fd, obj in list(map.items()):
             if obj.readable():
                 r.append (fd)
             if obj.writable():
@@ -87,7 +87,7 @@ def poll (timeout=0.0, map=None):
         r,w,e = select.select (r,w,e, timeout)
 
         if DEBUG:
-            print r,w,e
+            print(r,w,e)
 
         for fd in r:
             try:
@@ -121,7 +121,7 @@ def poll2 (timeout=0.0, map=None):
     timeout = int(timeout*1000)
     if map:
         l = []
-        for fd, obj in map.items():
+        for fd, obj in list(map.items()):
             flags = 0
             if obj.readable():
                 flags = poll.POLLIN
@@ -154,7 +154,7 @@ def poll3 (timeout=0.0, map=None):
     pollster = select.poll()
     if map:
         l = []
-        for fd, obj in map.items():
+        for fd, obj in list(map.items()):
             flags = 0
             if obj.readable():
                 flags = select.POLLIN
@@ -240,7 +240,7 @@ class dispatcher:
         fd = self._fileno
         if map is None:
             map=socket_map
-        if map.has_key (fd):
+        if fd in map:
             #self.log_info ('closing channel %d:%s' % (fd, self))
             del map [fd]
 
@@ -302,11 +302,11 @@ class dispatcher:
         self.connected = 0
         try:
             self.socket.connect (address)
-        except socket.error, why:
+        except socket.error as why:
             if why[0] in (EINPROGRESS, EALREADY, EWOULDBLOCK):
                 return
             else:
-                raise socket.error, why
+                raise socket.error(why)
         self.connected = 1
         self.handle_connect()
 
@@ -314,21 +314,21 @@ class dispatcher:
         try:
             conn, addr = self.socket.accept()
             return conn, addr
-        except socket.error, why:
+        except socket.error as why:
             if why[0] == EWOULDBLOCK:
                 pass
             else:
-                raise socket.error, why
+                raise socket.error(why)
 
     def send (self, data):
         try:
             result = self.socket.send (data)
             return result
-        except socket.error, why:
+        except socket.error as why:
             if why[0] == EWOULDBLOCK:
                 return 0
             else:
-                raise socket.error, why
+                raise socket.error(why)
             return 0
 
     def recv (self, buffer_size):
@@ -341,13 +341,13 @@ class dispatcher:
                 return ''
             else:
                 return data
-        except socket.error, why:
+        except socket.error as why:
             # winsock sometimes throws ENOTCONN
             if why[0] in [ECONNRESET, ENOTCONN, ESHUTDOWN]:
                 self.handle_close()
                 return ''
             else:
-                raise socket.error, why
+                raise socket.error(why)
 
     def close (self):
         self.del_channel()
@@ -367,7 +367,7 @@ class dispatcher:
 
     def log_info (self, message, type='info'):
         if __debug__ or type != 'info':
-            print '%s: %s' % (type, message)
+            print('%s: %s' % (type, message))
 
     def handle_read_event (self):
         if self.accepting:
@@ -481,10 +481,7 @@ def compact_traceback ():
 
     file, function, line = tbinfo[-1]
     info = '[' + string.join (
-        map (
-            lambda x: string.join (x, '|'),
-            tbinfo
-            ),
+        [string.join (x, '|') for x in tbinfo],
         '] ['
         ) + ']'
     return (file, function, line), t, v, info
@@ -492,7 +489,7 @@ def compact_traceback ():
 def close_all (map=None):
     if map is None:
         map=socket_map
-    for x in map.values():
+    for x in list(map.values()):
         x.socket.close()
     map.clear()
 
@@ -520,10 +517,10 @@ if os.name == 'posix':
             self.fd = fd
 
         def recv (self, *args):
-            return apply (os.read, (self.fd,)+args)
+            return os.read(*(self.fd,)+args)
 
         def send (self, *args):
-            return apply (os.write, (self.fd,)+args)
+            return os.write(*(self.fd,)+args)
 
         read = recv
         write = send

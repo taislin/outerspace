@@ -82,7 +82,7 @@ class FleetMassRedirectionDlg:
                     self.targetID, self.systemID)
                 self.win.setStatus(_('Command has been executed.'))
                 self.win.vStarMap.precompute()
-            except GameException, e:
+            except GameException as e:
                 self.win.setStatus(e.args[0])
         else:
             self.win.vStarMap.hightlightPos = None

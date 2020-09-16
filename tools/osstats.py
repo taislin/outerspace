@@ -39,7 +39,7 @@ count = {}
 total = {}
 maxval = {}
 
-for oid in gameDB.keys():
+for oid in list(gameDB.keys()):
     t = typeIdToString(gameDB[oid])
     #~ print oid, t, gameDB.view.itemsize(gameDB.view.data, i)
     if t not in count:
@@ -50,7 +50,7 @@ for oid in gameDB.keys():
     total[t] += gameDB.getItemLength(oid)
     maxval[t] = max(maxval[t], gameDB.getItemLength(oid))
 
-print "%15s %10s %10s %10s %10s" % ("TYPE", "COUNT", "TOTAL", "AVG", "MAX")
-print 59 * "-"
+print("%15s %10s %10s %10s %10s" % ("TYPE", "COUNT", "TOTAL", "AVG", "MAX"))
+print(59 * "-")
 for key in count:
-    print "%15s %10d %10d %10d %10d" % (key, count[key], total[key], total[key] / count[key], maxval[key])
+    print("%15s %10d %10d %10d %10d" % (key, count[key], total[key], total[key] / count[key], maxval[key]))

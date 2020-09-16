@@ -18,7 +18,7 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-import cPickle as pickle
+import pickle as pickle
 import os.path
 from ige import log
 class IClientDB:
@@ -35,7 +35,7 @@ class IClientDB:
 
     def __setitem__(self, key, value):
         if value != None:
-            if self.data.has_key(key):
+            if key in self.data:
                 self.data[key].__dict__.update(value.__dict__)
             else:
                 self.data[key] = value
@@ -49,7 +49,7 @@ class IClientDB:
         return self.data.get(key, default)
 
     def has_key(self, key):
-        return self.data.has_key(key)
+        return key in self.data
 
     def load(self):
         try:
@@ -77,14 +77,14 @@ class IClientDB:
         fh.close()
 
     def needsUpdate(self, key, maxDelta = 0):
-        return (not self.timestamp.has_key(key)) or self.timestamp[key] < self.turn - maxDelta
+        return (key not in self.timestamp) or self.timestamp[key] < self.turn - maxDelta
 
     def touch(self, key):
         self.timestamp[key] = self.turn
 
     def getLastUpdate(self):
         lastUpdate = -1
-        for value in self.timestamp.values():
+        for value in list(self.timestamp.values()):
             lastUpdate = max(lastUpdate, value)
         return lastUpdate
 
@@ -93,4 +93,4 @@ class IClientDB:
         self.timestamp = {}
 
     def keys(self):
-        return self.data.keys()
+        return list(self.data.keys())

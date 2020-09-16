@@ -31,7 +31,7 @@ class IDataHolder:
     # for debug only
     def __repr__(self):
         result = '<%s.%s %X ' % (self.__class__.__module__, self.__class__.__name__, id(self))
-        items = self.__dict__.items()
+        items = list(self.__dict__.items())
         items.sort()
         for key, value in items:
             result += '%s=%s, ' % (key, repr(value))
@@ -40,6 +40,6 @@ class IDataHolder:
 
 def makeIDataHolder(**kwargs):
     obj = IDataHolder()
-    for key, value in kwargs.items():
+    for key, value in list(kwargs.items()):
         setattr(obj, key, value)
     return obj

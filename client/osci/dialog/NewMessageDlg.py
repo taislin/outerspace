@@ -76,7 +76,7 @@ class NewMessageDlg:
             text = ""
             for objId in self.recipientObjID:
                 recipient = client.get(objId)
-                text = u"%s, %s" % (text, _("%s / %s") % (recipient.name, _(self.msgSpec[0])))
+                text = "%s, %s" % (text, _("%s / %s") % (recipient.name, _(self.msgSpec[0])))
             self.win.vRecipient.text = text[2:]
             self.win.vRecipient.action = None
         else:
@@ -111,7 +111,7 @@ class NewMessageDlg:
         for item in self.cwin.vContacts.selection:
             self.recipientObjID.append(item.tRecipientID)
             recipient = client.get(item.tRecipientID)
-            text = u"%s, %s" % (text, _("%s / %s") % (recipient.name, _(self.msgSpec[0])))
+            text = "%s, %s" % (text, _("%s / %s") % (recipient.name, _(self.msgSpec[0])))
         self.win.vRecipient.text = text[2:]
         self.cwin.hide()
 
@@ -144,7 +144,7 @@ class NewMessageDlg:
                 recipients = ""
                 for objID in self.recipientObjID:
                     recipient = client.get(objID)
-                    recipients = u"%s, %s" % (recipients, recipient.name)
+                    recipients = "%s, %s" % (recipients, recipient.name)
 
                 message = {
                     "forum": "OUTBOX",
@@ -160,7 +160,7 @@ class NewMessageDlg:
                 }
                 client.cmdProxy.sendMsg(client.getPlayerID(), message)
             self.win.setStatus(_("Command has been executed."))
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(e.args[0])
             return
         client.getMessages()

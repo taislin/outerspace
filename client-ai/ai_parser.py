@@ -78,7 +78,7 @@ class AIList:
         self.listname = "ais_list"
         try:
             self.records = json.load(open(os.path.join(self.configDir, self.listname), "r"), object_hook=aiRecordDecoder)
-        except Exception, e:
+        except Exception as e:
             listfile = open(os.path.join(self.configDir, self.listname), "a")
             listfile.close()
 
@@ -102,7 +102,7 @@ class AIList:
         return self.records
 
     def getLogins(self):
-        return map(lambda x: x.login, self.records)
+        return [x.login for x in self.records]
 
     def removeAll(self):
         self.records = []

@@ -23,7 +23,7 @@ import pygameui as ui
 from pygameui import Fonts
 import ige.ospace.Const as Const
 import pygame, pygame.draw
-import gdata, res, client
+from . import gdata, res, client
 from ige import log
 
 # number of planet's images
@@ -138,9 +138,9 @@ class SystemMapWidget(Widget):
                 if len(line) == 0:
                     break
                 if len(line) > MAX_BOUY_DISPLAY_LEN:
-                    line = u"%s..." % line[:MAX_BOUY_DISPLAY_LEN]
+                    line = "%s..." % line[:MAX_BOUY_DISPLAY_LEN]
                 elif i == MAX_BOUY_DISPLAY_ROWS:
-                    line = u"%s..." % line
+                    line = "%s..." % line
                 textSrfc = Fonts.renderText('small', line, 1, bouycolor)
                 textSrfcs.append(textSrfc)
                 maxW = max(textSrfc.get_width(), maxW)
@@ -215,7 +215,7 @@ class SystemMapWidget(Widget):
 
     def processMMotion(self, evt):
         pos = evt.pos
-        for objID in self._actAreas.keys():
+        for objID in list(self._actAreas.keys()):
             rect = self._actAreas[objID]
             if rect.collidepoint(pos) and self.action:
                 self.processAction(self.hoverAction, objID)
@@ -226,7 +226,7 @@ class SystemMapWidget(Widget):
 
     def processMB1Down(self, evt):
         pos = evt.pos
-        for objID in self._actAreas.keys():
+        for objID in list(self._actAreas.keys()):
             rect = self._actAreas[objID]
             if rect.collidepoint(pos):
                 self.pressedObjID = objID
@@ -235,7 +235,7 @@ class SystemMapWidget(Widget):
 
     def processMB1Up(self, evt):
         pos = evt.pos
-        for objID in self._actAreas.keys():
+        for objID in list(self._actAreas.keys()):
             rect = self._actAreas[objID]
             if rect.collidepoint(pos):
                 if self.pressedObjID == objID and self.action:

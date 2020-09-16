@@ -22,14 +22,14 @@ import math
 import ige.ospace.Const as Const
 from ige.IDataHolder import makeIDataHolder
 
-from Techs import noop as techDefaultHandler
+from .Techs import noop as techDefaultHandler
 
 def init(configDir):
     global techs, Tech
-    import Techs
+    from . import Techs
 
     Techs.init(configDir)
-    from Techs import techs, Tech
+    from .Techs import techs, Tech
 
 ## General
 turnsPerDay = 24
@@ -77,65 +77,65 @@ envAutoMod = 10.0
 envMax = 200
 envSelfUpgradeChance = {"H": 5, "C": 1, "B": 500, "m": 100, "r": 100, "p": 100, "e": 100} # in ten thousandths (10 000)
 planetSpec = {}
-planetSpec[u'A'] = makeIDataHolder(
+planetSpec['A'] = makeIDataHolder(
     minBio = 0,
     maxBio = 0,
     upgradeTo = None,
     downgradeTo = None,
 )
-planetSpec[u'G'] = makeIDataHolder(
+planetSpec['G'] = makeIDataHolder(
     minBio = 0,
     maxBio = 0,
     upgradeTo = None,
     downgradeTo = None,
 )
-planetSpec[u'C'] = makeIDataHolder(
+planetSpec['C'] = makeIDataHolder(
     minBio = 0,
     maxBio = 6,
-    upgradeTo = u'D',
+    upgradeTo = 'D',
     upgradeEnReqs = (5, 180),
     downgradeTo = None,
 )
-planetSpec[u'R'] = makeIDataHolder(
+planetSpec['R'] = makeIDataHolder(
     minBio = 0,
     maxBio = 6,
-    upgradeTo = u'D',
+    upgradeTo = 'D',
     upgradeEnReqs = (5, 180),
     downgradeTo = None,
 )
-planetSpec[u'D'] = makeIDataHolder(
+planetSpec['D'] = makeIDataHolder(
     minBio = 6,
     maxBio = 12,
-    upgradeTo = u'H',
+    upgradeTo = 'H',
     upgradeEnReqs = (25, 150),
-    downgradeTo = u'R',
+    downgradeTo = 'R',
 )
-planetSpec[u'H'] = makeIDataHolder(
+planetSpec['H'] = makeIDataHolder(
     minBio = 12,
     maxBio = 25,
-    upgradeTo = u'M',
+    upgradeTo = 'M',
     upgradeEnReqs = (50, 125),
-    downgradeTo = u'D',
+    downgradeTo = 'D',
 )
-planetSpec[u'M'] = makeIDataHolder(
+planetSpec['M'] = makeIDataHolder(
     minBio = 25,
     maxBio = 75,
-    upgradeTo = u'E',
+    upgradeTo = 'E',
     upgradeEnReqs = (50, 100),
-    downgradeTo = u'H',
+    downgradeTo = 'H',
 )
-planetSpec[u'E'] = makeIDataHolder(
+planetSpec['E'] = makeIDataHolder(
     minBio = 75,
     maxBio = 125,
-    upgradeTo = u"I",
+    upgradeTo = "I",
     upgradeEnReqs = (50, 100),
-    downgradeTo = u'M',
+    downgradeTo = 'M',
 )
-planetSpec[u"I"] = makeIDataHolder( # gaia
+planetSpec["I"] = makeIDataHolder( # gaia
     minBio = 125,
     maxBio = 200,
     upgradeTo = None,
-    downgradeTo = u"E",
+    downgradeTo = "E",
 )
 
 ## New colony settings

@@ -107,7 +107,7 @@ class StarMap(object):
         anyX = 0.0
         anyY = 0.0
         player = client.getPlayer()
-        for objID in client.db.keys():
+        for objID in list(client.db.keys()):
             if objID < Const.OID_FREESTART:
                 continue
             obj = client.get(objID, noUpdate = 1)
@@ -120,7 +120,7 @@ class StarMap(object):
                     anyX = obj.x
                 if hasattr(obj, "y"):
                     anyY = obj.y
-            except AttributeError, e:
+            except AttributeError as e:
                 log.warning('StarMap', 'Cannot render objID = %d' % objID)
                 continue
             if obj.type == Const.T_SYSTEM:
@@ -153,7 +153,7 @@ class StarMap(object):
     def precomputePirateSystems(self):
         pirate_systems = {}
         log.debug("Checking pirate planets and wormholes")
-        for objID in client.db.keys():
+        for objID in list(client.db.keys()):
             if objID < Const.OID_FREESTART:
                 continue
             obj = client.get(objID, noUpdate = 1)
@@ -493,9 +493,9 @@ class StarMap(object):
         if hasattr(obj, 'scannerPwr'): info.append(_('Scanner pwr: %d') % obj.scannerPwr)
         info.append(_('Coordinates: [%.2f, %.2f]') % (obj.x, obj.y))
         info.append(_('Signature: %d') % obj.signature)
-        if hasattr(obj, 'speed'): info.append(_(u'Speed: %3.2f') % obj.speed)
+        if hasattr(obj, 'speed'): info.append(_('Speed: %3.2f') % obj.speed)
         elif eta:
-            info.append(_(u'Speed: %3.2f') % (24*((obj.y-obj.oldY)**2+(obj.x-obj.oldX)**2)**.5))
+            info.append(_('Speed: %3.2f') % (24*((obj.y-obj.oldY)**2+(obj.x-obj.oldX)**2)**.5))
         if eta:
             info.append(_('ETA: %s') % res.formatTime(eta))
         if owner:
@@ -534,7 +534,7 @@ class StarMap(object):
                 if designID not in number:
                     number[designID] = [0, 0, 0, 0, 0]
                 number[designID][level - 1] += 1
-            order = number.keys()
+            order = list(number.keys())
             order.sort()
             for designID in order:
                 tech = client.get(owner).shipDesigns[designID]
@@ -698,7 +698,7 @@ class StarMap(object):
         currY = self.currY
         scale = self.scale
         first = True
-        for xy in self._map[self.MAP_CONTROLAREA].keys():
+        for xy in list(self._map[self.MAP_CONTROLAREA].keys()):
             x,y = xy.split(':',2)
             sx = int((int(x) - currX) * scale) + centerX + 1
             sy = maxY - (int((int(y) + 1 - currY) * scale) + centerY) # use y+1 because we have to draw from top down rather than bottom up
@@ -776,7 +776,7 @@ class StarMap(object):
                         if len(line) == 0:
                             break
                         if len(line) > MAX_BOUY_DISPLAY_LEN:
-                            line = u"%s..." % line[:MAX_BOUY_DISPLAY_LEN]
+                            line = "%s..." % line[:MAX_BOUY_DISPLAY_LEN]
                         if self.overlayMode == gdata.OVERLAY_OWNER:
                             bouycolor = buoyColors[buoy[1] - 1]
                         else:
@@ -793,10 +793,10 @@ class StarMap(object):
                     alternative = name
                     nSy = sy + h / 2 + img.get_height()
                     if constPoints != 0 or sciPoints != 0:
-                        img = Fonts.renderText(self.textSize, u"CP: %d RP: %d" % (constPoints, sciPoints), 1, namecolor)
+                        img = Fonts.renderText(self.textSize, "CP: %d RP: %d" % (constPoints, sciPoints), 1, namecolor)
                         mapSurf.blit(img, (sx - img.get_width() / 2, nSy))
                     if isGovCentral:
-                        img = Fonts.renderText(self.textSize, u"Central system", 1, (255, 255, 255))
+                        img = Fonts.renderText(self.textSize, "Central system", 1, (255, 255, 255))
                         mapSurf.blit(img, (sx - img.get_width() / 2, nSy + img.get_height()))
                 for icon in icons:
                     mapSurf.blit(icon, (x, y))
@@ -969,7 +969,7 @@ class StarMap(object):
                 player.stats.storPop, player.govPwr
                 maxMorale = int(Rules.maxMorale)
                 minAchievedMorale = int(max(Rules.minMoraleTrgt - 1, 107.5 - 37.5 * player.stats.storPop / player.govPwr))
-                for step in xrange(maxMorale, minAchievedMorale - 1 , -10):
+                for step in range(maxMorale, minAchievedMorale - 1 , -10):
                     moraleColor = res.getMoraleColors(step)
                     centralX = int((centralPlanet.x - currX) * scale) + centerX
                     centralY = maxY - (int((centralPlanet.y - currY) * scale) + centerY)
@@ -1025,7 +1025,7 @@ class StarMap(object):
         if hasattr(player, "buoys") and objID in player.buoys:
             lines = player.buoys[objID][0].split("\n")
             if len(lines) > 2:
-                return (u"%s\n%s" % (lines[0], lines[1]), player.buoys[objID][1])
+                return ("%s\n%s" % (lines[0], lines[1]), player.buoys[objID][1])
             else:
                 return player.buoys[objID]
         else:
@@ -1033,7 +1033,7 @@ class StarMap(object):
                 if len(player.alliedBuoys[objID]) > 0:
                     lines = player.alliedBuoys[objID][0][0].split("\n")
                     if len(lines) > 2:
-                        return (u"%s\n%s" % (lines[0], lines[1]), player.alliedBuoys[objID][0][1])
+                        return ("%s\n%s" % (lines[0], lines[1]), player.alliedBuoys[objID][0][1])
                     else:
                         return player.alliedBuoys[objID][0]
                 else:

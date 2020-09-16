@@ -26,13 +26,13 @@ import time
 import random, hashlib # TODO: remove after 0.5.74 release
 
 import ige
-import log
-import Const
+from . import log
+from . import Const
 
-from SQLiteDatabase import Database
-from Index import Index
-from IObject import IDataHolder
-from Transaction import Transaction
+from .SQLiteDatabase import Database
+from .Index import Index
+from .IObject import IDataHolder
+from .Transaction import Transaction
 
 class GameMngr:
 
@@ -82,7 +82,7 @@ class GameMngr:
         tran = Transaction(self, Const.OID_ADMIN)
         # used objects
         objIDs = {}
-        for objID in self.db.keys():
+        for objID in list(self.db.keys()):
             objIDs[objID] = None
         del objIDs[1]
         del objIDs[Const.OID_ADMIN]
@@ -94,11 +94,11 @@ class GameMngr:
         typesSum = {}
         # TODO: remove after 0.5.74
         # hash passwords in database
-        for accountID in self.clientMngr.accounts.keys():
+        for accountID in list(self.clientMngr.accounts.keys()):
             account = self.clientMngr.accounts[accountID]
             if hasattr(account, 'passwdHashed'):
                 continue
-            if isinstance(account.passwd, unicode):
+            if isinstance(account.passwd, str):
                 account.passwd = account.passwd.encode('utf-8')
             elif not isinstance(account.passwd, str):
                 # unexpected!
@@ -111,7 +111,7 @@ class GameMngr:
                 account.setPassword(account.passwd)
         # upgrade all objects in database
         # and collect all not referenced objects
-        for id in self.db.keys():
+        for id in list(self.db.keys()):
             try:
                 obj = self.db[id]
             except:
@@ -125,10 +125,10 @@ class GameMngr:
             typesMin[obj.type] = min(typesMin.get(obj.type, 1000000), size)
             typesMax[obj.type] = max(typesMax.get(obj.type, 0), size)
             typesSum[obj.type] = typesSum.get(obj.type, 0) + size
-            if self.cmdPool.has_key(obj.type):
+            if obj.type in self.cmdPool:
                 try:
                     self.cmdPool[obj.type].upgrade(tran, obj)
-                except Exception, e:
+                except Exception as e:
                     log.warning("Cannot upgrade object", id)
             references = self.cmdPool[obj.type].getReferences(tran, obj)
             if references:
@@ -167,7 +167,7 @@ class GameMngr:
         session = self.clientMngr.getSession(sid)
         if session.login != Const.ADMIN_LOGIN:
             raise ige.SecurityException('You cannot issue this command.')
-        for turn in xrange(turns):
+        for turn in range(turns):
             log.message("--- TURN PROCESSING STARTED ---")
             # commit player's changes
             #if ige.igeRuntimeMode:
@@ -214,7 +214,7 @@ class GameMngr:
 
     def turnFinished(self, sid):
         # notify logged player's about finished turn
-        for sessionID in self.clientMngr.sessions.keys():
+        for sessionID in list(self.clientMngr.sessions.keys()):
             session = self.clientMngr.getSession(sessionID)
             session.messages[Const.SMESSAGE_NEWTURN] = None
         # commit only in normal mode
@@ -290,7 +290,7 @@ class GameMngr:
     def unregisterPlayer(self, playerObj):
         log.debug('unregisterPlayer', playerObj.login, playerObj.name)
         # preconditions
-        if not self.db[Const.OID_I_LOGIN2OID].has_key(playerObj.login):
+        if playerObj.login not in self.db[Const.OID_I_LOGIN2OID]:
             log.debug("Account %s does not exist" % playerObj.login)
         # try to remove it
         try:
@@ -344,7 +344,7 @@ class GameMngr:
         if self.status != Const.GS_RUNNING and session.cid != Const.OID_ADMIN:
             raise ige.ServerStatusException(self.status)
         # check existence of the commander
-        if not self.db.has_key(session.cid):
+        if session.cid not in self.db:
             raise ige.GameException('This player does not exist. He/she could lose.')
         # update client's liveness
         session.touch()
@@ -374,7 +374,7 @@ class GameMngr:
         #@log.debug('result', result)
         # session messages
         #@log.debug('Messages:', session.messages.items())
-        messages = session.messages.items()
+        messages = list(session.messages.items())
         session.messages.clear()
         #@log.debug("Execution time", time.time() - startTime)
         return result, messages

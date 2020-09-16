@@ -24,12 +24,12 @@
 import rexec
 import re
 import string
-import StringIO
+import io
 import sys
 
-import counter
-import default_handler
-import producers
+from . import counter
+from . import default_handler
+from . import producers
 
 unquote    = default_handler.unquote
 
@@ -83,11 +83,11 @@ class script_handler:
             else:
                 self.continue_request (
                     request,
-                    StringIO.StringIO() # empty stdin
+                    io.StringIO() # empty stdin
                     )
 
     def continue_request (self, request, stdin):
-        temp_files = stdin, StringIO.StringIO(), StringIO.StringIO()
+        temp_files = stdin, io.StringIO(), io.StringIO()
         old_files = sys.stdin, sys.stdout, sys.stderr
 
         if self.restricted:
@@ -100,7 +100,7 @@ class script_handler:
                 if self.restricted:
                     r.s_execfile (request.script_filename)
                 else:
-                    execfile (request.script_filename)
+                    exec(compile(open(request.script_filename, "rb").read(), request.script_filename, 'exec'))
                 request.reply_code = 200
             except:
                 request.reply_code = 500
@@ -146,7 +146,7 @@ class persistent_script_handler:
     def match (self, request):
         [path, params, query, fragment] = request.split_uri()
         parts = string.split (path, '/')
-        if (len(parts)>1) and self.modules.has_key (parts[1]):
+        if (len(parts)>1) and parts[1] in self.modules:
             module = self.modules[parts[1]]
             request.module = module
             return 1
@@ -163,10 +163,10 @@ class persistent_script_handler:
             else:
                 collector (self, length, request)
         else:
-            self.continue_request (request, StringIO.StringIO())
+            self.continue_request (request, io.StringIO())
 
     def continue_request (self, request, input_data):
-        temp_files = input_data, StringIO.StringIO(), StringIO.StringIO()
+        temp_files = input_data, io.StringIO(), io.StringIO()
         old_files = sys.stdin, sys.stdout, sys.stderr
 
         try:
@@ -200,7 +200,7 @@ class collector:
         self.request = request
         self.request.collector = self
         self.request.channel.set_terminator (length)
-        self.buffer = StringIO.StringIO()
+        self.buffer = io.StringIO()
 
     def collect_incoming_data (self, data):
         self.buffer.write (data)

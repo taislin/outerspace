@@ -20,7 +20,7 @@
 
 import ige
 import os.path, log, os, sys, time, types, binascii, bz2
-import cPickle as pickle
+import pickle as pickle
 import sqlite3
 
 IDX_PREV = 0
@@ -172,11 +172,11 @@ class Database:
         self.cache[key] = value
         #value.setModified(0)
         # write through new objects
-        if not self.has_key(key):
+        if key not in self:
             raise ige.ServerException("'%s' created using set method" % key)
 
     def __contains__(self, key):
-        return self.has_key(key)
+        return key in self
 
     def __delitem__(self, key):
         key = self.keyMethod(key)
@@ -206,7 +206,7 @@ class Database:
     def checkpoint(self):
         log.debug('DB Checkpoint', self.dbName)
         log.debug("Storing all objects")
-        for key, value in self.cache.iteritems():
+        for key, value in self.cache.items():
             self.put(key, pickle.dumps(value, pickle.HIGHEST_PROTOCOL))
         # commit transaction
         log.debug("Commiting transaction")
@@ -266,7 +266,7 @@ class Database:
         #@log.debug("Creating new object", id)
         if not id:
             id = self.nextID
-            while self.has_key(id):
+            while id in self:
                 id += 1
             self.nextID = id + 1
             id = self.keyMethod(id)
@@ -278,7 +278,7 @@ class Database:
         else:
             id = self.keyMethod(id)
         #@log.debug("OID =", id)
-        if self.has_key(id):
+        if id in self:
             raise ige.ServerException("'%s' created twice" % id)
         self.cache[id] = object
         self._addNewCacheItem(id)
@@ -289,7 +289,7 @@ class Database:
         del self[key]
 
     def get(self, key, default = None):
-        if self.has_key(key):
+        if key in self:
             return self[key]
         else:
             return default
@@ -327,7 +327,7 @@ class Database:
         log.message("Creating backup", filename)
         fh = file(filename, "w") #bz2.BZ2File(filename, "w")
         fh.write("IGE OUTER SPACE BACKUP VERSION 1\n")
-        for key in self.keys():
+        for key in list(self.keys()):
             fh.write(binascii.b2a_hex(str(key)))
             fh.write("\n")
             fh.write(binascii.b2a_hex(pickle.dumps(self[key], pickle.HIGHEST_PROTOCOL)))

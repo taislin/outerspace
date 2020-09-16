@@ -18,7 +18,7 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-from ConfirmDlg import ConfirmDlg
+from .ConfirmDlg import ConfirmDlg
 import pygameui as ui
 import re
 from osci import gdata, client

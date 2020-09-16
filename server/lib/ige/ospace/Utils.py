@@ -19,8 +19,8 @@
 #
 import random
 
-import Const
-import Rules
+from . import Const
+from . import Rules
 
 import ige
 from ige import log

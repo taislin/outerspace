@@ -62,7 +62,7 @@ def tool_parseDB(client, db, enemyTypes):
     playerID = client.getPlayerID()
     player = client.getPlayer()
     owners = {}
-    for objID in db.keys():
+    for objID in list(db.keys()):
         try:
             obj = db[objID]
         except KeyError:
@@ -75,7 +75,7 @@ def tool_parseDB(client, db, enemyTypes):
             slots = getattr(obj, 'slots', [])
             prodProd = getattr(obj, 'prodProd', 0)
             plType = getattr(obj, 'plType', None)
-            if plType == u'G' or plType == u'A':
+            if plType == 'G' or plType == 'A':
                 data.nonhabPlanets.add(objID)
                 continue
             if ownerID == playerID and prodProd:
@@ -118,7 +118,7 @@ def tool_parseDB(client, db, enemyTypes):
                 data.myFleetSheets[objID] = getFleetSheet(obj)
                 if len(obj.actions[obj.actionIndex:]) == 0:
                     data.idleFleets.add(objID)
-                for designID in data.myFleetSheets[objID].keys():
+                for designID in list(data.myFleetSheets[objID].keys()):
                     if not data.myFleetsWithDesign.get(designID, set()):
                         data.myFleetsWithDesign[designID] = set([objID])
                     else:
@@ -273,7 +273,7 @@ def doDanger(data, client, db):
             milPow = ships = 0
         milPow += fleet.combatPwr
         if hasattr(fleet, 'shipScan'):
-            for (name, shipClass, isMilitary), quantity in fleet.shipScan.items():
+            for (name, shipClass, isMilitary), quantity in list(fleet.shipScan.items()):
                 if isMilitary:
                     ships += quantity * (shipClass + 1) ** 2
             data.endangeredSystems[targID] = (milPow, ships)
@@ -628,7 +628,7 @@ def getSystemStructStats(data, client, db, systemID, processQueues=True):
                 techID = task.techID
                 tech = client.getFullTechInfo(task.techID)
                 if tech.isStructure:
-                    if task.targetID not in systemStats.planets.keys():
+                    if task.targetID not in list(systemStats.planets.keys()):
                         continue
                     try:
                         systemStats.planets[task.targetID][techID] += 1
@@ -736,7 +736,7 @@ def buildSystem(data, client, db, systemID, prodPlanets, finalSystemPlan):
             continue
         # start the most effective project [CP-wise], which is still leaving
         # sustainable system
-        toBuild = getStructBuildEffectivity(client, db, planetID, structsToBuild.keys(), structsToBuild, structsToDemolish)
+        toBuild = getStructBuildEffectivity(client, db, planetID, list(structsToBuild.keys()), structsToBuild, structsToDemolish)
         for techID, targetPlanetID, targetTechID in toBuild:
             targetPlanet = db[targetPlanetID]
             if len(targetPlanet.slots) == targetPlanet.plSlots and targetTechID == Const.OID_NONE:

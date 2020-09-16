@@ -26,8 +26,8 @@ from ige.ospace import Rules
 import ige.ospace.Const as Const
 
 from osci import gdata, client, res
-from TechInfoDlg import TechInfoDlg
-from ConfirmDlg import ConfirmDlg
+from .TechInfoDlg import TechInfoDlg
+from .ConfirmDlg import ConfirmDlg
 
 class StructTaskDlg:
 
@@ -123,7 +123,7 @@ class StructTaskDlg:
     def _showStructures(self, prodProd):
         items = []
 
-        for techID in client.getPlayer().techs.keys():
+        for techID in list(client.getPlayer().techs.keys()):
             tech = client.getTechInfo(techID)
             if not tech.isStructure or tech.level not in self.showLevels or \
                (tech.isStructure and not self._filterStructure(tech)):
@@ -172,7 +172,7 @@ class StructTaskDlg:
         self.win.vTechs.itemsChanged()
 
         # filter
-        for i in xrange(1, 10):
+        for i in range(1, 10):
             widget = getattr(self.win, 'vLevel%d' % i)
             if i in self.showLevels and i <= self.maxTechLevel:
                 widget.visible = 1
@@ -266,7 +266,7 @@ class StructTaskDlg:
                         data.techID, self.quantity, self.planetID, data.techID < 1000,
                         self.win.vReportFin.checked, self.structToDemolish)
                 self.win.setStatus(_('Command has been executed.'))
-            except GameException, e:
+            except GameException as e:
                 self.win.setStatus(e.args[0])
                 return
 

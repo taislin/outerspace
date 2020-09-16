@@ -109,7 +109,7 @@ class PlanetsOverviewDlg:
         player = client.getPlayer()
 
         items = []
-        for planetID in client.db.keys():
+        for planetID in list(client.db.keys()):
             planet = client.get(planetID, noUpdate=1)
             # skip non-planets
             if not hasattr(planet, "type") or planet.type != Const.T_PLANET:

@@ -19,11 +19,11 @@
 #
 import time
 
-import Const
+from . import Const
 
 from ige import log
 from ige.IObject import public
-from IPlayer import IPlayer
+from .IPlayer import IPlayer
 
 class IAIPlayer(IPlayer):
 
@@ -32,14 +32,14 @@ class IAIPlayer(IPlayer):
     def init(self, obj):
         IPlayer.init(self, obj)
         #
-        obj.name = u'Rebels'
+        obj.name = 'Rebels'
         obj.login = '*'
 
     def register(self, tran, obj, galaxyID):
         log.debug("Reregistering player", obj.oid)
         counter = 1
         while 1:
-            obj.name = u'Rebel faction %d' % counter
+            obj.name = 'Rebel faction %d' % counter
             obj.login = '*AIP*rebels%d' % counter
             if galaxyID in tran.gameMngr.accountGalaxies(obj.login):
                 counter += 1

@@ -23,7 +23,7 @@ from ige import log
 from ige.ospace import Const
 import ige.ospace.Rules
 import hashlib, os.path
-import cPickle as pickle
+import pickle as pickle
 import types
 from ige.ospace import TechHandlers
 from xml.sax.handler import ContentHandler
@@ -164,11 +164,11 @@ attrs = {
     # after research handler
     'finishResearchHandler': noop,
     # names
-    'name': u'Unspecified',
+    'name': 'Unspecified',
     # textual description
-    'textPreRsrch': u'Not specified',
-    'textDescr': u'Not specified',
-    'textFlavor': u'Not specified',
+    'textPreRsrch': 'Not specified',
+    'textDescr': 'Not specified',
+    'textFlavor': 'Not specified',
 }
 
 # class representing technologies
@@ -182,25 +182,25 @@ class Technology:
         reg[id] = self
 
     def set(self, key, value):
-        if attrs.has_key(key):
+        if key in attrs:
             attrType = type(attrs[key])
-            if attrType == types.IntType:
+            if attrType == int:
                 value = int(value)
-            elif attrType == types.FloatType:
+            elif attrType == float:
                 value = float(value)
-            elif attrType == types.UnicodeType:
+            elif attrType == str:
                 pass
-            elif attrType == types.StringType:
+            elif attrType == bytes:
                 value = str(value)
             elif attrType == types.FunctionType:
                 value = getattr(TechHandlers, value)
-            elif attrType == types.ListType:
+            elif attrType == list:
                 itemType = type(attrs[key][0])
-                if itemType == types.IntType:
+                if itemType == int:
                     convertFunc = int
-                elif itemType == types.StringType:
+                elif itemType == bytes:
                     convertFunc = str
-                elif itemType == types.FloatType:
+                elif itemType == float:
                     convertFunc = float
                 else:
                     raise 'Unsupported attribute type %s' % repr(itemType)
@@ -209,24 +209,24 @@ class Technology:
                     if item:
                         result.append(convertFunc(item))
                 value = result
-            elif attrType == types.DictType:
+            elif attrType == dict:
                 # format is key:value,key2:value2
                 dict_key, dict_value = copy.copy(attrs[key]).popitem()
                 keyType = type(dict_key)
-                if keyType == types.IntType:
+                if keyType == int:
                     convertFuncKey = int
-                elif keyType == types.StringType:
+                elif keyType == bytes:
                     convertFuncKey = str
-                elif keyType == types.FloatType:
+                elif keyType == float:
                     convertFuncKey = float
                 else:
                     raise 'Unsupported attribute type %s' % repr(keyType)
                 valueType = type(dict_value)
-                if valueType == types.IntType:
+                if valueType == int:
                     convertFuncValue = int
-                elif valueType == types.StringType:
+                elif valueType == bytes:
                     convertFuncValue = str
-                elif valueType == types.FloatType:
+                elif valueType == float:
                     convertFuncValue = float
                 else:
                     raise 'Unsupported attribute type %s' % repr(valueType)
@@ -245,7 +245,7 @@ class Technology:
             raise AttributeError('Cannot create %s - unsupported attribute.' % key)
 
     def __getattr__(self, attr):
-        if attrs.has_key(attr):
+        if attr in attrs:
             # optimalization
             setattr(self, attr, attrs[attr])
             return attrs[attr]
@@ -260,7 +260,7 @@ class Technology:
 
     def __repr__(self):
         result = '(Technology '
-        for key, value in self.__dict__.items():
+        for key, value in list(self.__dict__.items()):
             result += '%s : %s, ' % (repr(key), repr(value))
         result += ')'
         return result
@@ -289,44 +289,44 @@ class TechTreeContentHandler(ContentHandler):
             self.tech.set('name', attrs['name'])
         elif self.state == 3 and name == 'structure':
             self.tech.set('isStructure', 1)
-            for key in attrs.keys():
+            for key in list(attrs.keys()):
                 self.tech.set(key, attrs[key])
             realBuildProd = int(self.tech.buildProd * ige.ospace.Rules.structDefaultCpCosts)
             self.tech.set('buildProd', realBuildProd)
         elif self.state == 3 and name == 'discovery':
             self.tech.set('isDiscovery', 1)
-            for key in attrs.keys():
+            for key in list(attrs.keys()):
                 self.tech.set(key, attrs[key])
         elif self.state == 3 and name == 'notdiscovery':
             self.tech.set('isDiscovery', 0)
-            for key in attrs.keys():
+            for key in list(attrs.keys()):
                 self.tech.set(key, attrs[key])
         elif self.state == 3 and name == 'starting':
             self.tech.set('isStarting', 1)
-            for key in attrs.keys():
+            for key in list(attrs.keys()):
                 self.tech.set(key, attrs[key])
         elif self.state == 3 and name == 'notstarting':
             self.tech.set('isStarting', 0)
-            for key in attrs.keys():
+            for key in list(attrs.keys()):
                 self.tech.set(key, attrs[key])
         elif self.state == 3 and name == 'shipequip':
             self.tech.set('isShipEquip', 1)
-            for key in attrs.keys():
+            for key in list(attrs.keys()):
                 self.tech.set(key, attrs[key])
         elif self.state == 3 and name == 'project':
             self.tech.set('isProject', 1)
-            for key in attrs.keys():
+            for key in list(attrs.keys()):
                 self.tech.set(key, attrs[key])
         elif self.state == 3 and name == 'shiphull':
             self.tech.set('isShipHull', 1)
-            for key in attrs.keys():
+            for key in list(attrs.keys()):
                 self.tech.set(key, attrs[key])
         elif self.state == 3 and name == 'mine':
             self.tech.set('isMine', 1)
-            for key in attrs.keys():
+            for key in list(attrs.keys()):
                 self.tech.set(key, attrs[key])
         elif self.state == 3 and name == 'data':
-            for key in attrs.keys():
+            for key in list(attrs.keys()):
                 self.tech.set(key, attrs[key])
         elif self.state == 3 and name == 'preresearch':
             self.state = 4
@@ -407,8 +407,8 @@ def init(configDir):
         log.message("There is %d technologies" % len(techs))
 
         # clean up 'type' in lists
-        for key in attrs.keys():
-            if type(attrs[key]) == types.ListType and len(attrs[key]) == 1:
+        for key in list(attrs.keys()):
+            if type(attrs[key]) == list and len(attrs[key]) == 1:
                 log.debug("Cleaning up", key)
                 attrs[key] = []
 
@@ -428,11 +428,11 @@ def init(configDir):
         os.path.walk(moduleDirectory, processDir, None)
 
         # clean up 'type' in lists
-        for key in attrs.keys():
-            if type(attrs[key]) == types.ListType and len(attrs[key]) == 1:
+        for key in list(attrs.keys()):
+            if type(attrs[key]) == list and len(attrs[key]) == 1:
                 log.debug("Cleaning up", key)
                 attrs[key] = []
-            elif type(attrs[key]) == types.DictType and len(attrs[key]) == 1:
+            elif type(attrs[key]) == dict and len(attrs[key]) == 1:
                 log.debug("Cleaning up", key)
                 attrs[key] = {}
 
@@ -440,7 +440,7 @@ def init(configDir):
         # link tech tree using researchRequires fields
         # construct researchEnables fields
         log.message('Converting symbolic fields...')
-        for techID in techs.keys():
+        for techID in list(techs.keys()):
             tech = techs[techID]
             # convert symbolic names to numbers
             techIDs = []
@@ -490,12 +490,12 @@ def init(configDir):
 
         # link
         log.message('Linking tech tree...')
-        for techID in techs.keys():
+        for techID in list(techs.keys()):
             tech = techs[techID]
             for tmpTechID, improvement in tech.researchRequires:
                 if techID not in techs[tmpTechID].researchEnables[improvement]:
                     techs[tmpTechID].researchEnables[improvement].append(techID)
-            for improvement in tech.researchEnables.keys():
+            for improvement in list(tech.researchEnables.keys()):
                 for tmpTechID in tech.researchEnables[improvement]:
                     if (techID, improvement) not in techs[tmpTechID].researchRequires:
                         techs[tmpTechID].researchRequires.append((techID, improvement))

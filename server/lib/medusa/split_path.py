@@ -7,6 +7,6 @@ path_regex = regex.compile (
 
 def split_path (path):
     if path_regex.match (path) != len(path):
-        raise ValueError, "bad path"
+        raise ValueError("bad path")
     else:
-        return map (lambda i,r=path_regex: r.group(i), range(1,5))
+        return list(map (lambda i,r=path_regex: r.group(i), list(range(1,5))))

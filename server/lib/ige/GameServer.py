@@ -86,7 +86,7 @@ class GameServer(object):
         msgMngr = MsgMngr(msgDB)
         gameMngr = GameMngr(gameID, config, self.clientMngr, msgMngr, gameDB, self.config.server.datadir, config.name)
         # reset game if Universe does not exist
-        if not gameDB.has_key(OID_UNIVERSE):
+        if OID_UNIVERSE not in gameDB:
             log.message('Resetting game \'%s\'...' % gameID)
             gameMngr.reset()
         # normal operations

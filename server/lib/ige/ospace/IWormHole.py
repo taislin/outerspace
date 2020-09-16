@@ -22,11 +22,11 @@ from xml.dom.minidom import Node
 
 import ige
 
-import Const
+from . import Const
 
 from ige import log
 from ige.IObject import public
-from ISystem import ISystem
+from .ISystem import ISystem
 
 class IWormHole(ISystem):
 
@@ -36,8 +36,8 @@ class IWormHole(ISystem):
         ISystem.init(self, obj)
         #
         obj.destinationOid = Const.OID_NONE
-        obj.destination = u'---'
-        obj.starClass = u'wW0'
+        obj.destination = '---'
+        obj.starClass = 'wW0'
 
     def loadDOMNode(self, tran, obj, xoff, yoff, node):
         obj.x = float(node.getAttribute('x')) + xoff

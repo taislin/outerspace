@@ -34,9 +34,9 @@ class ShowBuoyDlg:
         if hasattr(player, "buoys") and objID in player.buoys:
             label = _("Private buoy text")
             if player.buoys[objID][1] == Const.BUOY_TO_ALLY:
-                label = u"%s%s:" % (label, _(" (visible to allies)"))
+                label = "%s%s:" % (label, _(" (visible to allies)"))
             else:
-                label = u"%s:" % label
+                label = "%s:" % label
             text.append(label)
             text.extend(player.buoys[objID][0].split("\n"))
             text.append("")

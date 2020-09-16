@@ -304,7 +304,7 @@ class ProblemsDlg:
             freeSlots[planetID] = planet.plSlots - len(planet.slots)
 
         for planetID in playerPlanets:
-            for targetID, quantity in self._getTargetSlotDict(planetID).items():
+            for targetID, quantity in list(self._getTargetSlotDict(planetID).items()):
                 freeSlots[targetID] -= quantity
                 if quantity > 0:
                     try:
@@ -312,7 +312,7 @@ class ProblemsDlg:
                     except AttributeError:
                         structSources[targetID] = set([planetID])
 
-        for planetID, free in freeSlots.items():
+        for planetID, free in list(freeSlots.items()):
             if free < 0:
                 # not enough space, report for every planet that builds on this one
                 planet = client.get(planetID, noUpdate=1)

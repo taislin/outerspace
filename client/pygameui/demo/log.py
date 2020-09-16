@@ -75,7 +75,7 @@ def __getCaller():
     name = frame.f_globals['__name__']
     #if len(name) > 15:
     #    name = '..%s' % name[-13:]
-    if frame.f_locals.has_key('obj') and hasattr(frame.f_locals['obj'], 'oid'):
+    if 'obj' in frame.f_locals and hasattr(frame.f_locals['obj'], 'oid'):
         return '%s %d [oid=%s]' % (
             name,
             frame.f_lineno,
@@ -86,91 +86,91 @@ def __getCaller():
 def debug(*args):
     if level < LEVEL_DEBUG:
         return
-    print __getTime(), 'DBG', __getCaller(),
+    print(__getTime(), 'DBG', __getCaller(), end=' ')
     for item in args:
-        print str(item),
-    print
+        print(str(item), end=' ')
+    print()
     if msgLog:
-        print >> msgLog, __getTime(), 'DBG', __getCaller(),
+        print(__getTime(), 'DBG', __getCaller(), end=' ', file=msgLog)
         for item in args:
-            print >> msgLog, str(item),
-        print >> msgLog
+            print(str(item), end=' ', file=msgLog)
+        print(file=msgLog)
         msgLog.flush()
 
 def message(*args):
     if level < LEVEL_MESSAGE:
         return
-    print __getTime(), 'MSG', __getCaller(),
+    print(__getTime(), 'MSG', __getCaller(), end=' ')
     for item in args:
-        print str(item),
-    print
+        print(str(item), end=' ')
+    print()
     if msgLog:
-        print >> msgLog, __getTime(), 'MSG', __getCaller(),
+        print(__getTime(), 'MSG', __getCaller(), end=' ', file=msgLog)
         for item in args:
-            print >> msgLog, str(item),
-        print >> msgLog
+            print(str(item), end=' ', file=msgLog)
+        print(file=msgLog)
         msgLog.flush()
 
 def warning(*args):
     if level < LEVEL_WARNING:
         return
     # TODO lock!
-    print __getTime(), 'WAR', __getCaller(),
+    print(__getTime(), 'WAR', __getCaller(), end=' ')
     for item in args:
-        print str(item),
-    print
+        print(str(item), end=' ')
+    print()
     if sys.exc_info() != (None, None, None):
-        print 79 * '-'
+        print(79 * '-')
         traceback.print_exc(file=sys.stdout)
-        print 79 * '-'
+        print(79 * '-')
     if errorLog:
-        print >> errorLog, __getTime(), 'WAR', __getCaller(),
+        print(__getTime(), 'WAR', __getCaller(), end=' ', file=errorLog)
         for item in args:
-            print >> errorLog, str(item),
-        print >> errorLog
+            print(str(item), end=' ', file=errorLog)
+        print(file=errorLog)
         if sys.exc_info() != (None, None, None):
-            print >> errorLog, 79 * '-'
+            print(79 * '-', file=errorLog)
             traceback.print_exc(file=errorLog)
-            print >> errorLog, 79 * '-'
+            print(79 * '-', file=errorLog)
         errorLog.flush()
     if msgLog:
-        print >> msgLog, __getTime(), 'WAR', __getCaller(),
+        print(__getTime(), 'WAR', __getCaller(), end=' ', file=msgLog)
         for item in args:
-            print >> msgLog, str(item),
-        print >> msgLog
+            print(str(item), end=' ', file=msgLog)
+        print(file=msgLog)
         if sys.exc_info() != (None, None, None):
-            print >> msgLog, 79 * '-'
+            print(79 * '-', file=msgLog)
             traceback.print_exc(file=msgLog)
-            print >>msgLog, 79 * '-'
+            print(79 * '-', file=msgLog)
         msgLog.flush()
 
 def error(*args):
-    print __getTime(), 'ERR', __getCaller(),
+    print(__getTime(), 'ERR', __getCaller(), end=' ')
     for item in args:
-        print str(item),
-    print
+        print(str(item), end=' ')
+    print()
     if sys.exc_info() != (None, None, None):
-        print 79 * '-'
+        print(79 * '-')
         traceback.print_exc(file=sys.stdout)
-        print 79 * '-'
+        print(79 * '-')
     if errorLog:
-        print >> errorLog, __getTime(), 'ERR', __getCaller(),
+        print(__getTime(), 'ERR', __getCaller(), end=' ', file=errorLog)
         for item in args:
-            print >> errorLog, str(item),
-        print >> errorLog
+            print(str(item), end=' ', file=errorLog)
+        print(file=errorLog)
         if sys.exc_info() != (None, None, None):
-            print >> errorLog, 79 * '-'
+            print(79 * '-', file=errorLog)
             traceback.print_exc(file=errorLog)
-            print >> errorLog, 79 * '-'
+            print(79 * '-', file=errorLog)
         errorLog.flush()
     if msgLog:
-        print >> msgLog, __getTime(), 'ERR', __getCaller(),
+        print(__getTime(), 'ERR', __getCaller(), end=' ', file=msgLog)
         for item in args:
-            print >> msgLog, str(item),
-        print >> msgLog
+            print(str(item), end=' ', file=msgLog)
+        print(file=msgLog)
         if sys.exc_info() != (None, None, None):
-            print >> msgLog, 79 * '-'
+            print(79 * '-', file=msgLog)
             traceback.print_exc(file=msgLog)
-            print >>msgLog, 79 * '-'
+            print(79 * '-', file=msgLog)
         msgLog.flush()
     sys.exit(1)

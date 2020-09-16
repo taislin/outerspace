@@ -21,11 +21,12 @@
 import traceback
 import time
 import os
-import log
+from . import log
 import ige
 import ige.version
 from medusa import igerpc_handler, http_server, asyncore, logger, status_handler
 from medusa import filesys, default_handler, counter, producers, xmlrpc_handler
+import sys
 
 callMap = {}
 objMap = {}
@@ -60,25 +61,25 @@ class igerpc(igerpc_handler.igerpc_handler):
         try:
             params = [packet.sid]
             params.extend(packet.params)
-            packet.result, packet.messages = callMap[intern(packet.method)](*params)
+            packet.result, packet.messages = callMap[sys.intern(packet.method)](*params)
             packet.method = None
             packet.params = None
             return packet
-        except ige.NoAccountException, e:
+        except ige.NoAccountException as e:
             raise e
-        except ige.GameException, e:
+        except ige.GameException as e:
             raise e
-        except ige.SecurityException, e:
+        except ige.SecurityException as e:
             raise e
-        except ige.CreatePlayerException, e:
+        except ige.CreatePlayerException as e:
             raise e
-        except ige.ServerStatusException, e:
+        except ige.ServerStatusException as e:
             raise e
-        except ige.NoSuchObjectException, e:
+        except ige.NoSuchObjectException as e:
             raise e
-        except asyncore.ExitNow, e:
+        except asyncore.ExitNow as e:
             raise e
-        except Exception, e:
+        except Exception as e:
             log.warning('Cannot complete RPC call')
             self.seriousExcCounter.increment()
             raise e
@@ -119,9 +120,9 @@ class xmlrpc(xmlrpc_handler.xmlrpc_handler):
             #    raise e
             #except ige.ServerStatusException, e:
             #    raise e
-        except asyncore.ExitNow, e:
+        except asyncore.ExitNow as e:
             raise e
-        except Exception, e:
+        except Exception as e:
             log.warning('Cannot complete RPC call')
             self.seriousExcCounter.increment()
             raise e

@@ -27,8 +27,8 @@ import ige.ospace.Const as Const
 
 from osci import client, res, gdata
 
-from TechInfoDlg import TechInfoDlg
-from ConfirmDlg import ConfirmDlg
+from .TechInfoDlg import TechInfoDlg
+from .ConfirmDlg import ConfirmDlg
 
 class ResearchDlg:
 
@@ -176,7 +176,7 @@ class ResearchDlg:
         items = []
         disabled = []
         scheduledIDs = set([task.techID for task in player.rsrchQueue])
-        for techID in player.techs.keys():
+        for techID in list(player.techs.keys()):
             if techID in player.obsoleteTechs and not self.showObsolete:
                 continue
             tech = client.getTechInfo(techID)
@@ -251,7 +251,7 @@ class ResearchDlg:
             player = client.getPlayer()
             player.rsrchQueue = client.cmdProxy.startResearch(player.oid, techID)
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(e.args[0])
             return
         self.update()
@@ -267,7 +267,7 @@ class ResearchDlg:
             player = client.getPlayer()
             player.rsrchQueue = client.cmdProxy.startResearch(player.oid, techID)
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(e.args[0])
             return
         self.update()
@@ -326,7 +326,7 @@ class ResearchDlg:
             player = client.getPlayer()
             player.obsoleteTechs = client.cmdProxy.addObsoleteTechs(player.oid, techID)
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(e.args[0])
             return
         self.update()
@@ -342,7 +342,7 @@ class ResearchDlg:
             player = client.getPlayer()
             player.obsoleteTechs = client.cmdProxy.delObsoleteTechs(player.oid, techID)
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(e.args[0])
             return
         self.update()

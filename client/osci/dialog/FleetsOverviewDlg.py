@@ -141,7 +141,7 @@ class FleetsOverviewDlg:
     def show(self):
         player = client.getPlayer()
         items = []
-        for fleetID in client.db.keys():
+        for fleetID in list(client.db.keys()):
             fleet = client.get(fleetID, noUpdate=1)
             # skip non-fleets
             if not hasattr(fleet, "type") or fleet.type != Const.T_FLEET:

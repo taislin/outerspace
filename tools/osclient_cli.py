@@ -37,7 +37,7 @@ from ige import log
 
 def msgHandler(id, data):
     if id >= 0:
-        print 'Message', id, data
+        print('Message', id, data)
 
 def getPlayer(name):
     u = s.getInfo(1)
@@ -178,7 +178,7 @@ elif options.chronicler:
     import ige.version
     import gettext
     import hashlib
-    gettext.NullTranslations().install(unicode = 1)
+    gettext.NullTranslations().install(str = 1)
     gdata.config = Config(os.path.join(options.configDir, options.configFilename))
 
     gdata.config.game.server = 'localhost:9080'

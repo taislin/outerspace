@@ -18,7 +18,7 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-from ConfigParser import ConfigParser
+from configparser import ConfigParser
 
 class Config:
     """Encapsulation of ConfigParser class.

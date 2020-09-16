@@ -425,7 +425,7 @@ class Null(OctetString):
     subtypeSpec = OctetString.subtypeSpec+constraint.SingleValueConstraint(''.encode())
 
 if sys.version_info[0] <= 2:
-    intTypes = (int, long)
+    intTypes = (int, int)
 else:
     intTypes = int
 

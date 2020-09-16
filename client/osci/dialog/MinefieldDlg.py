@@ -64,7 +64,7 @@ class MinefieldDlg:
 
     def show(self):
         self.precompute()
-        keys = self._mines.keys()
+        keys = list(self._mines.keys())
         keys.sort()
         items = []
         for minetech in keys:

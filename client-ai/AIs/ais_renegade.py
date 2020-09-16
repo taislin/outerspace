@@ -23,7 +23,7 @@ from ige import log
 from ige.ospace import Const
 from ige.ospace import Rules
 
-from ai import AI
+from .ai import AI
 import ai_tools as tool
 
 

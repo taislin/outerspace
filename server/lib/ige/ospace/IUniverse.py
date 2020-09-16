@@ -27,9 +27,9 @@ import time
 import ige
 import ige.version
 
-import Const
-import GalaxyGenerator
-import Rules
+from . import Const
+from . import GalaxyGenerator
+from . import Rules
 
 from ige import log
 from ige.IObject import IObject, public
@@ -127,7 +127,7 @@ class IUniverse(IObject):
                 for partyID in player.diplomacyRels:
                     #@log.debug("Processing party", partyID)
                     dipl = player.diplomacyRels[partyID]
-                    for pactID in dipl.pacts.keys():
+                    for pactID in list(dipl.pacts.keys()):
                         if pactID not in Rules.pactDescrs:
                             # this is invalid pactID
                             log.debug(playerID, "Deleting invalid pact with", partyID, "pact", pactID)
@@ -201,7 +201,7 @@ class IUniverse(IObject):
             player = tran.db[playerID]
             for partyID in player.diplomacyRels:
                 dipl = player.diplomacyRels[partyID]
-                if dipl.contactType > Const.CONTACT_NONE and tran.db.has_key(partyID):
+                if dipl.contactType > Const.CONTACT_NONE and partyID in tran.db:
                     dipl.stats = tran.db[partyID].stats
                 else:
                     dipl.stats = None
@@ -430,7 +430,7 @@ class IUniverse(IObject):
             # struggle is ongoing
             return True
         # no enemies left, let's celebrate by sending a message, and finish the galaxy
-        victors = map(lambda x: x.name, players)
+        victors = [x.name for x in players]
         message = {
             "sender": "Galaxy %s" % galaxy.name,
             "senderID": tran.cid,
@@ -479,13 +479,13 @@ class IUniverse(IObject):
         log.debug('Game turn is',obj.turn)
         if 0:
             for galaxyID in obj.galaxies:
-                if not tran.db.has_key(galaxyID):
+                if galaxyID not in tran.db:
                     log.debug("CONSISTENCY - galaxy %d from universe %d does not exists" % (galaxyID, obj.oid))
                 elif tran.db[galaxyID].type != Const.T_GALAXY:
                     log.debug("CONSISTENCY - galaxy %d from universe %d is not a Const.T_GALAXY" % (galaxyID, obj.oid))
         # check existence of all players
         for playerID in obj.players[:]:
-            if not tran.db.has_key(playerID):
+            if playerID not in tran.db:
                 log.debug("CONSISTENCY - player %d from universe %d does not exists" % (playerID, obj.oid))
                 log.debug("Removing reference to player", playerID)
                 obj.players.remove(playerID)

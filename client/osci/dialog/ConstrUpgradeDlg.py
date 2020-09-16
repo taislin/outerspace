@@ -24,7 +24,7 @@ from osci import gdata, res, client, sequip
 import ige.ospace.Const as Const
 from ige import GameException
 from ige.ospace import Rules
-from ConfirmDlg import ConfirmDlg
+from .ConfirmDlg import ConfirmDlg
 
 class ConstrUpgradeDlg:
 
@@ -105,7 +105,7 @@ class ConstrUpgradeDlg:
             player.shipDesigns, player.stratRes, tasksUpgraded, player.prodQueues = \
                 client.cmdProxy.upgradeShipDesign(player.oid, self.designID, designID)
             self.win.setStatus(_('Command has been executed.'))
-        except GameException, e:
+        except GameException as e:
             self.win.setStatus(e.args[0])
             return
         client.updateIDs(player.planets)

@@ -361,7 +361,7 @@ def _find_method_hash(method_hash):
 
     '''
 
-    for (hashname, asn1code) in HASH_ASN1.iteritems():
+    for (hashname, asn1code) in HASH_ASN1.items():
         if not method_hash.startswith(asn1code):
             continue
 
@@ -374,7 +374,7 @@ __all__ = ['encrypt', 'decrypt', 'sign', 'verify',
            'DecryptionError', 'VerificationError', 'CryptoError']
 
 if __name__ == '__main__':
-    print 'Running doctests 1000x or until failure'
+    print('Running doctests 1000x or until failure')
     import doctest
 
     for count in range(1000):
@@ -383,6 +383,6 @@ if __name__ == '__main__':
             break
 
         if count and count % 100 == 0:
-            print '%i times' % count
+            print('%i times' % count)
 
-    print 'Doctests done'
+    print('Doctests done')

@@ -22,14 +22,14 @@ import random
 import sys
 import time
 
-import Const
-import Rules
-import Utils
+from . import Const
+from . import Rules
+from . import Utils
 
 from ige import log
 from ige.IDataHolder import IDataHolder
 from ige.IObject import public
-from IPlayer import IPlayer
+from .IPlayer import IPlayer
 
 class IAIPiratePlayer(IPlayer):
 
@@ -40,7 +40,7 @@ class IAIPiratePlayer(IPlayer):
     def init(self, obj):
         IPlayer.init(self, obj)
         #
-        obj.name = u'Pirate'
+        obj.name = 'Pirate'
         obj.login = '*'
         #
         obj.pirateFame = 0
@@ -55,7 +55,7 @@ class IAIPiratePlayer(IPlayer):
         log.debug("Registering player", obj.oid)
         counter = 1
         while 1:
-            obj.name = u'Pirate faction %d' % counter
+            obj.name = 'Pirate faction %d' % counter
             obj.login = '*AIP*pirate%d' % counter
             if galaxyID in tran.gameMngr.accountGalaxies(obj.login):
                 counter += 1
@@ -179,7 +179,7 @@ class IAIPiratePlayer(IPlayer):
 
     def distToNearestPiratePlanet(self,tran,obj,srcObj):
         # srcObj can be Planet or System type
-        dist = sys.maxint
+        dist = sys.maxsize
         for objID in obj.planets:
             pirPl = tran.db[objID]
             d = math.hypot(srcObj.x - pirPl.x, srcObj.y - pirPl.y)
@@ -231,7 +231,7 @@ class IAIPiratePlayer(IPlayer):
         Utils.sendMessage(tran, piratePlayer, Const.MSG_GAINED_TECH, stealFromPlanetID, (techID, piratePlayer.techs[techID]))
 
     def forceAllyWithEDEN(self,tran,obj):
-        for partyID in obj.diplomacyRels.keys():
+        for partyID in list(obj.diplomacyRels.keys()):
             party = tran.db.get(partyID, None)
             if party.type == Const.T_AIEDENPLAYER:
                 diplSelf = obj.diplomacyRels.get(party.oid, None)

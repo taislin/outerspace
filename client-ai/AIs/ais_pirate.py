@@ -26,7 +26,7 @@ from ige.ospace import Utils
 from ige.IDataHolder import IDataHolder
 
 import ai_tools as tool
-from ai import AI
+from .ai import AI
 
 class Pirate(AI):
     def __init__(self, client):
@@ -183,9 +183,9 @@ class Pirate(AI):
             except KeyError:
                 return
             planet = self.db[planet_id]
-            if target.plType == u'G':
+            if target.plType == 'G':
                 self._condensePlanet(planet, target)
-            elif target.plType == u'A':
+            elif target.plType == 'A':
                 self._assemblePlanet(planet, target)
 
     def _build_ships(self, system_info):
@@ -328,7 +328,7 @@ class Pirate(AI):
             self._build_ships(system_info)
 
     def ship_design_manager(self):
-        if len(self.player.shipDesigns.keys()) < 4:
+        if len(list(self.player.shipDesigns.keys())) < 4:
             self.client.cmdProxy.addShipDesign(self.player.oid, 'Brawler',
                     Rules.Tech.SMALLHULL1, {Rules.Tech.SCOCKPIT1:1,
                     Rules.Tech.CANNON1:2, Rules.Tech.PIRATEFTLENG:3})

@@ -1,5 +1,5 @@
-import Const
-from Widget import Widget, registerWidget
+from . import Const
+from .Widget import Widget, registerWidget
 
 class ColorBox(Widget):
 

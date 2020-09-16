@@ -36,7 +36,7 @@ def computeScanner(obj1, obj2, playerMaps, signatures):
     if hasattr(obj1, "scannerPwr"):
         recordScanLevel(d, obj2, sigMod, obj1.scannerPwr, obj1.owner, playerMaps)
     elif hasattr(obj1, "scannerPwrs"):
-        for owner, scannerPwr in obj1.scannerPwrs.iteritems():
+        for owner, scannerPwr in obj1.scannerPwrs.items():
             recordScanLevel(d, obj2, sigMod, scannerPwr, owner, playerMaps)
     else:
         raise ige.ServerException("Unsupported object")
@@ -71,7 +71,7 @@ def computeMap(galaxyCmdObj, tran, galaxy):
 
     # add always visible items
     for owner in playerMaps:
-        for visibleObject in alwaysVisible.values():
+        for visibleObject in list(alwaysVisible.values()):
             playerMaps[owner][visibleObject] = max(Rules.level1InfoScanPwr, playerMaps[owner].get(visibleObject, 0))
     stop = time.time()
     log.debug("Time    : %0.3f s" % (stop - start))
@@ -111,7 +111,7 @@ def generateSectors(_map, sectorSize = 5, size = 10):
     # generate sector map
     sectors = {}
     # can be optimized to not include corner sectors
-    surroundingSectors = range(-size / sectorSize, size / sectorSize + 1)
+    surroundingSectors = list(range(-size / sectorSize, size / sectorSize + 1))
 
     for i in _map:
         obj = _map[i]

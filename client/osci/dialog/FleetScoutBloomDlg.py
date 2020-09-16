@@ -89,7 +89,7 @@ class FleetScoutBloomDlg:
         if not self.sendShips:
             self.selectedShip = Const.OID_NONE
         elif self.selectedShip not in self.sendShips:
-            self.selectedShip = self.sendShips.keys()[0]
+            self.selectedShip = list(self.sendShips.keys())[0]
         # get target data
         self.win.vTarget.text = info
         fleet = self.fleet
@@ -195,7 +195,7 @@ class FleetScoutBloomDlg:
         self.hide()
 
     def onSelectedShipChange(self, widget, action, data):
-        list_of_designs = self.sendShips.keys()
+        list_of_designs = list(self.sendShips.keys())
         try:
             position = list_of_designs.index(self.selectedShip)
             self.selectedShip = list_of_designs[(position + 1) % len(list_of_designs)]

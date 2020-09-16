@@ -83,7 +83,7 @@ def getCountShips(ships, maxCount):
     return retShips
 
 def appendToDict(dict, key, object):
-    if not dict.has_key(key):
+    if key not in dict:
         dict[key] = [object]
     else:
         dict[key].append(object)
@@ -218,8 +218,8 @@ class FleetSplitDlg:
         self.hide()
 
     def groupShips(self, grouped, by):
-        for key, item in grouped.items():
-            if type(item) == types.ListType:
+        for key, item in list(grouped.items()):
+            if type(item) == list:
                 if by & DESIGN:
                     grouped[key] = groupShipsByDesign(item)
                     self.groupShips(grouped[key], by - DESIGN)
@@ -240,14 +240,14 @@ class FleetSplitDlg:
                     self.groupShips(grouped[key], by - SPEED)
 
     def appendShips(self, grouped, items, player, checks):
-        for key, item in grouped.items():
+        for key, item in list(grouped.items()):
             if checks == 0:
                 for ship in item:
                     self.appendItem(ship, items, player, 0)
 
                 return
 
-            if type(item) == types.ListType:
+            if type(item) == list:
                 self.appendItem(item, items, player, checks)
             else:
                 self.appendShips(item, items, player, checks)
@@ -281,7 +281,7 @@ class FleetSplitDlg:
         self.win.vNEnMax.text = _('/ %d') % self.newEnMax
 
     def appendItem(self, ships, items, player, checks):
-        if type(ships[0]) == types.ListType:
+        if type(ships[0]) == list:
             count = len(ships)
             designName = ""
             listData = ships
@@ -346,7 +346,7 @@ class FleetSplitDlg:
             fleet = client.get(self.fleetDlg.fleetID, noUpdate = 1)
             newFleet, origFleet, fleets = client.cmdProxy.splitFleet(self.fleetDlg.fleetID,
                 self.newShips, self.newEn)
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(e.args[0])
             return
         # update related objects

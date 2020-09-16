@@ -58,7 +58,7 @@ class SystemOverviewDlg:
         items = []
         player = client.getPlayer()
         #
-        for systemID in client.db.keys():
+        for systemID in list(client.db.keys()):
             if systemID == player.oid:
                 continue
             system = client.get(systemID, noUpdate=1)

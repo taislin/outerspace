@@ -20,13 +20,13 @@
 
 import pygameui as ui
 from osci import client, res, gdata, sequip
-from FleetCommandDlg import FleetCommandDlg
-from FleetSpecsDlg import FleetSpecsDlg
-from FleetSplitDlg import FleetSplitDlg
-from FleetScoutBloomDlg import FleetScoutBloomDlg
-from ConfirmDlg import ConfirmDlg
-from RenameFleetDlg import RenameFleetDlg
-from LocateDlg import LocateDlg
+from .FleetCommandDlg import FleetCommandDlg
+from .FleetSpecsDlg import FleetSpecsDlg
+from .FleetSplitDlg import FleetSplitDlg
+from .FleetScoutBloomDlg import FleetScoutBloomDlg
+from .ConfirmDlg import ConfirmDlg
+from .RenameFleetDlg import RenameFleetDlg
+from .LocateDlg import LocateDlg
 import ige.ospace.Const as Const
 from ige.ospace import Rules
 import ige
@@ -188,7 +188,7 @@ class FleetDlg:
             short = sequip.getShortDescr(techID)
             long = sequip.getLongDescr(techID)
             item = ui.Item(_("%d x %s") % (tech.eqIDs[techID], eq.name),
-                tData = short, tooltip = long, statustip = long)
+                tData = short, tooltip = int, statustip = int)
             items.append(item)
         self.win.vShipEquipment.items = items
         self.win.vShipEquipment.itemsChanged()
@@ -232,7 +232,7 @@ class FleetDlg:
                 self.update()
                 gdata.mainGameDlg.update()
             return 0
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(_(e.args[0]))
             return 1
 
@@ -262,7 +262,7 @@ class FleetDlg:
             self.update()
             gdata.mainGameDlg.update()
             return 0
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(_(e.args[0]))
             return 1
 
@@ -279,7 +279,7 @@ class FleetDlg:
             self.win.setStatus(_('Command has been executed.'))
             self.onSelectCommand(widget, action, None)
             gdata.mainGameDlg.update()
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(_(e.args[0]))
             return 1
 

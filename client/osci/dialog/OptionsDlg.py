@@ -30,7 +30,7 @@ import ige.ospace.Const as Const
 from ige import log
 import resources
 
-from ChangePasswordDlg import ChangePasswordDlg
+from .ChangePasswordDlg import ChangePasswordDlg
 
 class OptionsDlg:
     """Displays options dialog.
@@ -347,7 +347,7 @@ class OptionsDlg:
         langDir = resources.get('translations')
         for term in os.listdir(langDir):
             if os.path.isfile(os.path.join(langDir, term,"LC_MESSAGES", "OSPACE.mo")) and not term.startswith("."):
-                if self.languages.has_key(term):
+                if term in self.languages:
                     item = ui.Item(self.languages[term], tLanguage = term)
                 else:
                     item = ui.Item(term, tLanguage = term)
@@ -370,7 +370,7 @@ class OptionsDlg:
             tran = gettext.NullTranslations()
         else:
             tran = gettext.translation('OSPACE', resources.get('translations'), languages = [self.curLang])
-        tran.install(unicode = 1)
+        tran.install(str = 1)
         try:
             self.win.vLangSel.text = self.languages[self.curLang]
         except:

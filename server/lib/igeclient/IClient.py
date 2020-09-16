@@ -22,8 +22,8 @@ import ige
 import ige.Authentication
 from ige.IMarshal import IMarshal, IPacket
 from ige import ServerStatusException, log
-import httplib, urllib
-import exceptions
+import http.client, urllib.request, urllib.parse, urllib.error
+import builtins
 import time
 from binascii import hexlify
 import threading
@@ -182,7 +182,7 @@ class IClient:
     def keepAlive(self):
         return IProxy('ping', None, self)()
 
-    def __nonzero__(self):
+    def __bool__(self):
         return 1
 
     def __getattr__(self, name):
@@ -224,12 +224,12 @@ class IProxy:
                 result = self.processCall(args)
                 ok = 1
                 break
-            except ServerStatusException, e:
+            except ServerStatusException as e:
                 log.warning("Cannot complete request - retrying...")
                 retries -= 1
                 time.sleep(1)
             # this was commented out
-            except Exception, e:
+            except Exception as e:
                 log.warning("Cannot complete request")
                 if self.client.msgHandler:
                     self.client.msgHandler(MSG_CMD_END, None)
@@ -268,12 +268,12 @@ class IProxy:
             # use urllib
             if not self.client.httpConn:
                 log.debug('Using proxy', self.client.proxy)
-                self.client.httpConn = urllib.FancyURLopener({'http': self.client.proxy})
+                self.client.httpConn = urllib.request.FancyURLopener({'http': self.client.proxy})
         else:
             if self.client.httpConn:
                 h = self.client.httpConn
             else:
-                h = httplib.HTTPConnection(self.client.server)
+                h = http.client.HTTPConnection(self.client.server)
                 self.client.httpConn = h
         try:
             if self.client.proxy:
@@ -330,7 +330,7 @@ class IProxy:
                 else:
                     rspData = reader.result
                 # end of thread dispatcher
-        except Exception, e:
+        except Exception as e:
             log.warning('Cannot send request to the server')
             self.client.logged = 0
             self.client.connected = 0
@@ -366,5 +366,5 @@ class Reader(threading.Thread):
     def run(self):
         try:
             self.result = self.callable()
-        except Exception, e:
+        except Exception as e:
             self.exception = e

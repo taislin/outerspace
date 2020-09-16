@@ -31,14 +31,14 @@ from ige.Transaction import Transaction
 from ige.IDataHolder import IDataHolder
 from ige import GameException, SecurityException, CreatePlayerException
 
-import Const
-import IPlayer, IUniverse, IGalaxy, ISystem, IWormHole, IPlanet, IFleet
-import INature, IAIPlayer, IAIRenegadePlayer, IAIMutantPlayer, IAIPiratePlayer
-import GalaxyGenerator
-import IAIEDENPlayer, IPiratePlayer
-import Rules, Utils
+from . import Const
+from . import IPlayer, IUniverse, IGalaxy, ISystem, IWormHole, IPlanet, IFleet
+from . import INature, IAIPlayer, IAIRenegadePlayer, IAIMutantPlayer, IAIPiratePlayer
+from . import GalaxyGenerator
+from . import IAIEDENPlayer, IPiratePlayer
+from . import Rules, Utils
 
-from Rules import Tech
+from .Rules import Tech
 
 class GameMngr(IGEGameMngr):
 
@@ -424,19 +424,19 @@ class GameMngr(IGEGameMngr):
         universe = self.db[Const.OID_UNIVERSE]
         jsonComma = False
         fhjson = open(os.path.join(self.configDir, 'website/%s/json.txt' % (self.gameID)), 'w')
-        print >>fhjson, '{"turn":"%s",' % universe.turn
+        print('{"turn":"%s",' % universe.turn, file=fhjson)
         for playerID in universe.players:
             player = self.db[playerID]
             stats[playerID] = player.stats
             galaxies[playerID] = player.galaxy
             resolution = self.cmdPool[player.type].getResolution(player)
-            if resolutions.has_key(resolution):
+            if resolution in resolutions:
                 resolutions[resolution] += 1
             else:
                 resolutions[resolution] = 1
         for galaxyID in universe.galaxies:
             gStats = copy.deepcopy(stats)
-            for playerID in gStats.keys():
+            for playerID in list(gStats.keys()):
                 # huh, someone should have commented this
                 if galaxyID != galaxies[playerID]:
                     del gStats[playerID]
@@ -486,7 +486,7 @@ class GameMngr(IGEGameMngr):
                 imperator = ""
                 imperatoroid = 0
                 leaderoid = 0
-            print >>fh, statsHeader % (self.gameID, galaxy.name, imperator)
+            print(statsHeader % (self.gameID, galaxy.name, imperator), file=fh)
             order = self.sortStatsBy(gStats, 'storPop')
             self.printJSONStatsTable(fhjson, gStats, order, galaxyID, galaxy.name, imperatoroid, leaderoid, jsonComma)
             jsonComma = True
@@ -503,126 +503,126 @@ class GameMngr(IGEGameMngr):
             self.printStatsEcoTable(fh, 'Sorted by science', gStats, order)
             order = self.sortStatsBy(gStats, 'fleetPwr')
             self.printStatsEcoTable(fh, 'Sorted by military power', gStats, order)
-            print >>fh, statsFooter
+            print(statsFooter, file=fh)
             fh.close()
-        print >>fhjson, '}'
+        print('}', file=fhjson)
         fhjson.close()
         #write resolutions of clients in use for statistics tracking
         fhres = open(os.path.join(self.configDir, 'website/res.txt'), 'w')
-        print >>fhres, 'Resoltion: Number of users'
-        reskeys = resolutions.keys();
+        print('Resoltion: Number of users', file=fhres)
+        reskeys = list(resolutions.keys());
         reskeys.sort();
         for resolution in reskeys:
-            print >>fhres, '%s: %s' % (resolution, resolutions[resolution])
+            print('%s: %s' % (resolution, resolutions[resolution]), file=fhres)
         fhres.close()
 
     def sortStatsBy(self, stats, attr):
         keyF = lambda a: getattr(stats[a], attr)
-        order = sorted(stats.keys(), key=keyF, reverse = True)
+        order = sorted(list(stats.keys()), key=keyF, reverse = True)
         return order
 
     def printJSONStatsTable(self, fh, stats, order, galaxyID, galaxyName, imperatoroid, leaderoid, jsonComma):
         if jsonComma:
-            print >> fh, ','
-        print >> fh, '"%s":{"galaxyname":"%s","imperatorid":"%s","leaderid":"%s","players":' % (galaxyID, galaxyName, imperatoroid, leaderoid)
-        print >> fh, '{'
-        print >> fh, '"order":["name","pop","planets","structs","prod","sci","mp"]'
+            print(',', file=fh)
+        print('"%s":{"galaxyname":"%s","imperatorid":"%s","leaderid":"%s","players":' % (galaxyID, galaxyName, imperatoroid, leaderoid), file=fh)
+        print('{', file=fh)
+        print('"order":["name","pop","planets","structs","prod","sci","mp"]', file=fh)
         for playerID in order:
-            print >> fh, ','
+            print(',', file=fh)
             needComma = True
             stat = stats[playerID]
-            print >> fh, '"%s":["%s","%s","%s","%s","%s","%s","%s"]' % (playerID, self.db[playerID].name, stat.storPop, stat.planets, stat.structs, stat.prodProd, stat.prodSci, stat.fleetPwr)
-        print >> fh, '}}'
+            print('"%s":["%s","%s","%s","%s","%s","%s","%s"]' % (playerID, self.db[playerID].name, stat.storPop, stat.planets, stat.structs, stat.prodProd, stat.prodSci, stat.fleetPwr), file=fh)
+        print('}}', file=fh)
 
     def printStatsEcoTable(self, fh, title, stats, order):
-        print >> fh, '<table cellspacing="1" border="0" cellpadding="2" width="100%">'
-        print >> fh, '<tr>'
-        print >> fh, '<td class="title" align="center" colspan="8">%s</td>' % title
-        print >> fh, '</tr>'
-        print >> fh, '<tr>'
-        print >> fh, '<td class="title" align="right">#</td>'
-        print >> fh, '<td class="title" align="left">Player</td>'
-        print >> fh, '<td class="title" align="right">Population</td>'
-        print >> fh, '<td class="title" align="right">Planets</td>'
-        print >> fh, '<td class="title" align="right">Structures</td>'
-        print >> fh, '<td class="title" align="right">Production</td>'
-        print >> fh, '<td class="title" align="right">Military pwr</td>'
-        print >> fh, '<td class="title" align="right">Science</td>'
-        print >> fh, '</tr>'
-        print >> fh, '<tr>'
+        print('<table cellspacing="1" border="0" cellpadding="2" width="100%">', file=fh)
+        print('<tr>', file=fh)
+        print('<td class="title" align="center" colspan="8">%s</td>' % title, file=fh)
+        print('</tr>', file=fh)
+        print('<tr>', file=fh)
+        print('<td class="title" align="right">#</td>', file=fh)
+        print('<td class="title" align="left">Player</td>', file=fh)
+        print('<td class="title" align="right">Population</td>', file=fh)
+        print('<td class="title" align="right">Planets</td>', file=fh)
+        print('<td class="title" align="right">Structures</td>', file=fh)
+        print('<td class="title" align="right">Production</td>', file=fh)
+        print('<td class="title" align="right">Military pwr</td>', file=fh)
+        print('<td class="title" align="right">Science</td>', file=fh)
+        print('</tr>', file=fh)
+        print('<tr>', file=fh)
         # index
         index = 1
-        print >> fh, '<td align="right" nowrap>'
+        print('<td align="right" nowrap>', file=fh)
         for playerID in order:
             stat = stats[playerID]
-            if index % 2: print >> fh, '%d.<br>' % index
-            else:  print >> fh, '<font color="#c0c0c0">%d</font>.<br>' % index
+            if index % 2: print('%d.<br>' % index, file=fh)
+            else:  print('<font color="#c0c0c0">%d</font>.<br>' % index, file=fh)
             index += 1
-        print >> fh, '</td>'
+        print('</td>', file=fh)
         # name
         index = 1
-        print >> fh, '<td align="left" nowrap>'
+        print('<td align="left" nowrap>', file=fh)
         for playerID in order:
             stat = stats[playerID]
-            if index % 2: print >> fh, '%s<br>' % self.db[playerID].name
-            else: print >> fh, '<font color="#c0c0c0">%s</font><br>' % self.db[playerID].name
+            if index % 2: print('%s<br>' % self.db[playerID].name, file=fh)
+            else: print('<font color="#c0c0c0">%s</font><br>' % self.db[playerID].name, file=fh)
             index += 1
-        print >> fh, '</td>'
+        print('</td>', file=fh)
         # storPop
         index = 1
-        print >> fh, '<td align="right" nowrap>'
+        print('<td align="right" nowrap>', file=fh)
         for playerID in order:
             stat = stats[playerID]
-            if index % 2: print >> fh, '%d<br>' % stat.storPop
-            else: print >> fh, '<font color="#c0c0c0">%d</font><br>' % stat.storPop
+            if index % 2: print('%d<br>' % stat.storPop, file=fh)
+            else: print('<font color="#c0c0c0">%d</font><br>' % stat.storPop, file=fh)
             index += 1
-        print >> fh, '</td>'
+        print('</td>', file=fh)
         # planets
         index = 1
-        print >> fh, '<td align="right" nowrap>'
+        print('<td align="right" nowrap>', file=fh)
         for playerID in order:
             stat = stats[playerID]
-            if index % 2: print >> fh, '%d<br>' % stat.planets
-            else: print >> fh, '<font color="#c0c0c0">%d</font><br>' % stat.planets
+            if index % 2: print('%d<br>' % stat.planets, file=fh)
+            else: print('<font color="#c0c0c0">%d</font><br>' % stat.planets, file=fh)
             index += 1
-        print >> fh, '</td>'
+        print('</td>', file=fh)
         # structs
         index = 1
-        print >> fh, '<td align="right" nowrap>'
+        print('<td align="right" nowrap>', file=fh)
         for playerID in order:
             stat = stats[playerID]
-            if index % 2: print >> fh, '%d<br>' % stat.structs
-            else: print >> fh, '<font color="#c0c0c0">%d</font><br>' % stat.structs
+            if index % 2: print('%d<br>' % stat.structs, file=fh)
+            else: print('<font color="#c0c0c0">%d</font><br>' % stat.structs, file=fh)
             index += 1
-        print >> fh, '</td>'
+        print('</td>', file=fh)
         # prodProd
         index = 1
-        print >> fh, '<td align="right" nowrap>'
+        print('<td align="right" nowrap>', file=fh)
         for playerID in order:
             stat = stats[playerID]
-            if index % 2: print >> fh, '%d<br>' % stat.prodProd
-            else: print >> fh, '<font color="#c0c0c0">%d</font><br>' % stat.prodProd
+            if index % 2: print('%d<br>' % stat.prodProd, file=fh)
+            else: print('<font color="#c0c0c0">%d</font><br>' % stat.prodProd, file=fh)
             index += 1
-        print >> fh, '</td>'
+        print('</td>', file=fh)
         # fleet
         index = 1
-        print >> fh, '<td align="right" nowrap>'
+        print('<td align="right" nowrap>', file=fh)
         for playerID in order:
             stat = stats[playerID]
-            if index % 2: print >> fh, '%d<br>' % stat.fleetPwr
-            else: print >> fh, '<font color="#c0c0c0">%d</font><br>' % stat.fleetPwr
+            if index % 2: print('%d<br>' % stat.fleetPwr, file=fh)
+            else: print('<font color="#c0c0c0">%d</font><br>' % stat.fleetPwr, file=fh)
             index += 1
         # prodSci
         index = 1
-        print >> fh, '<td align="right" nowrap>'
+        print('<td align="right" nowrap>', file=fh)
         for playerID in order:
             stat = stats[playerID]
-            if index % 2: print >> fh, '%d<br>' % stat.prodSci
-            else: print >> fh, '<font color="#c0c0c0">%d</font><br>' % stat.prodSci
+            if index % 2: print('%d<br>' % stat.prodSci, file=fh)
+            else: print('<font color="#c0c0c0">%d</font><br>' % stat.prodSci, file=fh)
             index += 1
-        print >> fh, '</td>'
-        print >> fh, '</tr>'
-        print >> fh, '</table><br>'
+        print('</td>', file=fh)
+        print('</tr>', file=fh)
+        print('</table><br>', file=fh)
 
 statsHeader = '''\
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">

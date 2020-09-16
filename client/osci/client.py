@@ -105,7 +105,7 @@ def saveDB():
     ## Message handler
 
 def msgHandler(mid, data):
-    if ignoreMsgs.has_key(mid):
+    if mid in ignoreMsgs:
         log.debug('OSClient', 'ignoring message', mid, data)
         return
     if mid == Const.SMESSAGE_NEWTURN:
@@ -125,7 +125,7 @@ def messageIgnore(mid):
 
 def messageEnable(mid):
     global ignoreMsgs
-    if ignoreMsgs.has_key(mid):
+    if mid in ignoreMsgs:
         del ignoreMsgs[mid]
 
 ## Idle handler
@@ -174,7 +174,7 @@ def updateDatabaseUnsafe(clearDB = 0, force = 0):
     callbackObj.onUpdateProgress(current, max, _("Deleting obsolete data..."))
     # delete selected objects
     # reset combatCounters
-    for objID in db.keys():
+    for objID in list(db.keys()):
         obj = db[objID]
         if hasattr(obj, "combatCounter"):
             obj.combatCounter = 0
@@ -232,7 +232,7 @@ def keepAlive(force = False):
 
 def get(objID, forceUpdate = 0, noUpdate = 0, canBePublic = 1, publicOnly = 0):
     global nonexistingObj
-    if nonexistingObj.has_key(objID) and not forceUpdate:
+    if objID in nonexistingObj and not forceUpdate:
         return None
     if noUpdate:
         return db.get(objID, None)
@@ -245,7 +245,7 @@ def get(objID, forceUpdate = 0, noUpdate = 0, canBePublic = 1, publicOnly = 0):
             else:
                 return db.get(objID, None)
         except ige.NoSuchObjectException:
-            if db.has_key(objID):
+            if objID in db:
                 del db[objID]
             nonexistingObj[objID] = None
             return None
@@ -253,7 +253,7 @@ def get(objID, forceUpdate = 0, noUpdate = 0, canBePublic = 1, publicOnly = 0):
         try:
             db[objID] = cmdProxy.getPublicInfo(objID)
         except ige.NoSuchObjectException:
-            if db.has_key(objID):
+            if objID in db:
                 del db[objID]
             nonexistingObj[objID] = None
             return None
@@ -265,7 +265,7 @@ def updateIDs(objIDs):
         db[obj.oid] = obj
         delete.remove(obj.oid)
     for objID in delete:
-        if db.has_key(objID):
+        if objID in db:
             del db[objID]
 
 def getRelationTo(objID):
@@ -330,7 +330,7 @@ def getTechInfo(techID):
     return result
 
 def getAllTechIDs():
-    return Rules.techs.keys()
+    return list(Rules.techs.keys())
 
 def getPlayerID():
     return db.playerID

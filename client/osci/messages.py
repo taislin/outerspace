@@ -55,9 +55,10 @@ def objIDList2Names(objIDs):
         names.append(text)
     return string.join(names, ', ')
 
-def minesReport((damageCaused, killsCaused, minesTriggered)):
+def minesReport(xxx_todo_changeme):
+    (damageCaused, killsCaused, minesTriggered) = xxx_todo_changeme
     lines = []
-    techs = minesTriggered.keys()
+    techs = list(minesTriggered.keys())
     for techID in techs:
         techName = client.getTechInfo(techID).name.encode()
         text = _('%d of the %s detonated, causing %d damage, killing %d ships in the process.') %\
@@ -86,7 +87,8 @@ def designID2Name(designID):
 def queueID2Name(queueID):
     return res.globalQueueName(queueID)
 
-def votes2Txt((votes, voters)):
+def votes2Txt(xxx_todo_changeme1):
+    (votes, voters) = xxx_todo_changeme1
     lines = []
     nominated = sorted(votes, key=lambda a: votes[a], reverse = True)
     for playerName in nominated:
@@ -170,18 +172,18 @@ addMsg(Const.MSG_EXTRACTED_STRATRES, N_('Strategic resource extracted: %(1)s'), 
 addMsg(Const.MSG_EXTRACTED_ANTIMATTER_SYNTH, N_('Strategic resource synthesized: 4 units of %(1)s'), (stratID2Name,), MIN)
 addMsg(Const.MSG_DOWNGRADED_PLANET_ECO, N_('Planet downgraded to: %(1)s'), (plType2Name,), CRI)
 addMsg(Const.MSG_UPGRADED_PLANET_ECO, N_('Planet upgraded to: %(1)s'), (plType2Name,), CRI)
-addMsg(Const.MSG_UPGRADED_SHIP, N_('Ship upgraded from %(1)s to %(2)s'), (unicode,unicode), MIN)
-addMsg(Const.MSG_DELETED_DESIGN, N_('Obsolete ship design deleted: %(1)s'), (unicode,), CRI)
-addMsg(Const.MSG_CANNOT_UPGRADE_SR, N_('Cannot upgrade ship from %(1)s to %(2)s\n\nCannot upgrade ship from %(1)s to %(2)s because of we have not enough of %(3)s.'), (unicode,unicode,stratID2Name), MAJ)
+addMsg(Const.MSG_UPGRADED_SHIP, N_('Ship upgraded from %(1)s to %(2)s'), (str,str), MIN)
+addMsg(Const.MSG_DELETED_DESIGN, N_('Obsolete ship design deleted: %(1)s'), (str,), CRI)
+addMsg(Const.MSG_CANNOT_UPGRADE_SR, N_('Cannot upgrade ship from %(1)s to %(2)s\n\nCannot upgrade ship from %(1)s to %(2)s because of we have not enough of %(3)s.'), (str,str,stratID2Name), MAJ)
 addMsg(Const.MSG_DAMAGE_BY_SG, N_('Malfunctional Star Gate, lost %(1)d %% HP\n\nOur fleet has arrived at system with no or malfunctional Star Gate or Comm/Scann Center. Every ship lost %(1)d %% hitpoints due to intensive deceleration.'), (int,), MAJ)
 addMsg(Const.MSG_GAINED_FAME, N_('Gained %(1)d fame.'), severity = INFO)
 addMsg(Const.MSG_LOST_FAME, N_('Lost %(1)d fame.'), severity = CRI)
 addMsg(Const.MSG_GAINED_TECH, N_('Gained %(1)s technology at sublevel %(2)d.'), (techID2Name, int), severity = INFO)
-addMsg(Const.MSG_ENTERED_WORMHOLE, N_('Your fleet entered a wormhole at %(1)s and exited at %(2)s.'), (unicode,unicode), severity = MIN)
+addMsg(Const.MSG_ENTERED_WORMHOLE, N_('Your fleet entered a wormhole at %(1)s and exited at %(2)s.'), (str,str), severity = MIN)
 addMsg(Const.MSG_NOT_ENTERED_WORMHOLE, N_('Cannot enter wormhole - ship may be lost.'), severity = MIN)
 addMsg(Const.MSG_FOUND_WORMHOLE, N_('You have located a wormhole'), severity = MIN) #todo
-addMsg(Const.MSG_FUEL_LOST_ORBITING, N_('Fleet lost.\n\n We lost contact with the %(1)s after they ran out of fuel in the system %(2)s.'), (unicode, objID2Name), severity = MAJ)
-addMsg(Const.MSG_FUEL_LOST_FLYING, N_('Fleet lost.\n\n We lost contact with the %(1)s after they ran out of fuel en route to the system %(2)s.'), (unicode, objID2Name), severity = MAJ)
+addMsg(Const.MSG_FUEL_LOST_ORBITING, N_('Fleet lost.\n\n We lost contact with the %(1)s after they ran out of fuel in the system %(2)s.'), (str, objID2Name), severity = MAJ)
+addMsg(Const.MSG_FUEL_LOST_FLYING, N_('Fleet lost.\n\n We lost contact with the %(1)s after they ran out of fuel en route to the system %(2)s.'), (str, objID2Name), severity = MAJ)
 addMsg(Const.MSG_QUEUE_TASK_ALLOTED, N_('Task alloted.\n\nGlobal queue \"%(1)s\" alloted %(2)s.'), (queueID2Name, techID2Name), severity = MAJ)
 addMsg(Const.MSG_MINES_OWNER_RESULTS, N_('Our minefield triggered: HP / ships destroyed: %(3)s / %(4)s.\n\nForces of %(1)s triggered our minefield. Report:\n\n%(2)s'), (objIDList2Names,minesReport,int,int), severity = MAJ)
 addMsg(Const.MSG_MINES_FLEET_RESULTS, N_('Hostile minefield triggered: HP / ships lost: %(1)s / %(2)s.\n\nOur fleet triggered enemy minefield, losing %(1)s HP resulting in destruction of %(2)s ships.'), (int,int), severity = MAJ)
@@ -191,14 +193,14 @@ addMsg(Const.MSG_GNC_EMR_FORECAST, N_("EMR Forecast\n\nLevel of the electromagne
 addMsg(Const.MSG_GNC_EMR_CURRENT_LVL, N_("EMR Forecast\n\nCurrent level of the electromagnetic radiation is about %(1)d %% of the average level."), (float2percent,), severity = MIN)
 addMsg(Const.MSG_GNC_VOTING_COMING, N_("Elections!\n\nIt's %(1)s turns before elections! Don't hesitate and vote for the best commander!"), (res.formatTime,), severity = MAJ)
 addMsg(Const.MSG_GNC_VOTING_NOWINNER, N_("Election results! Nobody won...\n\nThe results from the last elections have been published. Nobody was strong enough to be elected as a leader of our galaxy. Can we find such person another day?\n\nThe official election results follow:\n\n%(1)s\n\n"), (votes2Txt,), severity = MAJ)
-addMsg(Const.MSG_GNC_VOTING_LEADER, N_("Election results! Leader elected!\n\nThe results from the last elections have been published. %(1)s has proved to be the most supported person and has been elected as our Leader. May be, %(1)s can become an Imperator one day.\n\nThe official election results follow:\n\n%(2)s\n\n"), (unicode, votes2Txt,), severity = MAJ)
-addMsg(Const.MSG_GNC_VOTING_IMPERATOR, N_("Election results! Imperator elected!\n\nThe results from the last elections have been published. %(1)s has proved to be the most supported person and has been elected as our glorified Imperator. Congratulations - you proved to be the best of all of us!\n\nThe official election results follow:\n\n%(2)s\n\n"), (unicode, votes2Txt,), severity = MAJ)
+addMsg(Const.MSG_GNC_VOTING_LEADER, N_("Election results! Leader elected!\n\nThe results from the last elections have been published. %(1)s has proved to be the most supported person and has been elected as our Leader. May be, %(1)s can become an Imperator one day.\n\nThe official election results follow:\n\n%(2)s\n\n"), (str, votes2Txt,), severity = MAJ)
+addMsg(Const.MSG_GNC_VOTING_IMPERATOR, N_("Election results! Imperator elected!\n\nThe results from the last elections have been published. %(1)s has proved to be the most supported person and has been elected as our glorified Imperator. Congratulations - you proved to be the best of all of us!\n\nThe official election results follow:\n\n%(2)s\n\n"), (str, votes2Txt,), severity = MAJ)
 
-addMsg(Const.MSG_GNC_GALAXY_FINISHED, N_("Galaxy %(2)s knows its winner - Imperator %(1)s\n\nToday the galaxy %(2)s has been united and the peace has been restored. Majority of commanders voted for Imperator %(1)s as their supreme leader. Congratulations, Imperator, you were brave and wise!\n\nMessage from imperator:\n%(3)s"), (unicode, unicode, impMsg), severity = MAJ)
-addMsg(Const.MSG_GNC_GALAXY_GENERATOR, N_("Galaxy %(1)s generation is completed. Galaxy specifications:\n\n%(2)s"), (unicode, votes2Txt,), severity = INFO)
-addMsg(Const.MSG_GNC_GALAXY_AUTO_FINISHED, N_("Galaxy %(1)s has ended\n\nToday the galaxy %(1)s has been automatically ended.\n\nReason:\n%(2)s"), (unicode, impMsg), severity = MAJ)
-addMsg(Const.MSG_GNC_GALAXY_BRAWL_WON, N_("Galaxy %(1)s has ended\n\nAll hail to the conqueror! Galaxy %(1)s is finally on the brink of peace. After years of conquest, all opposition has been decimated and Sovereign %(2)s stands as the sole usurper of the galaxy."), (unicode, unicode), severity = MAJ)
-addMsg(Const.MSG_GNC_GALAXY_COOP_WON, N_("Galaxy %(1)s has ended\n\nAll citizens of galaxy %(1)s rejoice. Peace is finally here!. After years of fending of attacks of barbaric empires, stalwart defence by %(2)s prevailed, and ensured further generations can live in prosperity."), (unicode, listing), severity = MAJ)
+addMsg(Const.MSG_GNC_GALAXY_FINISHED, N_("Galaxy %(2)s knows its winner - Imperator %(1)s\n\nToday the galaxy %(2)s has been united and the peace has been restored. Majority of commanders voted for Imperator %(1)s as their supreme leader. Congratulations, Imperator, you were brave and wise!\n\nMessage from imperator:\n%(3)s"), (str, str, impMsg), severity = MAJ)
+addMsg(Const.MSG_GNC_GALAXY_GENERATOR, N_("Galaxy %(1)s generation is completed. Galaxy specifications:\n\n%(2)s"), (str, votes2Txt,), severity = INFO)
+addMsg(Const.MSG_GNC_GALAXY_AUTO_FINISHED, N_("Galaxy %(1)s has ended\n\nToday the galaxy %(1)s has been automatically ended.\n\nReason:\n%(2)s"), (str, impMsg), severity = MAJ)
+addMsg(Const.MSG_GNC_GALAXY_BRAWL_WON, N_("Galaxy %(1)s has ended\n\nAll hail to the conqueror! Galaxy %(1)s is finally on the brink of peace. After years of conquest, all opposition has been decimated and Sovereign %(2)s stands as the sole usurper of the galaxy."), (str, str), severity = MAJ)
+addMsg(Const.MSG_GNC_GALAXY_COOP_WON, N_("Galaxy %(1)s has ended\n\nAll citizens of galaxy %(1)s rejoice. Peace is finally here!. After years of fending of attacks of barbaric empires, stalwart defence by %(2)s prevailed, and ensured further generations can live in prosperity."), (str, listing), severity = MAJ)
 addMsg(Const.MSG_GNC_GALAXY_CREATED, N_("Boom of galactic civilizations is here\n\nDark ages are past, and new empires are reaching galactic age at breakneck speed and with fervor never seen before. True space race is predicted to start on %(1)s of universal time."), (delayTurns,), severity = MAJ)
 
 # i18n
@@ -221,7 +223,7 @@ def getMsgText(msgID, data):
     try:
         # tranform data
         newData = {}
-        if not (type(data) == types.ListType or type(data) == types.TupleType):
+        if not (type(data) == list or type(data) == tuple):
             data = (data,)
         if transform:
             index = 1
@@ -234,7 +236,7 @@ def getMsgText(msgID, data):
                 newData[str(index)] = item
                 index += 1
         text = msg % newData
-    except Exception, e:
+    except Exception as e:
         # wrong arguments -> default message
         log.warning("Error while formating message")
         return _('ERROR\nWrong format for msg %d: %s\nException: %s: %s\nFormat: %s') % (msgID, repr(data), str(e.__class__), str(e), msg)
@@ -250,7 +252,7 @@ def getFullMessageText(message):
     string.
     """
     text = ""
-    if message.has_key("data"):
+    if "data" in message:
         sourceID, msgID, locationID, turn, data = message["data"]
         sev = getMsgSeverity(msgID)
         currTurn = client.getTurn()

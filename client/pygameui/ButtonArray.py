@@ -19,11 +19,11 @@
 #
 import pygame
 
-import Const
-from Widget import registerWidget
-from MetaWidget import MetaWidget
-from Scrollbar import Scrollbar
-from Button import Button
+from . import Const
+from .Widget import registerWidget
+from .MetaWidget import MetaWidget
+from .Scrollbar import Scrollbar
+from .Button import Button
 
 class ButtonArray(MetaWidget):
 
@@ -61,8 +61,8 @@ class ButtonArray(MetaWidget):
             self.columns = (r.width - gx) / gx / bwidth
         else:
             self.columns = r.width / gx / bwidth
-        for row in xrange(0, self.rows):
-            for column in xrange(0, self.columns):
+        for row in range(0, self.rows):
+            for column in range(0, self.columns):
                 x = column * gx * bwidth
                 y = row * gy * bheight
                 button = Button(self, action = 'onButtonPressed', rmbAction = 'onRButtonPressed', hoverAction = 'onButtonHighlighted', toggle = 1)

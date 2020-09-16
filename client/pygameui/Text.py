@@ -19,9 +19,9 @@
 #
 
 import unittest
-import Const
-from WordUtils import splitter
-from Widget import Widget, registerWidget
+from . import Const
+from .WordUtils import splitter
+from .Widget import Widget, registerWidget
 import pygame.key
 
 # keys mapping
@@ -56,7 +56,7 @@ class Selection(object):
     def deselect(self):
         self._start = self._end = None
 
-    def __nonzero__(self):
+    def __bool__(self):
         return self._start is not None and self._end is not None
 
 
@@ -229,7 +229,7 @@ class Text(Widget):
         self.cursorColumn = 0
 
     def _processUnicode(self, evt):
-        char = evt.unicode
+        char = evt.str
         self.text[self.cursorRow] = self.text[self.cursorRow][:self.cursorColumn] + char + self.text[self.cursorRow][self.cursorColumn:]
         self.cursorColumn += 1
 
@@ -298,7 +298,7 @@ class Text(Widget):
         elif evt.key == pygame.K_RETURN:
             self.wrapDeleteSelection(self._processReturn, evt)
 
-        elif hasattr(evt, 'unicode') and evt.unicode:
+        elif hasattr(evt, 'unicode') and evt.str:
             self.wrapDeleteSelection(self._processUnicode, evt)
 
         elif evt.key in MAPPING:
@@ -333,7 +333,7 @@ class TextTestCase(unittest.TestCase):
         class Evt:
             def __init__(self, key, letter="", mod=0):
                 self.key = key
-                self.unicode = unicode(letter)
+                self.str = str(letter)
                 self.mod = mod
 
         class App:

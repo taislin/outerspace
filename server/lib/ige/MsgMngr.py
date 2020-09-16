@@ -134,7 +134,7 @@ class MailboxRoot:
     def scan(self, db):
         log.debug("*** SCANNING MAILBOXES ***")
         self.mailboxNames = []
-        for key in db.keys():
+        for key in list(db.keys()):
             if key.count("-") == 1:
                 # mailbox
                 self.mailboxNames.append(key)

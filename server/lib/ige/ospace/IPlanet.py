@@ -25,10 +25,10 @@ import random
 from xml.dom.minidom import Node
 
 import ige
-import Const
-import Rules
-import Utils
-import ShipUtils
+from . import Const
+from . import Rules
+from . import Utils
+from . import ShipUtils
 
 from ige import log
 from ige.IObject import IObject, public
@@ -44,7 +44,7 @@ class IPlanet(IObject):
         obj.x = 0.0
         obj.y = 0.0
         obj.plDiameter = 0
-        obj.plType = u'-'
+        obj.plType = '-'
         obj.plMin = 0
         obj.plBio = 0
         obj.plEn = 0
@@ -114,9 +114,9 @@ class IPlanet(IObject):
         if quantity < 1:
             raise ige.GameException("Quantity must be greater than 0")
         player = tran.db[obj.owner]
-        if not player.techs.has_key(techID) and isShip == 0:
+        if techID not in player.techs and isShip == 0:
             raise ige.GameException('You do not own this kind of technology.')
-        if not player.shipDesigns.has_key(techID) and isShip == 1:
+        if techID not in player.shipDesigns and isShip == 1:
             raise ige.GameException('You do not own this ship design.')
         if targetID not in tran.db[obj.compOf].planets:
             raise ige.GameException('You can build only in the same system.')
@@ -227,7 +227,7 @@ class IPlanet(IObject):
             try:
                 oldOwner = tran.db[obj.owner]
                 oldOwner.planets.remove(obj.oid)
-                if tran.db.has_key(obj.owner):
+                if obj.owner in tran.db:
                     Utils.sendMessage(tran, obj, Const.MSG_LOST_PLANET, obj.oid, None)
             except Exception:
                 log.warning("Cannot remove planet from owner", obj.oid, obj.owner)
@@ -913,7 +913,7 @@ class IPlanet(IObject):
                 obj.storPop = 0
                 return
         # check compOf
-        if not tran.db.has_key(obj.compOf) or tran.db[obj.compOf].type != Const.T_SYSTEM:
+        if obj.compOf not in tran.db or tran.db[obj.compOf].type != Const.T_SYSTEM:
             log.debug("CONSISTENCY invalid compOf for planet", obj.oid)
         # fix signature
         obj.signature = 75
@@ -1004,7 +1004,7 @@ class IPlanet(IObject):
                     count = system.combatCounter + desCount[structTechID] + wpnCount[weaponID] - 2
                     # add to attacks
                     #@log.debug('IPlanet', obj.oid, structTechID, "Count", count, 'Shots', weapon.name, ShipUtils.getRounds(weapon.weaponROF, count))
-                    for round in xrange(0, ShipUtils.getRounds(weapon.weaponROF, count)):
+                    for round in range(0, ShipUtils.getRounds(weapon.weaponROF, count)):
                         shots[weapon.weaponClass].append((attack, weaponID))
         # hit limit
         obj.maxHits = len(obj.slots)

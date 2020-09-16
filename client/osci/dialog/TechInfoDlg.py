@@ -373,7 +373,7 @@ class TechInfoDlg:
 
         # description
         descr.append(_('Description:'))
-        if tech.textDescr != u'Not specified':
+        if tech.textDescr != 'Not specified':
             descr.extend(tech.textDescr.split('\n'))
         else:
             descr.extend(tech.textPreRsrch.split('\n'))

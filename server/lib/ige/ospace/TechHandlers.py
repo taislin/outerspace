@@ -22,9 +22,9 @@ import math
 import random
 import sys
 
-import Const
-import Rules
-import Utils
+from . import Const
+from . import Rules
+from . import Utils
 
 from ige import log
 
@@ -283,7 +283,7 @@ def OLDgetPirateFameMod(tran, player, system):
 
 def distToNearestPiratePlanet(tran,obj,srcObj):
     # srcObj can be Planet or System type
-    dist = sys.maxint
+    dist = sys.maxsize
     for objID in obj.planets:
         pirPl = tran.db[objID]
         d = math.hypot(srcObj.x - pirPl.x, srcObj.y - pirPl.y)

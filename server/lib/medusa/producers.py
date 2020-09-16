@@ -305,7 +305,7 @@ class escaping_producer:
         self.esc_from = esc_from
         self.esc_to = esc_to
         self.buffer = ''
-        from asynchat import find_prefix_at_end
+        from .asynchat import find_prefix_at_end
         self.find_prefix_at_end = find_prefix_at_end
 
     def more (self):

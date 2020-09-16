@@ -23,8 +23,8 @@ from osci.StarMapWidget import StarMapWidget
 from osci import gdata, res, client
 import osci.messages
 import ige.ospace.Const as Const
-from NewMessageDlg import NewMessageDlg
-from ConfirmDlg import ConfirmDlg
+from .NewMessageDlg import NewMessageDlg
+from .ConfirmDlg import ConfirmDlg
 import time
 from ige import log
 import re
@@ -216,7 +216,7 @@ class MessagesDlg:
         player = client.getPlayer()
         playerid = player.oid
         objMessages = client.get(selItem.tObjID)._messages
-        ids = objMessages.keys()
+        ids = list(objMessages.keys())
         ids.sort()
         ids.reverse()
         items = []
@@ -292,7 +292,7 @@ class MessagesDlg:
     def onDeleteAllConfirmed(self):
         obj = client.get(self.selectedObjID)
         # must make list (changing directory)
-        for messageID in obj._messages.keys():
+        for messageID in list(obj._messages.keys()):
             message = obj._messages[messageID]
             if message["forum"] == self.selectedForum:
                 del obj._messages[messageID]

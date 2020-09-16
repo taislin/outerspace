@@ -18,11 +18,11 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 import pygame
-import Const
-from Window import Window
-from SimpleGridLM import SimpleGridLM
-from Title import Title
-from ActiveLabel import ActiveLabel
+from . import Const
+from .Window import Window
+from .SimpleGridLM import SimpleGridLM
+from .Title import Title
+from .ActiveLabel import ActiveLabel
 from math import ceil
 
 class Menu(Window):
@@ -93,10 +93,10 @@ class Menu(Window):
     def processKeyDown(self, evt):
         for item in self.items:
             if getattr(item,'hotkeymod',False):
-                if getattr(item,'hotkey',False) == evt.unicode and pygame.key.get_mods() & getattr(item,'hotkeymod',False):
+                if getattr(item,'hotkey',False) == evt.str and pygame.key.get_mods() & getattr(item,'hotkeymod',False):
                     self.hide()
                     self.processAction(item.action, False)
-            elif getattr(item,'hotkey',False) == evt.unicode:
+            elif getattr(item,'hotkey',False) == evt.str:
                 self.hide()
                 self.processAction(item.action, False)
         if evt.key == pygame.K_ESCAPE:

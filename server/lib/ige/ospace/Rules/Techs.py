@@ -18,6 +18,9 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
+def _(msg): return msg
+
+
 import sys, copy
 from ige import log
 from ige.ospace import Const

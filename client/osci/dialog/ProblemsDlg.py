@@ -17,6 +17,9 @@
 #  along with Outer Space; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
+
+def _(msg): return msg
+
 import bisect
 import copy
 import math
@@ -90,7 +93,7 @@ class ProblemsDlg:
             # structure is off
             problems.append(severity,
                             ui.Item(planet.name, tOID=planet.oid, tType=Const.T_PLANET,
-                                    vDescription=_('Structure (%s) is off and will be destroyed in %s turns.') % (tech.name, res.formatTime(turnsToDestroy))))
+                                    vDescription=_('Structure (%s) is off and will be destroyed in %s turns.') % (tech.name, resr.formatTime(turnsToDestroy))))
 
         if status & Const.STRUCT_STATUS_DETER:
             problems.append(gdata.MAJ,
@@ -140,7 +143,7 @@ class ProblemsDlg:
         fleetName = fleet.customname if fleet.customname else fleet.name
         energyReserve = fleet.storEn * 100 / fleet.maxEn
         system = client.get(fleet.orbiting, noUpdate=1)
-        systemName = getattr(system, "name", res.getUnknownName())
+        systemName = getattr(system, "name", resr.getUnknownName())
         hasRefuel, maxRefuelMax = self._getSystemRefuel(system)
 
         if energyReserve == 100:
@@ -177,7 +180,7 @@ class ProblemsDlg:
             severity = gdata.MIN
 
         if totalMat > 0:
-            note = _(' surplus %d (%s)' % (totalMat, res.formatTime(surplusTurns)))
+            note = _(' surplus %d (%s)' % (totalMat, resr.formatTime(surplusTurns)))
         else:
             note = _(' with no surplus left!')
         problems.append(severity,
@@ -221,7 +224,7 @@ class ProblemsDlg:
                 severity = gdata.MAJ
             problems.append(severity,
                             ui.Item(_('Research'), tType=Const.T_TECHNOLOGY,
-                                    vDescription=_('Research queue ends in %s turns, %d item(s) on list.') % (res.formatTime(totalEtc), len(player.rsrchQueue))))
+                                    vDescription=_('Research queue ends in %s turns, %d item(s) on list.') % (resr.formatTime(totalEtc), len(player.rsrchQueue))))
 
     def _addProblemsGlobalQueues(self, problems):
         # go through all planets to understand the state of global queues
@@ -251,7 +254,7 @@ class ProblemsDlg:
 
         # creation of items with global queue problems
         for queue in range(1, 5):
-            queName = res.globalQueueName(queue)
+            queName = resr.globalQueueName(queue)
             quePlanets = globalQueueStats[queue][0]
             # check empty global production queue with at least one planet [so its relevant]
             if queConstValues[queue] == 0 and quePlanets > 0:
@@ -265,7 +268,7 @@ class ProblemsDlg:
                     severity = gdata.MAJ
                 problems.append(severity,
                                 ui.Item(_('Global queue ' + queName), tType=Const.T_QUEUE,
-                                        vDescription=_('Global production queue {0} used by {1} planet(s) runs out in {2} turns.'.format(queName, quePlanets, res.formatTime(queEtc[queue])))))
+                                        vDescription=_('Global production queue {0} used by {1} planet(s) runs out in {2} turns.'.format(queName, quePlanets, resr.formatTime(queEtc[queue])))))
         return queEtc[0]  # time of depletion of the default queue will be reused later
 
     def _getTargetSlotDict(self, planetID):
@@ -352,7 +355,7 @@ class ProblemsDlg:
 
         problems.append(severity,
                         ui.Item(planet.name, tOID=planet.oid, tType=Const.T_PLANET,
-                                vDescription=_('Production queue may end in {0} turns ({1} directly in planet queue).'.format(res.formatTime(etc), res.formatTime(planetEtc)))))
+                                vDescription=_('Production queue may end in {0} turns ({1} directly in planet queue).'.format(resr.formatTime(etc), resr.formatTime(planetEtc)))))
 
     def show(self):
         critical = self.win.vCritical.checked

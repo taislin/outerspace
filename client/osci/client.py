@@ -18,13 +18,17 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
+def _(msg): return msg
+
+
 import os.path
 
 from igeclient import IClient, IClientDB
 from ige.ospace import Rules
 import ige.ospace.Const as Const
 from ige.IDataHolder import IDataHolder
-import ige, gdata, osci, math, time
+import ige, osci, math, time
+from . import gdata
 from ige import log
 
 # module globals

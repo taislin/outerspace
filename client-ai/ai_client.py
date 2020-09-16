@@ -18,6 +18,9 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
+def _(msg): return msg
+
+
 from igeclient import IClient, IClientDB
 from ige.ospace import Const
 from ige.ospace import Rules

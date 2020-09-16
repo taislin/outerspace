@@ -18,12 +18,16 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
+def _(msg): return msg
+
+
 #
 # This module contains messages
 #
 import ige.ospace.Const as Const
 from ige import NoSuchObjectException
-import client, types, string, resr, gdata
+import types, string, gdata
+from . import client, resr
 from ige import log
 from ige.ospace import Rules
 
@@ -38,7 +42,7 @@ def techID2Name(techID):
 
 def objID2Name(objID):
     obj = client.get(objID, noUpdate = 0, publicOnly = 1)
-    return getattr(obj, 'name', res.getUnknownName())
+    return getattr(obj, 'name', resr.getUnknownName())
 
 def objIDList2Names(objIDs):
     names = []
@@ -51,7 +55,7 @@ def objIDList2Names(objIDs):
                 owner = ''
         else:
             owner = ''
-        text = _('%s%s') % (getattr(obj, 'name', res.getUnknownName()), owner)
+        text = _('%s%s') % (getattr(obj, 'name', resr.getUnknownName()), owner)
         names.append(text)
     return string.join(names, ', ')
 
@@ -70,7 +74,7 @@ def minesReport(xxx_todo_changeme):
     return '\n'.join(lines)
 
 def delayTurns(startTurn):
-    return res.formatTime(startTurn + Rules.galaxyStartDelay)
+    return resr.formatTime(startTurn + Rules.galaxyStartDelay)
 
 def stratID2Name(resID):
     return _(gdata.stratRes[resID])
@@ -85,7 +89,7 @@ def designID2Name(designID):
     return client.getPlayer().shipDesigns[designID].name
 
 def queueID2Name(queueID):
-    return res.globalQueueName(queueID)
+    return resr.globalQueueName(queueID)
 
 def votes2Txt(xxx_todo_changeme1):
     (votes, voters) = xxx_todo_changeme1
@@ -189,9 +193,9 @@ addMsg(Const.MSG_MINES_OWNER_RESULTS, N_('Our minefield triggered: HP / ships de
 addMsg(Const.MSG_MINES_FLEET_RESULTS, N_('Hostile minefield triggered: HP / ships lost: %(1)s / %(2)s.\n\nOur fleet triggered enemy minefield, losing %(1)s HP resulting in destruction of %(2)s ships.'), (int,int), severity = MAJ)
 
 # GNC
-addMsg(Const.MSG_GNC_EMR_FORECAST, N_("EMR Forecast\n\nLevel of the electromagnetic radiation is believed to be about %(1)d %% of the average level for the next %(2)s turns"), (float2percent, res.formatTime), severity = MIN)
+addMsg(Const.MSG_GNC_EMR_FORECAST, N_("EMR Forecast\n\nLevel of the electromagnetic radiation is believed to be about %(1)d %% of the average level for the next %(2)s turns"), (float2percent, resr.formatTime), severity = MIN)
 addMsg(Const.MSG_GNC_EMR_CURRENT_LVL, N_("EMR Forecast\n\nCurrent level of the electromagnetic radiation is about %(1)d %% of the average level."), (float2percent,), severity = MIN)
-addMsg(Const.MSG_GNC_VOTING_COMING, N_("Elections!\n\nIt's %(1)s turns before elections! Don't hesitate and vote for the best commander!"), (res.formatTime,), severity = MAJ)
+addMsg(Const.MSG_GNC_VOTING_COMING, N_("Elections!\n\nIt's %(1)s turns before elections! Don't hesitate and vote for the best commander!"), (resr.formatTime,), severity = MAJ)
 addMsg(Const.MSG_GNC_VOTING_NOWINNER, N_("Election results! Nobody won...\n\nThe results from the last elections have been published. Nobody was strong enough to be elected as a leader of our galaxy. Can we find such person another day?\n\nThe official election results follow:\n\n%(1)s\n\n"), (votes2Txt,), severity = MAJ)
 addMsg(Const.MSG_GNC_VOTING_LEADER, N_("Election results! Leader elected!\n\nThe results from the last elections have been published. %(1)s has proved to be the most supported person and has been elected as our Leader. May be, %(1)s can become an Imperator one day.\n\nThe official election results follow:\n\n%(2)s\n\n"), (str, votes2Txt,), severity = MAJ)
 addMsg(Const.MSG_GNC_VOTING_IMPERATOR, N_("Election results! Imperator elected!\n\nThe results from the last elections have been published. %(1)s has proved to be the most supported person and has been elected as our glorified Imperator. Congratulations - you proved to be the best of all of us!\n\nThe official election results follow:\n\n%(2)s\n\n"), (str, votes2Txt,), severity = MAJ)
@@ -264,7 +268,7 @@ def getFullMessageText(message):
                 if hasattr(obj,'customname') and obj.customname:
                         source = _('"%s"') % obj.customname
                 else:
-                        source = getattr(obj, 'name', res.getUnknownName())
+                        source = getattr(obj, 'name', resr.getUnknownName())
             else:
                 source = _('N/A')
         else:
@@ -273,14 +277,14 @@ def getFullMessageText(message):
         # location
         if locationID != Const.OID_NONE:
             obj = client.get(locationID, noUpdate = 1, publicOnly = 1)
-            location = getattr(obj, 'name', res.getUnknownName())
+            location = getattr(obj, 'name', resr.getUnknownName())
         else:
             location = _('-')
         text = '%s%s\n' % (text, _("Location: %s") % location)
         text = '%s%s\n' % (text, _("Severity: %s") % _(gdata.msgSeverity[sev]))
         text = '%s%s\n' % (text, _("Time: %s [%s]") % (
-            res.formatTime(turn),
-            res.formatTime(turn - currTurn),
+            resr.formatTime(turn),
+            resr.formatTime(turn - currTurn),
         ))
         text = '%s%s\n' % (text, "")
         text = '%s%s\n' % (text, getMsgText(msgID, data))

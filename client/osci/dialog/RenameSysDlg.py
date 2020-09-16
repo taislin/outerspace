@@ -18,6 +18,9 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
+def _(msg): return msg
+
+
 import pygameui as ui
 from osci.StarMapWidget import StarMapWidget
 from osci import gdata, resr, client
@@ -51,7 +54,7 @@ class RenameSysDlg:
 
     def show(self):
         system = client.get(self.systemID, noUpdate = 1)
-        self.win.vName.text = getattr(system, 'name', res.getUnknownName())
+        self.win.vName.text = getattr(system, 'name', resr.getUnknownName())
         items = [
             ui.Item(_('Alpha, Beta, ...'), tIndex = 1),
             ui.Item(_('I, II, III, ...'), tIndex = 2),

@@ -18,6 +18,9 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
+def _(msg): return msg
+
+
 import pygameui as ui
 from osci import client, resr, gdata, sequip
 from .FleetCommandDlg import FleetCommandDlg
@@ -74,7 +77,7 @@ class FleetDlg:
         if hasattr(fleet,'customname') and fleet.customname:
             self.win.title = _('Fleet: %s') % fleet.customname
         else:
-            self.win.title = _('Fleet: %s') % getattr(fleet, 'name', res.getUnknownName())
+            self.win.title = _('Fleet: %s') % getattr(fleet, 'name', resr.getUnknownName())
         # fill listbox
         items = []
         # serial ships
@@ -105,7 +108,7 @@ class FleetDlg:
         # fleet info
         self.win.vFCoordinates.text = '[%.1f, %.1f]' % (fleet.x, fleet.y)
         if fleet.orbiting != Const.OID_NONE:
-            self.win.vFOrbiting.text = getattr(client.get(fleet.orbiting, noUpdate = 1), 'name', res.getUnknownName())
+            self.win.vFOrbiting.text = getattr(client.get(fleet.orbiting, noUpdate = 1), 'name', resr.getUnknownName())
         else:
             self.win.vFOrbiting.text = _('N/A')
         if hasattr(fleet, "speedBoost") and hasattr(fleet, "maxSpeed"):
@@ -128,14 +131,14 @@ class FleetDlg:
             for action, target, data in fleet.actions:
                 info = "-"
                 if target != Const.OID_NONE:
-                    targetName = getattr(client.get(target, noUpdate = 1), 'name', res.getUnknownName())
+                    targetName = getattr(client.get(target, noUpdate = 1), 'name', resr.getUnknownName())
                 else:
                     targetName = '-'
                 if index == fleet.actionIndex: current = '>'
                 else: current = ''
                 # additional info
                 if action == Const.FLACTION_DECLAREWAR:
-                    info = getattr(client.get(data, noUpdate = 1), 'name', res.getUnknownName())
+                    info = getattr(client.get(data, noUpdate = 1), 'name', resr.getUnknownName())
                 elif action == Const.FLACTION_DEPLOY:
                     info = client.getPlayer().shipDesigns[data].name
                 elif action == Const.FLACTION_REPEATFROM:

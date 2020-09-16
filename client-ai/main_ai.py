@@ -19,6 +19,9 @@ import importlib
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
+def _(msg): return msg
+
+
 def runAIClient(options):
     import time
     import traceback

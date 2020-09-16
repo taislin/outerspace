@@ -18,6 +18,9 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
+def _(msg): return msg
+
+
 import pygameui as ui
 from osci.StarMapWidget import StarMapWidget
 from osci import gdata, resr, client, sequip
@@ -87,8 +90,8 @@ class PlanetsOverviewDlg:
                     etc = math.ceil(float(prodFirst) / planet.effProdProd)
                 totalProd += prodFirst + prodNext
                 index += 1
-            etc = res.formatTime(etc)
-            totalEtc = res.formatTime(math.ceil(float(totalProd) / planet.effProdProd))
+            etc = resr.formatTime(etc)
+            totalEtc = resr.formatTime(math.ceil(float(totalProd) / planet.effProdProd))
         elif planet.prodQueue:
             task = planet.prodQueue[0]
             if task.isShip:
@@ -137,7 +140,7 @@ class PlanetsOverviewDlg:
 
             plType = gdata.planetTypes[getattr(planet, 'plType', None)]
             # list item
-            item = ui.Item(getattr(planet, 'name', res.getUnknownName()),
+            item = ui.Item(getattr(planet, 'name', resr.getUnknownName()),
                            tPlType=_(plType),
                            tPlBio=getattr(planet, 'plBio', '?'),
                            tPlMin=getattr(planet, 'plMin', '?'),

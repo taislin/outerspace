@@ -17,6 +17,9 @@ Copyright 2001 - 2016 Ludek Smid [http://www.ospace.net/]
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
+def _(msg): return msg
+
+
 import argparse
 import atexit
 import http.client

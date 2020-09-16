@@ -14,7 +14,7 @@ build:
                     -
                         command: pylint-run
                         use_website_config: true
-                    - command: pip install passlib pygame poll gdata
+                    - command: pip install passlib pygame poll
                     - command: ./tests/unittest.sh
                     - command: ./tests/smoke_test.py --travis
         tests: true 

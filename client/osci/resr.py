@@ -18,6 +18,9 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
+def _(msg): return msg
+
+
 import bisect
 import glob
 import math
@@ -58,7 +61,7 @@ def initialize():
 def updateProgress(curr, progress_dlg):
     if not progress_dlg: return
     if curr % 30 == 0:
-        periods = '.' * (curr / 30 % 4)
+        periods = '.' * int(curr / 30 % 4)
         progress_dlg.setProgress(_('Loading resources' + periods), curr)
 
 

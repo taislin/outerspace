@@ -19,12 +19,15 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
+def _(msg): return msg
+
+
 from pygameui import Fonts
 import ige.ospace.Const as Const
 from ige.ospace import Rules, Utils
 import pygame, pygame.draw, pygame.key, pygame.image
-import gdata, math, string
-from . import resr, client
+import math, string
+from . import resr, client, gdata
 from ige import log
 
 buoyColors = [(0xff, 0xff, 0x00), (0x00, 0xff, 0xff), (0xff, 0x00, 0xff), (0xb0, 0xb0, 0xff)]
@@ -173,7 +176,7 @@ class StarMap(object):
         return pirate_systems
 
     def precomputeSystems(self, obj, player, pirate_systems):
-        img = res.getSmallStarImg(obj.starClass[1]) # TODO correct me
+        img = resr.getSmallStarImg(obj.starClass[1]) # TODO correct me
         icons = []
         name = getattr(obj, 'name', None)
         # TODO compute real relationship
@@ -213,7 +216,7 @@ class StarMap(object):
                 if hasattr(planet, "plStratRes") and planet.plStratRes != Const.SR_NONE:
                     stratRes = planet.plStratRes
                     stratRes = planet.plStratRes
-                    icons.append(res.icons["sr_%d" % planet.plStratRes])
+                    icons.append(resr.icons["sr_%d" % planet.plStratRes])
                 if owner:
                     ownerID = owner
                     if hasattr(planet, "morale"):
@@ -269,39 +272,39 @@ class StarMap(object):
         # refuelling
         if refuelMax > 0:
             if refuelMax >= 87:
-                icons.append(res.icons["fuel_99"])
+                icons.append(resr.icons["fuel_99"])
             elif refuelMax >= 62:
-                icons.append(res.icons["fuel_75"])
+                icons.append(resr.icons["fuel_75"])
             elif refuelMax >= 37:
-                icons.append(res.icons["fuel_50"])
+                icons.append(resr.icons["fuel_50"])
             elif refuelMax >= 12:
-                icons.append(res.icons["fuel_25"])
+                icons.append(resr.icons["fuel_25"])
         elif hasRefuel:
-            icons.append(res.icons["fuel_-"])
+            icons.append(resr.icons["fuel_-"])
         # repair and upgrade
         if upgradeShip > 10 and repairShip > 0.02:
-            icons.append(res.icons["rep_10"])
+            icons.append(resr.icons["rep_10"])
         elif upgradeShip > 0 and repairShip > 0:
-            icons.append(res.icons["rep_1"])
+            icons.append(resr.icons["rep_1"])
 
         self.precomputeCombat(obj, icons)
         self.precomputeMines(obj, icons)
         self.precomputeBuoys(obj, player, icons)
         # star gates
         if speedBoost > 1.0:
-            icons.append(res.icons["sg_%02d" % round(speedBoost)])
+            icons.append(resr.icons["sg_%02d" % round(speedBoost)])
             self._map[self.MAP_GATESYSTEMS].append((obj.x, obj.y, speedBoost))
         #if owner2 != 0:
         #   color = gdata.playerHighlightColor
         #else:
-        #   color = res.getFFColorCode(rel)
+        #   color = resr.getFFColorCode(rel)
         if (player.type == Const.T_PIRPLAYER or\
                 player.type == Const.T_AIPIRPLAYER):
-            colors = res.getStarmapWidgetSystemColor(ownerID,bio,minerals,slots,numPlanets,speedBoost, refuelInc, upgradeShip, pirProb*100, stratRes, morale, pirateFameCost)
+            colors = resr.getStarmapWidgetSystemColor(ownerID,bio,minerals,slots,numPlanets,speedBoost, refuelInc, upgradeShip, pirProb*100, stratRes, morale, pirateFameCost)
         else:
-            colors = res.getStarmapWidgetSystemColor(ownerID,bio,minerals,slots,numPlanets,speedBoost, refuelInc, upgradeShip, pirProb*100, stratRes, morale)
-        namecolor = res.getPlayerColor(ownerID)
-        controlcolor = res.getControlColor(ownerID)
+            colors = resr.getStarmapWidgetSystemColor(ownerID,bio,minerals,slots,numPlanets,speedBoost, refuelInc, upgradeShip, pirProb*100, stratRes, morale)
+        namecolor = resr.getPlayerColor(ownerID)
+        controlcolor = resr.getControlColor(ownerID)
         if controlcolor:
             groupCenterX = int(obj.x)
             groupCenterY = int(obj.y)
@@ -318,7 +321,7 @@ class StarMap(object):
         self._map[self.MAP_SYSTEMS].append((obj.oid, obj.x, obj.y, name, img, colors, namecolor, False, icons, constPoints, sciPoints, isGovCentral))
         # pop up info
         info = []
-        info.append(_('System: %s [ID: %d]') % (name or res.getUnknownName(), obj.oid))
+        info.append(_('System: %s [ID: %d]') % (name or resr.getUnknownName(), obj.oid))
         info.append(_('Coordinates: [%.2f, %.2f]') % (obj.x, obj.y))
         info.append(_('Scan pwr: %d') % obj.scanPwr)
         info.append(_('Star Class: %s') % obj.starClass[1:])
@@ -340,28 +343,28 @@ class StarMap(object):
 
     def precomputeWormholes(self, obj, player, pirate_systems):
         log.debug("Displaying wormhole",obj.oid)
-        img = res.getSmallStarImg(obj.starClass[1])
+        img = resr.getSmallStarImg(obj.starClass[1])
         icons = []
         name = getattr(obj, 'name', None)
         pirProb = self.precomputePiratesProbability(obj, pirate_systems, icons)
         self.precomputeCombat(obj, icons)
         self.precomputeMines(obj, icons)
         self.precomputeBuoys(obj, player, icons)
-        color = res.getPlayerColor(Const.OID_NONE)
-        namecolor = res.getPlayerColor(Const.OID_NONE)
+        color = resr.getPlayerColor(Const.OID_NONE)
+        namecolor = resr.getPlayerColor(Const.OID_NONE)
         constPoints = 0
         sciPoints = 0
         isGovCentral = False
         self._map[self.MAP_SYSTEMS].append((obj.oid, obj.x, obj.y, name, img, color, namecolor, True, icons, constPoints, sciPoints, isGovCentral))
         # pop up info
         info = []
-        info.append(_('Worm hole: %s [ID: %d]') % (name or res.getUnknownName(), obj.oid))
+        info.append(_('Worm hole: %s [ID: %d]') % (name or resr.getUnknownName(), obj.oid))
         info.append(_('Coordinates: [%.2f, %.2f]') % (obj.x, obj.y))
         try:
             log.debug("Attempting to get wormhole destination (",obj.destinationOid,") from client.")
             whDestObj = client.get(obj.destinationOid, noUpdate = 1) #except if the client doesn't have this in their DB
             whDestName = getattr(whDestObj, 'name', None)
-            info.append(_('Destination: %s [ID: %d]') % (whDestName or res.getUnknownName(), obj.oid))
+            info.append(_('Destination: %s [ID: %d]') % (whDestName or resr.getUnknownName(), obj.oid))
             info.append(_('Dest. Coords: [%.2f, %.2f]') % (whDestObj.x, whDestObj.y))
         except:
             log.debug("Failed getting wormhole destination from client.")
@@ -396,7 +399,7 @@ class StarMap(object):
                 player.type == Const.T_AIPIRPLAYER):
             pirateFameCost = self.getPirateFameCost(player.oid,obj.compOf,len(player.planets),pirate_systems)
         # build system
-        name = getattr(obj, 'name', None) or res.getUnknownName()
+        name = getattr(obj, 'name', None) or resr.getUnknownName()
         singlet = True
         if hasattr(obj, "plType") and obj.plType in ("A", "G"):
             colors = gdata.sevColors[gdata.DISABLED]
@@ -404,9 +407,9 @@ class StarMap(object):
             singlet = False
             if (player.type == Const.T_PIRPLAYER or\
                     player.type == Const.T_AIPIRPLAYER):
-                colors = res.getStarmapWidgetPlanetColor(owner,biodata,mindata,slotdata,stargatedata, dockrefueldata, dockupgradedata, famedata, stratresdata, moraledata, pirateFameCost)
+                colors = resr.getStarmapWidgetPlanetColor(owner,biodata,mindata,slotdata,stargatedata, dockrefueldata, dockupgradedata, famedata, stratresdata, moraledata, pirateFameCost)
             else:
-                colors = res.getStarmapWidgetPlanetColor(owner,biodata,mindata,slotdata,stargatedata, dockrefueldata, dockupgradedata, famedata, stratresdata, moraledata)
+                colors = resr.getStarmapWidgetPlanetColor(owner,biodata,mindata,slotdata,stargatedata, dockrefueldata, dockupgradedata, famedata, stratresdata, moraledata)
         self._map[self.MAP_PLANETS].append((obj.oid, obj.x, obj.y, obj.orbit, colors, singlet))
         scannerPwr = getattr(obj, 'scannerPwr', 0)
         if scannerPwr:
@@ -430,7 +433,7 @@ class StarMap(object):
         if owner:
             ownerobj = client.get(owner, publicOnly = 1)
             info.append(_('Owner: %s [ID: %s]') % (
-                getattr(ownerobj, 'name', res.getUnknownName()),
+                getattr(ownerobj, 'name', resr.getUnknownName()),
                 getattr(ownerobj, 'oid', '?')
             ))
         self._popupInfo[obj.oid] = info
@@ -470,8 +473,8 @@ class StarMap(object):
         if hasattr(obj,'customname') and obj.customname:
             name = obj.customname
         else:
-            name = getattr(obj, 'name', res.getUnknownName())
-        color = res.getPlayerColor(owner)
+            name = getattr(obj, 'name', resr.getUnknownName())
+        color = resr.getPlayerColor(owner)
         # fleet scanner setup
         scannerPwr = getattr(obj, 'scannerPwr', 0)
         if hasattr(obj, "scannerOn") and not obj.scannerOn:
@@ -485,7 +488,7 @@ class StarMap(object):
             self.fleetOrbit[obj.orbiting] = orbit + 1
         # set path and times
         eta = getattr(obj, 'eta', 0)
-        self._map[self.MAP_FLEETS].append((obj.oid, obj.x, obj.y, obj.oldX, obj.oldY, orbit, res.formatTime(eta), color,
+        self._map[self.MAP_FLEETS].append((obj.oid, obj.x, obj.y, obj.oldX, obj.oldY, orbit, resr.formatTime(eta), color,
             obj.signature / 25, getattr(obj, "isMilitary", 1)))
         # pop up info
         info = []
@@ -498,11 +501,11 @@ class StarMap(object):
         elif eta:
             info.append(_('Speed: %3.2f') % (24*((obj.y-obj.oldY)**2+(obj.x-obj.oldX)**2)**.5))
         if eta:
-            info.append(_('ETA: %s') % res.formatTime(eta))
+            info.append(_('ETA: %s') % resr.formatTime(eta))
         if owner:
             ownerobj = client.get(owner, publicOnly = 1)
             info.append(_('Owner: %s [ID: %s]') % (
-                getattr(ownerobj, 'name', res.getUnknownName()),
+                getattr(ownerobj, 'name', resr.getUnknownName()),
                 getattr(ownerobj, 'oid', '?')
             ))
         if hasattr(obj, 'storEn'):
@@ -519,12 +522,12 @@ class StarMap(object):
             if obj.operEn > 0: turns = obj.storEn / obj.operEn
             range = turns * obj.speed / Rules.turnsPerDay
             self._fleetRanges[obj.oid] = (obj.x, obj.y, range, range  / 2., range / 3., obj.speed * 6 / Rules.turnsPerDay, turns)
-            info.append(_("Operational time: %s") % res.formatTime(turns))
+            info.append(_("Operational time: %s") % resr.formatTime(turns))
         if hasattr(obj, 'target') and obj.target != Const.OID_NONE:
             target = client.get(obj.target, noUpdate=1)
             if hasattr(target, "x"):
                 self._fleetTarget[obj.oid] = (obj.x, obj.y, target.x, target.y)
-            info.append(_('Target: %s') % getattr(target, "name", res.getUnknownName()))
+            info.append(_('Target: %s') % getattr(target, "name", resr.getUnknownName()))
         # pop up info (continued)
         if hasattr(obj, 'ships'):
             info.append(_('Ships:'))
@@ -562,7 +565,7 @@ class StarMap(object):
         if hasattr(obj, 'actionIndex') and not Utils.isIdleFleet(obj):
             action, target, data = obj.actions[obj.actionIndex]
             if target != Const.OID_NONE:
-                targetName = getattr(client.get(target, noUpdate = 1), 'name', res.getUnknownName())
+                targetName = getattr(client.get(target, noUpdate = 1), 'name', resr.getUnknownName())
             else:
                 targetName = ""
             info.append(_("Command: %s %s") % (
@@ -595,36 +598,36 @@ class StarMap(object):
         pirProb = Rules.pirateGainFamePropability(dist)
         if icons != False:
             if pirProb >= 1.0:
-                icons.append(res.icons["pir_99"])
+                icons.append(resr.icons["pir_99"])
             elif pirProb > 0.0:
-                icons.append(res.icons["pir_00"])
+                icons.append(resr.icons["pir_00"])
         return pirProb
 
     def precomputeMines(self, system, icons):
         if getattr(system, "minefield", False):
             # ok, system has our mines - as minefield is identified
-            icons.append(res.icons["mines_ours"])
+            icons.append(resr.icons["mines_ours"])
             if getattr(system, "hasmines", 0) == 2:
                 # there are also unknown mines!
-                icons.append(res.icons["mines_unknown"])
+                icons.append(resr.icons["mines_unknown"])
         elif getattr(system, "hasmines", 0):
             # there are only unknown mines
-            icons.append(res.icons["mines_unknown"])
+            icons.append(resr.icons["mines_unknown"])
 
 
 
     def precomputeCombat(self, system, icons):
         if hasattr(system, "combatCounter") and system.combatCounter > 0:
-            icons.append(res.icons["combat"])
+            icons.append(resr.icons["combat"])
 
     def precomputeBuoys(self, system, player, icons):
         if hasattr(player, "buoys") and system.oid in player.buoys:
-            icons.append(res.icons["buoy_%d" % player.buoys[system.oid][1]])
+            icons.append(resr.icons["buoy_%d" % player.buoys[system.oid][1]])
         if hasattr(player, "alliedBuoys") and system.oid in player.alliedBuoys and len(player.alliedBuoys[system.oid]) > 0:
             buoyName = "buoy_%d" % player.alliedBuoys[system.oid][0][1]
             if len(player.alliedBuoys[system.oid]) > 1:
                 buoyName = "%s_plus" % buoyName
-            icons.append(res.icons[buoyName])
+            icons.append(resr.icons[buoyName])
 
 
     def draw(self, mapSurf):
@@ -744,7 +747,7 @@ class StarMap(object):
         currX = self.currX
         currY = self.currY
         scale = self.scale
-        namecolor = res.getPlayerColor(Const.OID_NONE)
+        namecolor = resr.getPlayerColor(Const.OID_NONE)
         if scale >= 30:
             for objID, x, y, name, img, color, namecolor, singlet, icons, constPoints, sciPoints, isGovCentral in self._map[self.MAP_SYSTEMS]:
                 sx = int((x - currX) * scale) + centerX
@@ -758,14 +761,14 @@ class StarMap(object):
                 h = 22
                 if name:
                     if self.overlayMode != gdata.OVERLAY_OWNER:
-                        namecolor = res.fadeColor(namecolor)
+                        namecolor = resr.fadeColor(namecolor)
                     img = Fonts.renderText(self.textSize, name, 1, namecolor)
                     mapSurf.blit(img, (sx - img.get_width() / 2, sy + h / 2))
                 buoy = self.getBuoy(objID)
                 if buoy != None and not self.control_modes['alternative_mode']:
                     if not name: #if name not set and there is a bouy, set "?" as the name
                         if self.overlayMode != gdata.OVERLAY_OWNER:
-                            namecolor = res.fadeColor(namecolor)
+                            namecolor = resr.fadeColor(namecolor)
                         img = Fonts.renderText(self.textSize, '[ ? ]', 1, namecolor)
                         mapSurf.blit(img, (sx - img.get_width() / 2, sy + h / 2))
                         nSy = sy + h / 2 + img.get_height()
@@ -781,7 +784,7 @@ class StarMap(object):
                         if self.overlayMode == gdata.OVERLAY_OWNER:
                             bouycolor = buoyColors[buoy[1] - 1]
                         else:
-                            bouycolor = res.fadeColor(buoyColors[buoy[1] - 1])
+                            bouycolor = resr.fadeColor(buoyColors[buoy[1] - 1])
                         img = Fonts.renderText(self.textSize, line, 1, bouycolor)
                         maxW = max(img.get_width(), maxW)
                         mapSurf.blit(img, (sx - img.get_width() / 2, nSy + hh))
@@ -816,7 +819,7 @@ class StarMap(object):
                 pygame.draw.circle(mapSurf, color, (sx, sy), 4, 0)
                 if name and scale > 15:
                     if self.overlayMode != gdata.OVERLAY_OWNER:
-                        namecolor = res.fadeColor(namecolor)
+                        namecolor = resr.fadeColor(namecolor)
                     img = Fonts.renderText(self.textSize, name, 1, namecolor)
                     mapSurf.blit(img, (sx - img.get_width() / 2, sy + 6 / 2))
                     buoy = self.getBuoy(objID)
@@ -856,7 +859,7 @@ class StarMap(object):
                 sy = maxY - (int((y - currY) * scale) + centerY)
                 for curSpeed in range(1,int(speed+1)):
                     radius = (curSpeed-1)* radiusMult + minRadius
-                    color = res.getStargateColorCode(curSpeed)
+                    color = resr.getStargateColorCode(curSpeed)
                     pygame.draw.circle(mapSurf, color, (sx, sy), radius, 1)
 
     def drawPlanets(self, mapSurf):
@@ -921,7 +924,7 @@ class StarMap(object):
             if not self.control_modes['civilian_fleets'] and not military:
                 continue
             if self.overlayMode != gdata.OVERLAY_OWNER:
-                color = res.fadeColor(color)
+                color = resr.fadeColor(color)
             sx = int((x - currX) * scale) + centerX
             sy = maxY - (int((y - currY) * scale) + centerY)
             if orbit >= 0 and scale >= 30:
@@ -971,7 +974,7 @@ class StarMap(object):
                 maxMorale = int(Rules.maxMorale)
                 minAchievedMorale = int(max(Rules.minMoraleTrgt - 1, 107.5 - 37.5 * player.stats.storPop / player.govPwr))
                 for step in range(maxMorale, minAchievedMorale - 1 , -10):
-                    moraleColor = res.getMoraleColors(step)
+                    moraleColor = resr.getMoraleColors(step)
                     centralX = int((centralPlanet.x - currX) * scale) + centerX
                     centralY = maxY - (int((centralPlanet.y - currY) * scale) + centerY)
                     radius = int((107.5 - step) * govPCR / 37.5 * scale)

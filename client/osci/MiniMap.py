@@ -18,6 +18,9 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
+def _(msg): return msg
+
+
 from pygameui.Widget import Widget, registerWidget
 import ige.ospace.Const as Const
 import pygame, pygame.draw
@@ -69,7 +72,7 @@ class MiniMap:
                         if int(owner) != 0:
                             ownerID = owner
                             break
-                color = res.getPlayerColor(ownerID)
+                color = resr.getPlayerColor(ownerID)
                 self._map.append((obj.oid, obj.x, obj.y, color))
 
         self._minX = minX

@@ -18,6 +18,9 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
+def _(msg): return msg
+
+
 import math
 
 import pygameui as ui
@@ -91,7 +94,7 @@ class NewTaskDlg:
             etc = math.ceil(float(tech.buildProd) / self.prodProd)
             if self.targetID != self.planetID:
                 etc *= Rules.buildOnAnotherPlanetMod
-            etc = res.formatTime(etc)
+            etc = resr.formatTime(etc)
         else:
             etc = _("N/A")
 
@@ -157,7 +160,7 @@ class NewTaskDlg:
                 # skip ships that are set to upgrade
                 continue
             if self.prodProd > 0:
-                etc = res.formatTime(math.ceil(float(tech.buildProd) / self.prodProd))
+                etc = resr.formatTime(math.ceil(float(tech.buildProd) / self.prodProd))
             else:
                 etc = _("N/A")
             item = ui.Item(tech.name,
@@ -170,7 +173,7 @@ class NewTaskDlg:
         return items
 
     def _processTarget(self, planet):
-        ownerName = res.getUnknownName()
+        ownerName = resr.getUnknownName()
         ownerID = Const.OID_NONE
         if hasattr(planet, 'owner'):
             ownerID = planet.owner
@@ -179,8 +182,8 @@ class NewTaskDlg:
         if planet.plType in ("A", "G"):
             color = gdata.sevColors[gdata.DISABLED]
         else:
-            color = res.getPlayerColor(ownerID)
-        plname = getattr(planet, 'name', res.getUnknownName())
+            color = resr.getPlayerColor(ownerID)
+        plname = getattr(planet, 'name', resr.getUnknownName())
         item = ui.Item(plname,
                        text_raw=getattr(planet, 'plEn', plname),
                        planetID=planet.oid,

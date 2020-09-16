@@ -18,7 +18,11 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-import client, string, gdata
+def _(msg): return msg
+
+
+import string, gdata
+from . import client
 from ige.ospace import Rules
 
 SHORT = 1

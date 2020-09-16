@@ -18,6 +18,9 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
+def _(msg): return msg
+
+
 import pygameui as ui
 from osci.StarMapWidget import StarMapWidget
 from ige.ospace import Rules
@@ -84,7 +87,7 @@ class FleetScoutBloomDlg:
             info = _('No target selected')
         else:
             target = client.get(self.targetID, noUpdate = 1)
-            info = getattr(target, 'name', res.getUnknownName())
+            info = getattr(target, 'name', resr.getUnknownName())
         # correct buildingIndex
         if not self.sendShips:
             self.selectedShip = Const.OID_NONE
@@ -115,7 +118,7 @@ class FleetScoutBloomDlg:
                 maxDelta = fleetSpeed / Rules.turnsPerDay * speedBoost
                 if maxDelta != 0:
                     eta = lnght / maxDelta
-                    self.win.vEta.text = res.formatTime(eta)
+                    self.win.vEta.text = resr.formatTime(eta)
                 else:
                     self.win.vEta.text = _("N/A")
             else:

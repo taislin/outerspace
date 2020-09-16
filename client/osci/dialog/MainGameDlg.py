@@ -18,6 +18,9 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
+def _(msg): return msg
+
+
 import pygameui as ui
 from osci import gdata, client, resr
 from osci.StarMapWidget import StarMapWidget
@@ -184,7 +187,7 @@ class MainGameDlg:
 
     def onSaveViewConfirm(self):
         turn = client.getTurn()
-        name = 'view_' + res.formatTime(turn,'_')
+        name = 'view_' + resr.formatTime(turn,'_')
         full_name = os.path.join(gdata.config.game.screenshot_dir, name)
         savedas = self.mapWidget.save(full_name, chronicle_shot=False)
         self.confirmDlg.display(_('File saved as %s' % savedas), _('OK'), False)
@@ -195,7 +198,7 @@ class MainGameDlg:
 
     def onSaveStarmapConfirm(self):
         turn = client.getTurn()
-        name = 'starmap_' + res.formatTime(turn,'_')
+        name = 'starmap_' + resr.formatTime(turn,'_')
         full_name = os.path.join(gdata.config.game.screenshot_dir, name)
         savedas = self.mapWidget.save(full_name, chronicle_shot=True)
         self.confirmDlg.display(_('File saved as %s' % savedas), _('OK'), False)
@@ -242,7 +245,7 @@ class MainGameDlg:
         self.alterMenu(None, None, False)
         player = client.getPlayer()
         turn = client.getTurn()
-        self.win.vTurn.text = res.formatTime(turn)
+        self.win.vTurn.text = resr.formatTime(turn)
         if configUpdated:
             self.win.vStarMap.updateConfigModes()
         self.win.vStarMap.precompute()

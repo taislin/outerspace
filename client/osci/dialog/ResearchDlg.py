@@ -17,6 +17,9 @@
 #  along with Outer Space; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
+
+def _(msg): return msg
+
 import math
 
 import pygameui as ui
@@ -70,7 +73,7 @@ class ResearchDlg:
         item.tShip = '*' if getattr(tech, 'isShipEquip', None) else ''
 
         neededSci = Utils.getTechRCost(player, tech.id)
-        item.tETC = res.formatTime(float(neededSci) / player.effSciPoints) if player.effSciPoints > 0 else _("N/A")
+        item.tETC = resr.formatTime(float(neededSci) / player.effSciPoints) if player.effSciPoints > 0 else _("N/A")
         item.foreground = None
 
         if client.getFullTechInfo(tech.id).finishResearchHandler == TechHandlers.finishResTLAdvance:
@@ -110,18 +113,18 @@ class ResearchDlg:
             etc = float(researchSci - task.currSci) / max(task.changeSci, player.effSciPoints)
             totalSci += researchSci - task.currSci
             if player.effSciPoints > 0:
-                item.tETC = res.formatTime(etc)
+                item.tETC = resr.formatTime(etc)
             else:
-                item.tETC = res.getNA()
+                item.tETC = resr.getNA()
         elif task.changeSci < 0:
             etc = - float(task.currSci) / min(task.changeSci, player.effSciPoints)
-            item.tETC = _("[%s]") % res.formatTime(etc)
+            item.tETC = _("[%s]") % resr.formatTime(etc)
         elif player.effSciPoints > 0:
             etc = float(researchSci) / player.effSciPoints
             totalSci += researchSci
-            item.tETC = res.formatTime(etc)
+            item.tETC = resr.formatTime(etc)
         else:
-            item.tETC = res.getNA()
+            item.tETC = resr.getNA()
 
         if task.improveToMax:
             for impr in range(task.improvement + 1, fulltech.maxImprovement + 1):
@@ -153,7 +156,7 @@ class ResearchDlg:
         self.win.vRQueueRepat.enabled = 0
         self.win.vRQueueRepat.pressed = 0
         self.win.vRQueueInfo.enabled = 0
-        self.win.vRTotal.text = res.formatTime(totalSci) if totalSci else _("N/A")
+        self.win.vRTotal.text = resr.formatTime(totalSci) if totalSci else _("N/A")
         return queued
 
     def _processImprovableTech(self, tech, scheduledIDs):
@@ -165,7 +168,7 @@ class ResearchDlg:
                        tStruct=(' ', '*')[tech.isStructure],
                        tShip=(' ', '*')[tech.isShipEquip])
         neededSci = Utils.getTechRCost(player, tech.id)
-        item.tETC = res.formatTime(float(neededSci) / player.effSciPoints) if player.effSciPoints > 0 else _("N/A")
+        item.tETC = resr.formatTime(float(neededSci) / player.effSciPoints) if player.effSciPoints > 0 else _("N/A")
         item.foreground = (0xd0, 0xd0, 0xd0) if tech.id in scheduledIDs else None
         item.foreground = (0x80, 0x40, 0x40) if tech.id in player.obsoleteTechs else item.foreground
         return item

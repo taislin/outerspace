@@ -18,6 +18,9 @@
 #  along with Outer Space; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
+
+def _(msg): return msg
+
 import bisect
 
 from pygameui.Widget import Widget, registerWidget
@@ -189,7 +192,7 @@ class StarMapWidget(Widget):
         for buttonkey in self._hotbuttons:
             button = self._hotbuttons[buttonkey]
             self._hotbuttonRects[button[0]] = [button[0],pygame.Rect(button[2]+self._hotbuttonsZone.left,button[3]+self._hotbuttonsZone.top+15,button[4],button[5])]
-            img = res.getButton(button[0],button[1])
+            img = resr.getButton(button[0],button[1])
             if (button[1] and not (self._tempOverlayHotbutton and self._tempOverlayHotbutton == button[0])) or (not button[1] and self._tempOverlayHotbutton and self._tempOverlayHotbutton == button[0]):
                 pygame.draw.rect(mapSurf,(0x90, 0x90, 0x90),(left+button[2]-1,top+15+button[3]-1,button[4]+2,button[5]+2),1)
             mapSurf.blit(img,(left+button[2],top+15+button[3]))
@@ -268,7 +271,7 @@ class StarMapWidget(Widget):
             rng = int(i * speed * self.star_map.scale)
             if rng > 1:
                 pygame.draw.circle(surface, (0x70, 0x70, 0x80), (sx, sy), rng, 1)
-                textSrfc = Fonts.renderText(self.star_map.textSize, res.formatTime(i * 6), 1, (0x70, 0x70, 0x80), (0x00, 0x00, 0x00))
+                textSrfc = Fonts.renderText(self.star_map.textSize, resr.formatTime(i * 6), 1, (0x70, 0x70, 0x80), (0x00, 0x00, 0x00))
                 surface.blit(textSrfc, (sx - rng, sy - textSrfc.get_height() / 2))
                 surface.blit(textSrfc, (sx + rng, sy - textSrfc.get_height() / 2))
                 surface.blit(textSrfc, (sx - textSrfc.get_width() / 2, sy - rng))
@@ -492,19 +495,19 @@ class StarMapWidget(Widget):
                 obj = client.get(objID)
                 if obj.type == Const.T_SYSTEM:
                     name = getattr(obj, "name", None)
-                    name = _("System: %s [ID: %d]") % (name or res.getUnknownName(), obj.oid)
+                    name = _("System: %s [ID: %d]") % (name or resr.getUnknownName(), obj.oid)
                 elif obj.type == Const.T_WORMHOLE:
                     name = getattr(obj, "name", None)
-                    name = _("Worm hole: %s [ID: %d]") % (name or res.getUnknownName(), obj.oid)
+                    name = _("Worm hole: %s [ID: %d]") % (name or resr.getUnknownName(), obj.oid)
                 elif obj.type == Const.T_PLANET:
                     name = getattr(obj, "name", None)
-                    name = _("Planet: %s [ID: %d]") % (name or res.getUnknownName(), obj.oid)
+                    name = _("Planet: %s [ID: %d]") % (name or resr.getUnknownName(), obj.oid)
                 elif obj.type == Const.T_FLEET:
                     if hasattr(obj,'customname') and obj.customname:
                         name = obj.customname
                     else:
                         name = getattr(obj, "name", None)
-                    name = _("Fleet: %s [ID: %d]") % (name or res.getUnknownName(), obj.oid)
+                    name = _("Fleet: %s [ID: %d]") % (name or resr.getUnknownName(), obj.oid)
                 else:
                     name = _("Unknown object [ID: %d]") % obj.oid
                 item = ui.Item(name, action = "onObjectSelected", data = objID)
@@ -513,10 +516,10 @@ class StarMapWidget(Widget):
                 obj = client.get(objID)
                 if obj.type == Const.T_SYSTEM:
                     name = getattr(obj, "name", None)
-                    name = _("Buoy on system: %s [ID: %d]") % (name or res.getUnknownName(), obj.oid)
+                    name = _("Buoy on system: %s [ID: %d]") % (name or resr.getUnknownName(), obj.oid)
                 elif obj.type == Const.T_WORMHOLE:
                     name = getattr(obj, "name", None)
-                    name = _("Buoy on worm hole: %s [ID: %d]") % (name or res.getUnknownName(), obj.oid)
+                    name = _("Buoy on worm hole: %s [ID: %d]") % (name or resr.getUnknownName(), obj.oid)
                 else:
                     name = _("Buoy on unknown object [ID: %d]") % obj.oid
                 item = ui.Item(name, action = "onBuoySelected", data = objID)

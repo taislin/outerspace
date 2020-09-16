@@ -17,6 +17,9 @@
 #  along with Outer Space; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
+
+def _(msg): return msg
+
 import math
 
 import pygameui as ui
@@ -89,7 +92,7 @@ class StructTaskDlg:
                 planet = client.get(planetID, noUpdate=1)
                 # only player owned planets can be source planets
                 enabled = getattr(planet, "owner") == playerID
-                buttonText = "%s / %s" % (getattr(planet, 'name', res.getUnknownName()), getattr(planet, "effProdProd", "?"))
+                buttonText = "%s / %s" % (getattr(planet, 'name', resr.getUnknownName()), getattr(planet, "effProdProd", "?"))
                 item = ui.Item(buttonText,
                                planetID=planetID,
                                enabled=enabled,
@@ -133,7 +136,7 @@ class StructTaskDlg:
                 etc = math.ceil(float(tech.buildProd) / prodProd)
                 if self.sourceID != self.planetID:
                     etc *= Rules.buildOnAnotherPlanetMod
-                etc = res.formatTime(etc)
+                etc = resr.formatTime(etc)
             else:
                 etc = _("N/A")
 
@@ -143,7 +146,7 @@ class StructTaskDlg:
                            name=tech.name,
                            tl=tech.level,
                            subtype=tech.subtype,
-                           icons=((res.getTechImg(techID), ui.ALIGN_N),),
+                           icons=((resr.getTechImg(techID), ui.ALIGN_N),),
                            font="small-bold",
                            align=ui.ALIGN_S,
                            tooltipTitle=_("Details"),

@@ -18,6 +18,9 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
+def _(msg): return msg
+
+
 from pygameui.Widget import Widget, registerWidget
 import pygameui as ui
 from pygameui import Fonts
@@ -71,7 +74,7 @@ class SystemMapWidget(Widget):
         self.computeBuoy()
         self._starImg = None
         if hasattr(system, 'starClass'):
-            self._starImg = res.getBigStarImg(system.starClass[1])
+            self._starImg = resr.getBigStarImg(system.starClass[1])
         self._planetImgs = []
         if hasattr(system, 'planets'):
             for planetID in system.planets:
@@ -80,19 +83,19 @@ class SystemMapWidget(Widget):
                     continue
                 # image
                 plType = getattr(planet, 'plType', 'X')
-                img = res.getPlanetImg(plType, planet.oid + system.oid)
+                img = resr.getPlanetImg(plType, planet.oid + system.oid)
                 #if plType != 'G':
                 #    ratio = planet.plDiameter / 19000.0
                 #else:
                 #    ratio = planet.plDiameter / 180000.0
                 #img2 = pygame.transform.scale(img, (int(ratio * img.get_width()), int(ratio * img.get_height())))
-                name = getattr(planet, 'name', res.getUnknownName()).split(' ')[-1]
+                name = getattr(planet, 'name', resr.getUnknownName()).split(' ')[-1]
                 #rel = Const.REL_UNDEF
                 if hasattr(planet, 'owner'):
                     ownerID = planet.owner
                 else:
                     ownerID = Const.OID_NONE
-                self._planetImgs.append((planetID, img, name, res.getPlayerColor(ownerID)))
+                self._planetImgs.append((planetID, img, name, resr.getPlayerColor(ownerID)))
 
     def computeBuoy(self):
         player = client.getPlayer()
@@ -116,15 +119,15 @@ class SystemMapWidget(Widget):
         # mines
         if self.my_mines:
             if self.unknown_mines:
-                textSrfc = Fonts.renderText('small', 'Minefield', 1, res.getFFColorCode(1250))
+                textSrfc = Fonts.renderText('small', 'Minefield', 1, resr.getFFColorCode(1250))
                 surface.blit(textSrfc, (x, self.rect.top + textSrfc.get_height()))
-                textSrfc = Fonts.renderText('small', 'Unknown Minefield Detected', 1, res.getFFColorCode(0))
+                textSrfc = Fonts.renderText('small', 'Unknown Minefield Detected', 1, resr.getFFColorCode(0))
                 surface.blit(textSrfc, (x, self.rect.top + textSrfc.get_height()*2 + 5))
             else:
-                textSrfc = Fonts.renderText('small', 'Minefield', 1, res.getFFColorCode(1250))
+                textSrfc = Fonts.renderText('small', 'Minefield', 1, resr.getFFColorCode(1250))
                 surface.blit(textSrfc, (x, self.rect.top + textSrfc.get_height()))
         elif self.unknown_mines:
-            textSrfc = Fonts.renderText('small', 'Unknown Minefield Detected', 1, res.getFFColorCode(0))
+            textSrfc = Fonts.renderText('small', 'Unknown Minefield Detected', 1, resr.getFFColorCode(0))
             surface.blit(textSrfc, (x, self.rect.top + textSrfc.get_height()))
         # buoy
         if self.buoytext:

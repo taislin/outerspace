@@ -18,6 +18,9 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
+def _(msg): return msg
+
+
 import pygameui as ui
 from osci.StarMapWidget import StarMapWidget
 from osci import gdata, resr, client, sequip
@@ -69,7 +72,7 @@ class FleetSpecsDlg:
         self.designID = Const.OID_NONE
         self.fleetID = fleetID
         self.fleet = client.get(fleetID, noUpdate = 1)
-        self.win.title = _('Fleet Details: %s') % getattr(self.fleet, 'name', res.getUnknownName())
+        self.win.title = _('Fleet Details: %s') % getattr(self.fleet, 'name', resr.getUnknownName())
         if not hasattr(self.fleet, "ships"):
             return
         self.calcFleet(self.fleet)

@@ -17,6 +17,9 @@
 #  along with Outer Space; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
+
+def _(msg): return msg
+
 import bisect
 import math
 
@@ -65,21 +68,21 @@ class FleetsOverviewDlg:
         # check fleet color and decide if display the fleet
         if hasattr(fleet, 'owner'):
             plRelation = client.getRelationTo(fleet.owner)
-            fgColor = res.getPlayerColor(fleet.owner)
+            fgColor = resr.getPlayerColor(fleet.owner)
             if fleet.owner == playerID and self.win.vMine.checked:
                 return fgColor
             return fgColor if checkBoxes[bisect.bisect(Const.REL_BOUNDARIES, plRelation)] else None
         else:
             # with no owner assume enemy
-            return res.getFFColorCode(Const.REL_ENEMY_LO) if checkBoxes[0] else None
+            return resr.getFFColorCode(Const.REL_ENEMY_LO) if checkBoxes[0] else None
 
     def _populateName(self, fleet):
         return fleet.customname if hasattr(fleet, 'customname') and fleet.customname \
-                                else getattr(fleet, 'name', res.getUnknownName())
+                                else getattr(fleet, 'name', resr.getUnknownName())
 
     def _populatePopup(self, playerID, fleet):
         if hasattr(fleet, 'owner') and playerID != fleet.owner:
-            owner = getattr(client.get(fleet.owner, noUpdate=1), "name", res.getUnknownName())
+            owner = getattr(client.get(fleet.owner, noUpdate=1), "name", resr.getUnknownName())
             ownerName = " (%s)" % owner
             ownerNameTip = owner
             ownerTipTitle = _("Owner")
@@ -93,10 +96,10 @@ class FleetsOverviewDlg:
         systemName = "-"
         if hasattr(fleet, 'orbiting') and fleet.orbiting:
             system = client.get(fleet.orbiting, noUpdate=1)
-            systemName = getattr(system, "name", res.getUnknownName())
+            systemName = getattr(system, "name", resr.getUnknownName())
         elif hasattr(fleet, 'closeSystem'):
             system = client.get(fleet.closeSystem, noUpdate=1)
-            systemName = _("%s (dst)") % getattr(system, "name", res.getUnknownName())
+            systemName = _("%s (dst)") % getattr(system, "name", resr.getUnknownName())
         return systemName
 
     def _populateOrder(self, fleet):
@@ -110,12 +113,12 @@ class FleetsOverviewDlg:
                 return None
             order = gdata.fleetActions[action]
             if target != Const.OID_NONE:
-                targetName = getattr(client.get(target, noUpdate=1), 'name', res.getUnknownName())
+                targetName = getattr(client.get(target, noUpdate=1), 'name', resr.getUnknownName())
                 order = "%s %s" % (order, targetName)
         return order
 
     def _populateEta(self, fleet):
-        return res.formatTime(fleet.eta) if hasattr(fleet, "eta") else "?"
+        return resr.formatTime(fleet.eta) if hasattr(fleet, "eta") else "?"
 
     def _populateFuel(self, fleet):
         if hasattr(fleet, "storEn"):
@@ -129,14 +132,14 @@ class FleetsOverviewDlg:
             turns = fleet.storEn / fleet.operEn if fleet.operEn > 0 else 100000
             rawRange = turns * fleet.speed / Rules.turnsPerDay
             _range = "%.2f" % rawRange
-            opTime = res.formatTime(turns)
+            opTime = resr.formatTime(turns)
         else:
             _range = "?"
             opTime = "?"
         return opTime, _range
 
     def _populateLastUpgrade(self, fleet):
-        return res.formatTime(fleet.lastUpgrade) if hasattr(fleet, "lastUpgrade") else "?"
+        return resr.formatTime(fleet.lastUpgrade) if hasattr(fleet, "lastUpgrade") else "?"
 
     def show(self):
         player = client.getPlayer()

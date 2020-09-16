@@ -18,6 +18,9 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
+def _(msg): return msg
+
+
 import pygameui as ui
 from osci.StarMapWidget import StarMapWidget
 from osci import gdata, resr, client, sequip
@@ -132,11 +135,11 @@ class SystemOverviewDlg:
                 else:
                     speedBoost = ''
                 if self.showProblems:
-                    color = res.getSystemOverviewProblemColor(useOwner, problem)
+                    color = resr.getSystemOverviewProblemColor(useOwner, problem)
                 else:
-                    color = res.getPlayerColor(useOwner)
+                    color = resr.getPlayerColor(useOwner)
                 item = ui.Item(
-                    getattr(system, 'name', res.getUnknownName()),
+                    getattr(system, 'name', resr.getUnknownName()),
                     tSyPnum=planetsMine + planetsOwned + planetsUnowned + planetsGA,
                     tSyPTnum=planetsNotMine,
                     tSyPYnum=planetsMine,

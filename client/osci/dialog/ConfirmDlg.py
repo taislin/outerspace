@@ -18,6 +18,9 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
+def _(msg): return msg
+
+
 import pygameui as ui
 from osci import client, gdata, resr
 
@@ -90,7 +93,7 @@ class ConfirmDlg:
         )
         self.win.subscribeAction('*', self)
         ui.Text(self.win, layout = (5, 0, 16, 3), id = 'vText', background = self.win.app.theme.themeBackground, editable = 0)
-        ui.Label(self.win, layout = (0, 0, 5, 4), icons = ((res.loginLogoImg, ui.ALIGN_W),))
+        ui.Label(self.win, layout = (0, 0, 5, 4), icons = ((resr.loginLogoImg, ui.ALIGN_W),))
         ui.Title(self.win, layout = (0, 4, 13, 1), id = 'vStatusBar', align = ui.ALIGN_W)
         ui.Check(self.win, layout = (17, 3, 4, 1), text = _('I agree'), id = 'vAgree', action = 'onAgree')
         ui.TitleButton(self.win, layout = (13, 4, 4, 1), id = 'vCancel', action = 'onCancel')

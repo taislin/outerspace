@@ -18,6 +18,9 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
+def _(msg): return msg
+
+
 # TODO rewrite it to support general number of queues, not just 5 and to make
 # the code nicer
 
@@ -95,10 +98,10 @@ class GlobalQueuesDlg:
         for task in prodQueue:
             if task.isShip:
                 tech = self.player.shipDesigns[task.techID]
-                icons = ((res.getShipImg(tech.combatClass, tech.isMilitary), ui.ALIGN_NONE),)
+                icons = ((resr.getShipImg(tech.combatClass, tech.isMilitary), ui.ALIGN_NONE),)
             else:
                 tech = client.getFullTechInfo(task.techID)
-                icons = ((res.getTechImg(task.techID), ui.ALIGN_NONE),)
+                icons = ((resr.getTechImg(task.techID), ui.ALIGN_NONE),)
             item = ui.Item(text = str(task.quantity), font = 'small', align = ui.ALIGN_NE, icons = icons, tooltipTitle = "", tooltip = tech.name, statustip = tech.name, index = index, const = tech.buildProd*task.quantity)
             if task.isShip:
                 item.background = None
@@ -106,7 +109,7 @@ class GlobalQueuesDlg:
                 item.background = (0x44, 0x44, 0x44)
             items.append(item)
             index += 1
-        icons = ((res.getTechImg(1), ui.ALIGN_NONE),)
+        icons = ((resr.getTechImg(1), ui.ALIGN_NONE),)
         item = ui.Item(_('New'), font = 'small-bold', align = ui.ALIGN_SW, icons = icons, index = None)
         items.append(item)
         self.vPQueues[id].items = items
@@ -247,19 +250,19 @@ class GlobalQueuesDlg:
             align = ui.ALIGN_W, font = 'normal-bold')
         ui.ButtonArray(self.win, layout = (0, 1, 20, 2), id = 'vPQueue0',
             buttonSize = (2, 2), showSlider = 0, tags = ['pl'], action = 'onQueueItemSelected', orderNo = 0)
-        ui.Title(self.win, layout = (0, 3, 20, 1), text = _('Queue \"{0}\"'.format(res.globalQueueName(1))),
+        ui.Title(self.win, layout = (0, 3, 20, 1), text = _('Queue \"{0}\"'.format(resr.globalQueueName(1))),
             align = ui.ALIGN_W, font = 'normal-bold')
         ui.ButtonArray(self.win, layout = (0, 4, 20, 2), id = 'vPQueue1',
             buttonSize = (2, 2), showSlider = 0, tags = ['pl'], action = 'onQueueItemSelected', orderNo = 1)
-        ui.Title(self.win, layout = (0, 6, 20, 1), text = _('Queue \"{0}\"'.format(res.globalQueueName(2))),
+        ui.Title(self.win, layout = (0, 6, 20, 1), text = _('Queue \"{0}\"'.format(resr.globalQueueName(2))),
             align = ui.ALIGN_W, font = 'normal-bold')
         ui.ButtonArray(self.win, layout = (0, 7, 20, 2), id = 'vPQueue2',
             buttonSize = (2, 2), showSlider = 0, tags = ['pl'], action = 'onQueueItemSelected', orderNo = 2)
-        ui.Title(self.win, layout = (0, 9, 20, 1), text = _('Queue \"{0}\"'.format(res.globalQueueName(3))),
+        ui.Title(self.win, layout = (0, 9, 20, 1), text = _('Queue \"{0}\"'.format(resr.globalQueueName(3))),
             align = ui.ALIGN_W, font = 'normal-bold')
         ui.ButtonArray(self.win, layout = (0, 10, 20, 2), id = 'vPQueue3',
             buttonSize = (2, 2), showSlider = 0, tags = ['pl'], action = 'onQueueItemSelected', orderNo = 3)
-        ui.Title(self.win, layout = (0, 12, 20, 1), text = _('Queue \"{0}\"'.format(res.globalQueueName(4))),
+        ui.Title(self.win, layout = (0, 12, 20, 1), text = _('Queue \"{0}\"'.format(resr.globalQueueName(4))),
             align = ui.ALIGN_W, font = 'normal-bold')
         ui.ButtonArray(self.win, layout = (0, 13, 20, 2), id = 'vPQueue4',
             buttonSize = (2, 2), showSlider = 0, tags = ['pl'], action = 'onQueueItemSelected', orderNo = 4)

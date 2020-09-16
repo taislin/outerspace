@@ -1,6 +1,3 @@
-#!/usr/bin/env python2
-
-#
 #  Copyright 2001 - 2016 Ludek Smid [http://www.ospace.net/]
 #
 #  This file is part of Outer Space.

@@ -23,7 +23,7 @@
 #
 import ige.ospace.Const as Const
 from ige import NoSuchObjectException
-import client, types, string, res, gdata
+import client, types, string, resr, gdata
 from ige import log
 from ige.ospace import Rules
 

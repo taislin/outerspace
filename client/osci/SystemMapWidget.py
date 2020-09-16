@@ -23,7 +23,7 @@ import pygameui as ui
 from pygameui import Fonts
 import ige.ospace.Const as Const
 import pygame, pygame.draw
-from . import gdata, res, client
+from . import gdata, resr, client
 from ige import log
 
 # number of planet's images

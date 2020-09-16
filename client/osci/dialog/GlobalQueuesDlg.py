@@ -28,7 +28,7 @@ from .ConstructionDlg import ConstructionDlg
 from .TechInfoDlg import TechInfoDlg
 from .ConfirmDlg import ConfirmDlg
 from osci.StarMapWidget import StarMapWidget
-from osci import gdata, res, client, sequip
+from osci import gdata, resr, client, sequip
 import ige.ospace.Const as Const
 from ige.ospace import ShipUtils, Rules
 from ige import GameException

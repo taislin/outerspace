@@ -26,7 +26,7 @@ from ige import GameException
 from ige.ospace import ShipUtils, Rules
 import ige.ospace.Const as Const
 
-from osci import gdata, res, client, sequip
+from osci import gdata, resr, client, sequip
 from osci.StarMapWidget import StarMapWidget
 
 from .ConstrSelTechDlg import ConstrSelTechDlg

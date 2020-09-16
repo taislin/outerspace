@@ -20,7 +20,7 @@
 
 import pygameui as ui
 from osci.StarMapWidget import StarMapWidget
-from osci import gdata, res, client, sequip
+from osci import gdata, resr, client, sequip
 import ige.ospace.Const as Const
 from ige import GameException
 from ige.ospace import Rules

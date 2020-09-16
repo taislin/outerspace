@@ -25,7 +25,7 @@ import ige
 from ige.ospace import Rules, Utils, TechHandlers
 import ige.ospace.Const as Const
 
-from osci import client, res, gdata
+from osci import client, resr, gdata
 
 from .TechInfoDlg import TechInfoDlg
 from .ConfirmDlg import ConfirmDlg

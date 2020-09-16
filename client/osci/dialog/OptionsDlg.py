@@ -25,7 +25,7 @@ import re
 
 import pygame
 import pygameui as ui
-from osci import client, gdata, res
+from osci import client, gdata, resr
 import ige.ospace.Const as Const
 from ige import log
 import resources

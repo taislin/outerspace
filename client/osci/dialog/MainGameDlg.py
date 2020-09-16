@@ -19,7 +19,7 @@
 #
 
 import pygameui as ui
-from osci import gdata, client, res
+from osci import gdata, client, resr
 from osci.StarMapWidget import StarMapWidget
 from .StarSystemDlg import StarSystemDlg
 from .FleetDlg import FleetDlg
@@ -46,6 +46,8 @@ import webbrowser, pygame
 import time
 import os.path
 from . import Utils
+
+def _(msg): return msg
 
 class MainGameDlg:
 

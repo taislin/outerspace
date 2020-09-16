@@ -58,7 +58,7 @@ import ige.version
 from ige import log
 import osci
 import resources
-import osci.res
+import osci.resr
 
 # i18n (delayed translation)
 def _(msg): return msg
@@ -109,7 +109,7 @@ def defineBackground():
 def update():
     rects = gdata.app.draw(gdata.screen)
     if gdata.cmdInProgress:
-        img = osci.res.cmdInProgressImg
+        img = osci.resr.cmdInProgressImg
         wx, wy = gdata.screen.get_size()
         x, y = img.get_size()
         gdata.screen.blit(img, (wx - x, 0))
@@ -271,16 +271,16 @@ def runClient(options):
     pygame.event.clear()
 
     # resources
-    import osci.res
+    import osci.resr
 
-    osci.res.initialize()
+    osci.resr.initialize()
 
     # load resources
     import osci.dialog
     dlg = osci.dialog.ProgressDlg(gdata.app)
-    osci.res.loadResources(dlg)
+    osci.resr.loadResources(dlg)
     dlg.hide()
-    osci.res.prepareUIIcons(ui.SkinableTheme.themeIcons)
+    osci.resr.prepareUIIcons(ui.SkinableTheme.themeIcons)
 
 
     while running:

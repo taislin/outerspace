@@ -20,8 +20,10 @@
 
 import pygameui as ui
 from osci.StarMapWidget import StarMapWidget
-from osci import gdata, res, client, sequip
+from osci import gdata, resr, client, sequip
 import ige.ospace.Const as Const
+
+def _(msg): return msg
 
 ENGINE = 1
 SMALL = 2

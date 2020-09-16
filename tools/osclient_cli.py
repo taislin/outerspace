@@ -168,7 +168,7 @@ elif options.chronicler:
 
     from osci.StarMap import StarMap
     import resources
-    import osci.res
+    import osci.resr
     import pygame, pygame.ftfont, pygame.freetype
     import pygameui, pygameui.SkinableTheme
     from osci.config import Config
@@ -195,8 +195,8 @@ elif options.chronicler:
 
     pygame.init()
     screen = pygame.display.set_mode((10,10))
-    osci.res.initialize()
-    osci.res.loadResources()
+    osci.resr.initialize()
+    osci.resr.loadResources()
     pygameui.SkinableTheme.setSkin(os.path.join(resources.get("themes"), 'green'))
     control_modes = {}  # mutable, thus updating here will update StarMap
     control_modes['systems'] = 1
@@ -230,7 +230,7 @@ elif options.chronicler:
     for obj in osci.client.cmdProxy.multiGetInfo(1, fleets_to_get[:]):
         osci.client.db[obj.oid] = obj
     painter = StarMap(control_modes)
-    turn_string = osci.res.formatTime(osci.client.getTurn(), '_')
+    turn_string = osci.resr.formatTime(osci.client.getTurn(), '_')
     painter.precompute()
     # we are not using default zoom - it's too much
     painter.scale = 30

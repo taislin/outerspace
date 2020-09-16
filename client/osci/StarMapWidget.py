@@ -27,7 +27,7 @@ import ige.ospace.Const as Const
 import pygame, pygame.draw, pygame.key, pygame.image
 from .dialog.ShowBuoyDlg import ShowBuoyDlg
 from .dialog.KeyModHelp import KeyModHelp
-from . import gdata, client, res
+from . import gdata, client, resr
 from ige import log
 from osci.dialog.SearchDlg import SearchDlg
 from osci.MiniMap import MiniMap

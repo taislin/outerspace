@@ -19,7 +19,7 @@
 #
 
 import pygameui as ui
-from osci import client, gdata, res
+from osci import client, gdata, resr
 from ige import log
 
 class ColorDefinitionDlg:

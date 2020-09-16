@@ -19,7 +19,7 @@
 #
 
 import pygameui as ui
-from osci import res, gdata
+from osci import resr, gdata
 
 class ProgressDlg:
 

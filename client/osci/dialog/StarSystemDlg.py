@@ -19,7 +19,7 @@
 #
 
 import pygameui as ui
-from osci import client, res, gdata
+from osci import client, resr, gdata
 from osci.SystemMapWidget import SystemMapWidget
 from .NewTaskDlg import NewTaskDlg
 from .StructTaskDlg import StructTaskDlg

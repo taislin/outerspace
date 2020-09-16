@@ -23,7 +23,8 @@ from pygameui import Fonts
 import ige.ospace.Const as Const
 from ige.ospace import Rules, Utils
 import pygame, pygame.draw, pygame.key, pygame.image
-import gdata, client, res, math, string
+import gdata, math, string
+from . import resr, client
 from ige import log
 
 buoyColors = [(0xff, 0xff, 0x00), (0x00, 0xff, 0xff), (0xff, 0x00, 0xff), (0xb0, 0xb0, 0xff)]

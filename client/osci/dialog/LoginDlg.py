@@ -19,7 +19,7 @@
 #
 
 import pygameui as ui
-from osci import client, gdata, res
+from osci import client, gdata, resr
 from .NewAccountDlg import NewAccountDlg
 from .PlayerSelectDlg import PlayerSelectDlg
 from .ConfirmDlg import ConfirmDlg

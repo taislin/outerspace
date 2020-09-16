@@ -19,7 +19,7 @@
 #
 
 import pygameui as ui
-from osci import client, res, gdata, sequip
+from osci import client, resr, gdata, sequip
 from .FleetCommandDlg import FleetCommandDlg
 from .FleetSpecsDlg import FleetSpecsDlg
 from .FleetSplitDlg import FleetSplitDlg

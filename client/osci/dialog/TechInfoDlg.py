@@ -24,8 +24,9 @@ import pygameui as ui
 from ige.ospace import Rules, Utils
 import ige.ospace.Const as Const
 
-from osci import gdata, res, client
+from osci import gdata, resr, client
 
+def _(msg): return msg
 
 def cclass2Text(cclass):
     return [_("small"), _("medium"), _("large"), _("planet")][cclass]

@@ -21,7 +21,7 @@
 from ige import log
 from ige.version import version as clientVersion
 import os
-from osci import client, gdata, res
+from osci import client, gdata, resr
 import pygame
 import pygameui as ui
 import re

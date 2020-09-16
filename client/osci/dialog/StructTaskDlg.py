@@ -25,7 +25,7 @@ from ige import GameException
 from ige.ospace import Rules
 import ige.ospace.Const as Const
 
-from osci import gdata, client, res
+from osci import gdata, client, resr
 from .TechInfoDlg import TechInfoDlg
 from .ConfirmDlg import ConfirmDlg
 

@@ -178,7 +178,7 @@ elif options.chronicler:
     import ige.version
     import gettext
     import hashlib
-    gettext.NullTranslations().install(str = 1)
+    gettext.NullTranslations().install(str = "1")
     gdata.config = Config(os.path.join(options.configDir, options.configFilename))
 
     gdata.config.game.server = 'localhost:9080'

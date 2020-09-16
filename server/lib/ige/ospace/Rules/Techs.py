@@ -387,7 +387,7 @@ def init(configDir):
     # regular module
     moduleDirectory = os.path.dirname(moduleFile)
     chsum = hashlib.sha1()
-    os.path.walk(moduleDirectory, chsumDir, chsum)
+    os.walk(moduleDirectory, chsumDir, chsum)
 
     # read old checksum
     try:
@@ -425,7 +425,7 @@ def init(configDir):
                     xml.sax.parse(os.path.join(dirname, filename), TechTreeContentHandler())
 
         # collect xml files
-        os.path.walk(moduleDirectory, processDir, None)
+        os.walk(moduleDirectory, processDir, None)
 
         # clean up 'type' in lists
         for key in list(attrs.keys()):
@@ -523,7 +523,7 @@ def init(configDir):
         log.message('Saving specification...')
         pickle.dump(techs, open(os.path.join(configDir, 'techs.spf'), 'wb'), 1)
         pickle.dump(Tech, open(os.path.join(configDir, 'Tech.spf'), 'wb'), 1)
-        fh = open(os.path.join(configDir, 'checksum'), 'wb')
+        fh = open(os.path.join(configDir, 'checksum'), 'w')
         fh.write(chsum.hexdigest())
         fh.close()
 

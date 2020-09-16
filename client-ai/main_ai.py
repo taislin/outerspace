@@ -80,10 +80,6 @@ def runAIClient(options):
     gdata.config = Config(os.path.join(options.configDir, 'ais_dummy'))
     client.initialize(options.server, options)
 
-    import gettext
-    tran = gettext.NullTranslations()
-    tran.install(str = 1)
-
     if options.login:
         login = options.login
     else:

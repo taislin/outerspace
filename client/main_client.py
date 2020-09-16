@@ -60,7 +60,8 @@ import osci
 import resources
 import osci.res
 
-
+# i18n (delayed translation)
+def _(msg): return msg
 
 def defineBackground():
     surface = pygame.Surface.copy(gdata.screen)
@@ -205,23 +206,6 @@ def runClient(options):
     gdata.config.game.server = options.server
 
     setDefaults(gdata, options)
-
-    language = gdata.config.client.language
-    import gettext
-    log.debug('OSCI', 'Installing translation for:', language)
-    if language == 'en':
-        log.debug('OSCI', 'English is native - installing null translations')
-        tran = gettext.NullTranslations()
-    else:
-        try:
-            tran = gettext.translation('OSPACE', resources.get('translations'), languages = [language])
-        except IOError:
-            log.warning('OSCI', 'Cannot find catalog for', language)
-            log.message('OSCI', 'Installing null translations')
-            tran = gettext.NullTranslations()
-
-    tran.install(str = 1)
-
 
     #initialize pygame and prepare screen
     if (gdata.config.defaults.sound == "yes") or (gdata.config.defaults.music == "yes"):

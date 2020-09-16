@@ -1,0 +1,25 @@
+checks:
+    python:
+        code_rating: true
+        duplicate_code: true
+build:
+    nodes:
+        analysis:
+            project_setup:
+                override:
+                    - 'true'
+            tests:
+                override:
+                    - py-scrutinizer-run
+                    -
+                        command: pylint-run
+                        use_website_config: true
+                    - command: pip install passlib pygame poll gdata res
+                    - command: ./tests/unittest.sh
+                    - command: ./tests/smoke_test.py --travis
+        tests: true 
+filter:
+    excluded_paths:
+        - '*/test/*'
+    dependency_paths:
+        - 'lib/*'

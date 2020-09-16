@@ -18,7 +18,7 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-from types import StringType, UnicodeType
+from types import *
 
 class Item:
 
@@ -47,7 +47,7 @@ class Item:
         if hasattr(self, key):
             value = getattr(self, key)
             valType = type(value)
-            if valType == StringType or valType == UnicodeType:
+            if valType is str:
                 return value
             else:
                 return str(value)

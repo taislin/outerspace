@@ -481,7 +481,7 @@ def compact_traceback ():
 
     file, function, line = tbinfo[-1]
     info = '[' + str.join (
-        [str.join (x, '|') for x in tbinfo],
+        [str.join (x[0],x[1],x[2], '|') for x in tbinfo],
         '] ['
         ) + ']'
     return (file, function, line), t, v, info

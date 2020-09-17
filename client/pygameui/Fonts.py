@@ -22,7 +22,7 @@ def _(msg): return msg
 
 import pygame
 
-from pygame.ftfont import Font
+from pygame.font import Font
 from types import *
 
 __all__ = ['initFont', 'renderText', 'getTextSize', 'getLineSize']
@@ -36,6 +36,7 @@ def initFont(name, ttfFile, size, bold = 0, italic = 0, underline = 0):
     global fontFaces
     if name in fontFaces:
         del fontFaces[name]
+    pygame.font.init()
     font = Font(ttfFile, size)
     font.set_bold(bold)
     font.set_italic(italic)

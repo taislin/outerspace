@@ -57,7 +57,7 @@ def defineBackground():
         (surface.get_height() - background.get_height()) / 2,
     )
     try:
-        font = pygame.ftfont.Font(resources.get('fonts/DejaVuLGCSans.ttf'), 12)
+        font = pygame.font.Font(resources.get('fonts/DejaVuLGCSans.ttf'), 12)
     except IOError:
         # this can happen on windows during update process, when directory
         # is moved already

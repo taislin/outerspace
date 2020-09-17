@@ -1,3 +1,2 @@
-client: pygame
-
-server: pygame medusa pyasn1 rsa
+pygame
+poll

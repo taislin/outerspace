@@ -27,6 +27,8 @@ import pickle as pickle
 import sqlite3
 from . import log
 
+sys.setrecursionlimit(10000)
+
 IDX_PREV = 0
 IDX_NEXT = 1
 

@@ -270,6 +270,8 @@ class Database:
         #@log.debug("Creating new object", id)
         if not id:
             id = self.nextID
+            while id in self:
+                id += 1
             self.nextID = id + 1
             id = self.keyMethod(id)
             object.oid = id
@@ -280,6 +282,8 @@ class Database:
         else:
             id = self.keyMethod(id)
         #@log.debug("OID =", id)
+        if id in self:
+            raise ige.ServerException("'%s' created twice" % id)
         self.cache[id] = object
         self._addNewCacheItem(id)
         self.put(id, pickle.dumps(object, pickle.HIGHEST_PROTOCOL))

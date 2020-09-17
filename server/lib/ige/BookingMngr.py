@@ -47,6 +47,7 @@ class Booking(object):
         self.capacity = None
         self.owner = None
         self.owner_nick = None
+        self.pw_salt = hashlib.sha256(str(random.random())).hexdigest()
         self.pw_hash = None
 
     def toggle_booking(self, player):
@@ -63,10 +64,10 @@ class Booking(object):
         return len(self.players) == self.capacity
 
     def set_password(self, password):
-        self.pw_hash = hashlib.sha256(password).hexdigest()
+        self.pw_hash = hashlib.sha256(password + self.pw_salt).hexdigest()
 
     def check_password(self, password):
-        pw_hash = hashlib.sha256(password).hexdigest()
+        pw_hash = hashlib.sha256(password + self.pw_salt).hexdigest()
         return self.pw_hash == pw_hash
 
     def answer(self, player):

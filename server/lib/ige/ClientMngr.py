@@ -50,7 +50,7 @@ class ClientMngr:
         self.sessions = {}
         #
         self.accounts = database
-##        self._initAdminAccount()
+        self._initAdminAccount()
         self.generateAIList()
 
     def shutdown(self):
@@ -71,13 +71,18 @@ class ClientMngr:
     def _initAdminAccount(self):
         # create special key
 
-        log.message("No administator account found! (looking for '%s')" % ADMIN_LOGIN)
-        log.message("Creating default account")
-        # create account
-        account = AdminAccount()
-        # update
-        password = account.passwd
-        self.accounts.create(account, id = str(account.login))
+        if ADMIN_LOGIN in self.accounts:
+            self.accounts[ADMIN_LOGIN].passwdHashed = False # Needs plaintext login from token
+            password = passwordGen()
+            self.accounts[ADMIN_LOGIN].setPassword(password)
+        else:
+            log.message("No administator account found! (looking for '%s')" % ADMIN_LOGIN)
+            log.message("Creating default account")
+            # create account
+            account = AdminAccount()
+            # update
+            password = account.passwd
+            self.accounts.create(account, id = str(account.login))
         with open(os.path.join(self.configDir, "token"), "w") as tokenFile:
             tokenFile.write(password)
 
@@ -108,7 +113,8 @@ class ClientMngr:
         account = Account(login, nick, email, plainPassword)
         # update
         self.accounts.create(account, id = str(account.login))
-        log.message('Account created.')
+        log.message('Account created, confirmation token:', account.confToken)
+        # TODO send confirmation token to the email address
         return 1, None
 
     def createAIAccount(self, login, nick, aiType):

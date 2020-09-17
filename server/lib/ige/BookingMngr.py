@@ -105,7 +105,6 @@ class BookingMngr(object):
                 book = self._create_booking(gal_type)
                 self.db.create(book)
                 bookings.append(book)
-        log.debug("init")
         # cleanup of those not used anymore
         for bookID in list(self.db.keys()):
             gal_type = self.db[bookID].gal_type

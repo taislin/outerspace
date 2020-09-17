@@ -103,15 +103,15 @@ class StarMapWidget(Widget):
 
 
     def updateConfigModes(self):
-        self.control_modes['redirects'] = gdata.config.defaults.showredirects is not 'no'
-        self.control_modes['coords'] = gdata.config.defaults.showcoords is not 'no'
-        self.control_modes['map_grid'] = gdata.config.defaults.showmapgrid is not 'no'
-        self.control_modes['scanners'] = gdata.config.defaults.showmapscanners is not 'no'
-        self.control_modes['fleet_lines'] = gdata.config.defaults.showfleetlines is not 'no'
-        self.control_modes['gate_systems'] = gdata.config.defaults.showgatesystems is not 'no'
-        self.control_modes['alternative_mode'] = gdata.config.defaults.alternateviewmode is not 'no'
-        self.control_modes['control_areas'] = gdata.config.defaults.showplayerzones is not 'no'
-        self.control_modes['minimap'] = gdata.config.defaults.showminimap is not 'yes'
+        self.control_modes['redirects'] = gdata.config.defaults.showredirects != 'no'
+        self.control_modes['coords'] = gdata.config.defaults.showcoords != 'no'
+        self.control_modes['map_grid'] = gdata.config.defaults.showmapgrid != 'no'
+        self.control_modes['scanners'] = gdata.config.defaults.showmapscanners != 'no'
+        self.control_modes['fleet_lines'] = gdata.config.defaults.showfleetlines != 'no'
+        self.control_modes['gate_systems'] = gdata.config.defaults.showgatesystems != 'no'
+        self.control_modes['alternative_mode'] = gdata.config.defaults.alternateviewmode != 'no'
+        self.control_modes['control_areas'] = gdata.config.defaults.showplayerzones != 'no'
+        self.control_modes['minimap'] = gdata.config.defaults.showminimap != 'yes'
 
     def precompute(self):
         self.star_map.rect = self.rect
@@ -151,7 +151,7 @@ class StarMapWidget(Widget):
 
         if self.repaint_map:
             mapSurf, self._actAreas, self._actBuoyAreas  = self.star_map.draw(mapSurf)
-            # For some reason, this is not just optimization, it's mandatory for proper
+            # For some reason, this != just optimization, it's mandatory for proper
             # function. BUG?!
             self.repaint_map = 0
             self.repaintHotbuttons = 1

@@ -303,7 +303,7 @@ class IProxy:
                 h.putheader("Content-Type", "text/plain")
                 h.putheader("Content-Length", str(len(data)))
                 h.endheaders()
-                h.send(data)
+                h.send(data.encode(encoding='utf-8'))
                 # use thread to read response and invoke idle handler
                 # regularly
                 reader = Reader(h.getresponse)

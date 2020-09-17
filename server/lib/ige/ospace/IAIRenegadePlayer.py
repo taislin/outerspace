@@ -17,20 +17,17 @@
 #  along with Outer Space; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-
-def _(msg): return msg
-
 import time
 
-from . import Const
-from . import Rules
-from . import ShipUtils
-from . import Utils
+import Const
+import Rules
+import ShipUtils
+import Utils
 
 from ige import log
 from ige.IDataHolder import IDataHolder
 from ige.IObject import public
-from .IPlayer import IPlayer
+from IPlayer import IPlayer
 
 class IAIRenegadePlayer(IPlayer):
 
@@ -40,7 +37,7 @@ class IAIRenegadePlayer(IPlayer):
     def init(self, obj):
         IPlayer.init(self, obj)
         #
-        obj.name = 'Renegade'
+        obj.name = u'Renegade'
         obj.race = "r"
         obj.login = '*'
 
@@ -48,7 +45,7 @@ class IAIRenegadePlayer(IPlayer):
         log.debug("Registering player", obj.oid)
         counter = 1
         while 1:
-            obj.name = 'Renegade faction %d' % counter
+            obj.name = u'Renegade faction %d' % counter
             obj.login = '*AIP*renegade%d' % counter
             if galaxyID in tran.gameMngr.accountGalaxies(obj.login):
                 counter += 1

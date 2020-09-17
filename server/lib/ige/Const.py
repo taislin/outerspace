@@ -18,9 +18,6 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 # return values
 SUCC = 1
 FAIL = 0

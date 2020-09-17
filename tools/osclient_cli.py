@@ -1,4 +1,5 @@
 
+#
 #  Copyright 2001 - 2016 Ludek Smid [http://www.ospace.net/]
 #
 #  This file is part of Outer Space.
@@ -17,9 +18,6 @@
 #  along with Outer Space; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-
-def _(msg): return msg
-
 
 # tweak PYTHONPATH
 import os
@@ -171,7 +169,7 @@ elif options.chronicler:
 
     from osci.StarMap import StarMap
     import resources
-    import osci.resr
+    import osci.res
     import pygame, pygame.ftfont, pygame.freetype
     import pygameui, pygameui.SkinableTheme
     from osci.config import Config
@@ -180,7 +178,7 @@ elif options.chronicler:
     import ige.version
     import gettext
     import hashlib
-    gettext.NullTranslations().install(str = "1")
+    gettext.NullTranslations().install(unicode = 1)
     gdata.config = Config(os.path.join(options.configDir, options.configFilename))
 
     gdata.config.game.server = 'localhost:9080'
@@ -198,8 +196,8 @@ elif options.chronicler:
 
     pygame.init()
     screen = pygame.display.set_mode((10,10))
-    osci.resr.initialize()
-    osci.resr.loadResources()
+    osci.res.initialize()
+    osci.res.loadResources()
     pygameui.SkinableTheme.setSkin(os.path.join(resources.get("themes"), 'green'))
     control_modes = {}  # mutable, thus updating here will update StarMap
     control_modes['systems'] = 1
@@ -233,7 +231,7 @@ elif options.chronicler:
     for obj in osci.client.cmdProxy.multiGetInfo(1, fleets_to_get[:]):
         osci.client.db[obj.oid] = obj
     painter = StarMap(control_modes)
-    turn_string = osci.resr.formatTime(osci.client.getTurn(), '_')
+    turn_string = osci.res.formatTime(osci.client.getTurn(), '_')
     painter.precompute()
     # we are not using default zoom - it's too much
     painter.scale = 30

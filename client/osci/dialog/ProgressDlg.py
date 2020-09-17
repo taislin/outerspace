@@ -18,11 +18,8 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import pygameui as ui
-from osci import resr, gdata
+from osci import res, gdata
 
 class ProgressDlg:
 
@@ -63,5 +60,5 @@ class ProgressDlg:
         self.win.subscribeAction('*', self)
         ui.Text(self.win, layout = (5, 1, 15, 1), id = 'vText', background = self.win.app.theme.themeBackground, editable = 0)
         ui.ProgressBar(self.win, layout = (5, 2, 15, 1), id = 'vProgress')
-        ui.Label(self.win, layout = (0, 0, 5, 4), icons = ((resr.loginLogoImg, ui.ALIGN_W),))
+        ui.Label(self.win, layout = (0, 0, 5, 4), icons = ((res.loginLogoImg, ui.ALIGN_W),))
         ui.Title(self.win, layout = (0, 4, 21, 1), id = 'vStatusBar', align = ui.ALIGN_W)

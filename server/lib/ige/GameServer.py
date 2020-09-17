@@ -17,9 +17,6 @@
 #  along with Outer Space; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-
-def _(msg): return msg
-
 import os
 
 from ige import log
@@ -89,7 +86,7 @@ class GameServer(object):
         msgMngr = MsgMngr(msgDB)
         gameMngr = GameMngr(gameID, config, self.clientMngr, msgMngr, gameDB, self.config.server.datadir, config.name)
         # reset game if Universe does not exist
-        if OID_UNIVERSE not in gameDB:
+        if not gameDB.has_key(OID_UNIVERSE):
             log.message('Resetting game \'%s\'...' % gameID)
             gameMngr.reset()
         # normal operations

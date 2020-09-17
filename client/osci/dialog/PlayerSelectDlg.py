@@ -18,9 +18,6 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import pygameui as ui
 
 import ige
@@ -29,10 +26,10 @@ from osci import client
 from osci import gdata
 import ige.ospace.Const as Const
 
-from .MainGameDlg import MainGameDlg
-from .ConfirmDlg import ConfirmDlg
-from .BookingDlg import BookingDlg
-from .PasswordDlg import PasswordDlg
+from MainGameDlg import MainGameDlg
+from ConfirmDlg import ConfirmDlg
+from BookingDlg import BookingDlg
+from PasswordDlg import PasswordDlg
 
 class PlayerSelectDlg:
     """ Called for selection of active or picking a new player."""

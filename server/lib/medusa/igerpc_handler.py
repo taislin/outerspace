@@ -1,6 +1,6 @@
-from . import http_server, producers, asyncore
-from . import status_handler
-from .counter import counter
+import http_server, producers, asyncore
+import status_handler
+from counter import counter
 from ige.IMarshal import IMarshal, IPacket
 
 import string
@@ -52,9 +52,9 @@ class igerpc_handler:
                 response.exception = None
                 del response.clientAddr
                 self.completedCounter.increment()
-            except asyncore.ExitNow as e:
+            except asyncore.ExitNow, e:
                 raise e
-            except Exception as e:
+            except Exception, e:
                 # report exception back to client
                 response = packet
                 response.method = None
@@ -63,9 +63,9 @@ class igerpc_handler:
                 response.messages = None
                 response.exception = ('%s.%s' % (e.__class__.__module__, e.__class__.__name__), e.args)
                 self.exceptionsCounter.increment()
-        except asyncore.ExitNow as e:
+        except asyncore.ExitNow, e:
             raise e
-        except Exception as e:
+        except Exception, e:
             # internal error, report as HTTP server error
             request.error (500)
         else:
@@ -127,13 +127,13 @@ if __name__ == '__main__':
         def call (self, packet):
             print('IGERPC call')
             for attr in dir(packet):
-                print(attr, '=', getattr(packet, attr))
+                print(attr, '=', getattr(packet, attr)
             packet.result = 'Hello!'
             packet.messages = ()
             return packet
 
-    from . import asyncore
-    from . import http_server
+    import asyncore
+    import http_server
 
     hs = http_server.http_server ('', 8000)
     rpc = rpc_demo()

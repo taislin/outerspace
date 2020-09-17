@@ -18,11 +18,8 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
-from .ProgressDlg import ProgressDlg
-from .MainGameDlg import MainGameDlg
-from .ExceptionDlg import ExceptionDlg
-from .LoginDlg import LoginDlg
-from .UpdateDlg import UpdateDlg
+from ProgressDlg import ProgressDlg
+from MainGameDlg import MainGameDlg
+from ExceptionDlg import ExceptionDlg
+from LoginDlg import LoginDlg
+from UpdateDlg import UpdateDlg

@@ -17,9 +17,6 @@
 #  along with Outer Space; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-
-def _(msg): return msg
-
 import random, copy, math
 
 from ige import log
@@ -28,7 +25,7 @@ from ige.ospace import Rules
 from ige.ospace import Utils
 
 import ai_tools as tool
-from .ai import AI
+from ai import AI
 
 class Mutant(AI):
     def __init__(self, client):
@@ -43,11 +40,11 @@ class Mutant(AI):
         worth = 0
         for planet_id in self.data.myPlanets & set(system.planets):
             planet = self.db[planet_id]
-            if planet.plType == "I":  # gaia
+            if planet.plType == u"I":  # gaia
                 worth += weights[0]
-            elif planet.plType == "E":  # terrestial
+            elif planet.plType == u"E":  # terrestial
                 worth += weights[1]
-            elif planet.plType == "M":  # marginal
+            elif planet.plType == u"M":  # marginal
                 worth += weights[2]
             else:  # junk
                 worth += weights[3]
@@ -98,7 +95,7 @@ class Mutant(AI):
         # precious gaia space if possible
         # also ignore actual state - don't be afraid to rebuild if planet is
         # promoted
-        for avoided_types in [("I", "E", "M"), ("I", "E"), ("I",), ()]:
+        for avoided_types in [(u"I", u"E", u"M"), (u"I", u"E"), (u"I",), ()]:
             # sorting, to avoid rebuilds between equivalent planets
             for planet_id in sorted(system_blueprint):
                 planet = self.db[planet_id]
@@ -116,7 +113,7 @@ class Mutant(AI):
                 return
 
     def _cleanup_dict(self, dict_):
-        for key in list(dict_.keys()):
+        for key in dict_.keys():
             if not dict_[key]:
                 del dict_[key]
 
@@ -128,13 +125,13 @@ class Mutant(AI):
         for planet_id in self.data.myPlanets & set(system.planets):
             planet = self.db[planet_id]
             space = planet.plSlots - 1 # the main building is there every time
-            if planet.plType == "I":  # gaia
+            if planet.plType == u"I":  # gaia
                 system_blueprint[planet_id] = self._create_gaia_blueprint(space)
                 continue
-            elif planet.plType == "E":  # terrestial
+            elif planet.plType == u"E":  # terrestial
                 system_blueprint[planet_id] = self._create_terrestial_blueprint(space)
                 continue
-            elif planet.plType == "M":  # marginal
+            elif planet.plType == u"M":  # marginal
                 system_blueprint[planet_id] = self._create_marginal_blueprint(space)
                 continue
             else: # all sub-marginal types
@@ -260,7 +257,7 @@ class Mutant(AI):
                         min_dist = fleet_range
                         min_dist_sys_id = None
                         min_dist_rel = self.data.distanceToRelevance[system_id]
-                        for temp_id, dist in list(self.data.distanceToRelevance.items()):
+                        for temp_id, dist in self.data.distanceToRelevance.items():
                             temp = self.db[temp_id]
                             distance = math.hypot(temp.x - system.x, temp.y - system.y)
                             if distance < min_dist and dist < min_dist_rel:
@@ -307,7 +304,7 @@ class Mutant(AI):
             nearest = tool.findNearest(self.db, fleet, self.data.enemySystems, max_range, 4)
             if len(nearest):
                 # range is adjusted to flatten probabilities a bit
-                probability_map = [x ** 2 for x in range(2 + len(nearest), 2, -1)]
+                probability_map = map(lambda x: x ** 2, range(2 + len(nearest), 2, -1))
                 target = Utils.weightedRandom(nearest, probability_map)
 
                 fleet, new_fleet, my_fleets = tool.orderPartFleet(self.client, self.db,

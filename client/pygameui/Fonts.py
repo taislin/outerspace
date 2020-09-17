@@ -17,13 +17,10 @@
 #  along with Pygame.UI; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-
-def _(msg): return msg
-
 import pygame
 
-from pygame.font import Font
-from types import *
+from pygame.ftfont import Font
+from types import StringType, UnicodeType
 
 __all__ = ['initFont', 'renderText', 'getTextSize', 'getLineSize']
 
@@ -36,7 +33,6 @@ def initFont(name, ttfFile, size, bold = 0, italic = 0, underline = 0):
     global fontFaces
     if name in fontFaces:
         del fontFaces[name]
-    pygame.font.init()
     font = Font(ttfFile, size)
     font.set_bold(bold)
     font.set_italic(italic)
@@ -46,7 +42,7 @@ def initFont(name, ttfFile, size, bold = 0, italic = 0, underline = 0):
 def renderText(name, text, antialias, fg, bg = None):
     antialias = 1
     tType = type(text)
-    if tType is str:
+    if tType != StringType and tType != UnicodeType:
         text = str(text)
     if len(text) == 0:
         # TODO return very small surface

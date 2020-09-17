@@ -18,9 +18,6 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 """
 Member variables naming convention:
     _  non watched variable (not changing visual representation of widget)
@@ -29,7 +26,7 @@ Member variables naming convention:
 
 import pygame
 
-from . import Const
+import Const
 import types
 
 class DataHolder:
@@ -39,33 +36,33 @@ class Widget:
     def __init__(self, parent, **kwargs):
         # set attributes
         # bypass change detection
-        self.__dict__['_changeReported'] = 0
-        self.__dict__['parent'] = parent
-        self.__dict__['metaType'] = Const.TYPE_WIDGET
-        self.__dict__['app'] = parent.getApp()
-        self.__dict__['theme'] = self.app.theme
-        self.__dict__['foreground'] = None
-        self.__dict__['background'] = None
-        self.__dict__['style'] = None
-        self.__dict__['font'] = None
-        self.__dict__['align'] = Const.ALIGN_NONE
-        self.__dict__['tooltip'] = None
-        self.__dict__['tooltipTitle'] = None
-        self.__dict__['statustip'] = None
-        self.__dict__['visible'] = 0
-        self.__dict__['enabled'] = 1
-        self.__dict__['focused'] = 0
-        self.__dict__['mouseOver'] = 0
-        self.__dict__['focusable'] = 1
-        self.__dict__['dragSource'] = 0
-        self.__dict__['dragTarget'] = 0
-        self.__dict__['layout'] = None
-        self.__dict__['tags'] = []
-        self.__dict__['id'] = None
-        self.__dict__['orderNo'] = 0
-        self.__dict__['rect'] = pygame.Rect((0, 0, 0, 0))
-        self.__dict__['_handleMap'] = {'*': []}
-        self.__dict__['data'] = DataHolder()
+        setattr(self,'_changeReported', 0)
+        setattr(self,'parent', parent)
+        setattr(self,'metaType', Const.TYPE_WIDGET)
+        setattr(self,'app', parent.getApp())
+        setattr(self,'theme', self.app.theme)
+        setattr(self,'foreground', None)
+        setattr(self,'background', None)
+        setattr(self,'style', None)
+        setattr(self,'font', None)
+        setattr(self,'align', Const.ALIGN_NONE)
+        setattr(self,'tooltip', None)
+        setattr(self,'tooltipTitle', None)
+        setattr(self,'statustip', None)
+        setattr(self,'visible', 0)
+        setattr(self,'enabled', 1)
+        setattr(self,'focused', 0)
+        setattr(self,'mouseOver', 0)
+        setattr(self,'focusable', 1)
+        setattr(self,'dragSource', 0)
+        setattr(self,'dragTarget', 0)
+        setattr(self,'layout', None)
+        setattr(self,'tags', [])
+        setattr(self,'id', None)
+        setattr(self,'orderNo', 0)
+        setattr(self,'rect', pygame.Rect((0, 0, 0, 0)))
+        setattr(self,'_handleMap', {'*': []})
+        setattr(self,'data', DataHolder())
         # notify parent
         self.visible = 1
         self.processKWArguments(kwargs)
@@ -74,7 +71,7 @@ class Widget:
         # process keyword arguments
         for key in kwargs:
             if hasattr(self, key):
-                self.__dict__[key] = kwargs[key]
+                setattr(self,key, kwargs[key]
             else:
                 raise AttributeError(key)
 
@@ -89,7 +86,7 @@ class Widget:
         handlers = self._handleMap.get(actionName, self._handleMap['*'])
         if handlers:
             for handler in handlers:
-                if type(handler) == types.InstanceType:
+                if type(handler) == InstanceType:
                     handler = getattr(handler, actionName)
                 handler(widget, actionName, data)
         else:
@@ -163,7 +160,7 @@ class Widget:
 
     def redraw(self):
         self.parent.redraw(self)
-        self.__dict__['_changeReported'] = 1
+        setattr(self,'_changeReported', 1)
 
     def __setattr__(self, name, value):
         #@name = intern(name)

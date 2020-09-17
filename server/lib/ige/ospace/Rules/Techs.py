@@ -18,9 +18,6 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import sys, copy
 from ige import log
 from ige.ospace import Const
@@ -167,11 +164,11 @@ attrs = {
     # after research handler
     'finishResearchHandler': noop,
     # names
-    'name': 'Unspecified',
+    'name': u'Unspecified',
     # textual description
-    'textPreRsrch': 'Not specified',
-    'textDescr': 'Not specified',
-    'textFlavor': 'Not specified',
+    'textPreRsrch': u'Not specified',
+    'textDescr': u'Not specified',
+    'textFlavor': u'Not specified',
 }
 
 # class representing technologies
@@ -185,25 +182,25 @@ class Technology:
         reg[id] = self
 
     def set(self, key, value):
-        if key in attrs:
+        if attrs.has_key(key):
             attrType = type(attrs[key])
-            if attrType == int:
+            if attrType == IntType:
                 value = int(value)
-            elif attrType == float:
+            elif attrType == FloatType:
                 value = float(value)
-            elif attrType == str:
+            elif attrType == UnicodeType:
                 pass
-            elif attrType == bytes:
+            elif attrType == StringType:
                 value = str(value)
-            elif attrType == types.FunctionType:
+            elif attrType == FunctionType:
                 value = getattr(TechHandlers, value)
             elif attrType == list:
                 itemType = type(attrs[key][0])
-                if itemType == int:
+                if itemType == IntType:
                     convertFunc = int
-                elif itemType == bytes:
+                elif itemType == StringType:
                     convertFunc = str
-                elif itemType == float:
+                elif itemType == FloatType:
                     convertFunc = float
                 else:
                     raise 'Unsupported attribute type %s' % repr(itemType)
@@ -216,20 +213,20 @@ class Technology:
                 # format is key:value,key2:value2
                 dict_key, dict_value = copy.copy(attrs[key]).popitem()
                 keyType = type(dict_key)
-                if keyType == int:
+                if keyType == IntType:
                     convertFuncKey = int
-                elif keyType == bytes:
+                elif keyType == StringType:
                     convertFuncKey = str
-                elif keyType == float:
+                elif keyType == FloatType:
                     convertFuncKey = float
                 else:
                     raise 'Unsupported attribute type %s' % repr(keyType)
                 valueType = type(dict_value)
-                if valueType == int:
+                if valueType == IntType:
                     convertFuncValue = int
-                elif valueType == bytes:
+                elif valueType == StringType:
                     convertFuncValue = str
-                elif valueType == float:
+                elif valueType == FloatType:
                     convertFuncValue = float
                 else:
                     raise 'Unsupported attribute type %s' % repr(valueType)
@@ -248,7 +245,7 @@ class Technology:
             raise AttributeError('Cannot create %s - unsupported attribute.' % key)
 
     def __getattr__(self, attr):
-        if attr in attrs:
+        if attrs.has_key(attr):
             # optimalization
             setattr(self, attr, attrs[attr])
             return attrs[attr]
@@ -263,7 +260,7 @@ class Technology:
 
     def __repr__(self):
         result = '(Technology '
-        for key, value in list(self.__dict__.items()):
+        for key, value in self.__dict__.items():
             result += '%s : %s, ' % (repr(key), repr(value))
         result += ')'
         return result
@@ -292,44 +289,44 @@ class TechTreeContentHandler(ContentHandler):
             self.tech.set('name', attrs['name'])
         elif self.state == 3 and name == 'structure':
             self.tech.set('isStructure', 1)
-            for key in list(attrs.keys()):
+            for key in attrs.keys():
                 self.tech.set(key, attrs[key])
             realBuildProd = int(self.tech.buildProd * ige.ospace.Rules.structDefaultCpCosts)
             self.tech.set('buildProd', realBuildProd)
         elif self.state == 3 and name == 'discovery':
             self.tech.set('isDiscovery', 1)
-            for key in list(attrs.keys()):
+            for key in attrs.keys():
                 self.tech.set(key, attrs[key])
         elif self.state == 3 and name == 'notdiscovery':
             self.tech.set('isDiscovery', 0)
-            for key in list(attrs.keys()):
+            for key in attrs.keys():
                 self.tech.set(key, attrs[key])
         elif self.state == 3 and name == 'starting':
             self.tech.set('isStarting', 1)
-            for key in list(attrs.keys()):
+            for key in attrs.keys():
                 self.tech.set(key, attrs[key])
         elif self.state == 3 and name == 'notstarting':
             self.tech.set('isStarting', 0)
-            for key in list(attrs.keys()):
+            for key in attrs.keys():
                 self.tech.set(key, attrs[key])
         elif self.state == 3 and name == 'shipequip':
             self.tech.set('isShipEquip', 1)
-            for key in list(attrs.keys()):
+            for key in attrs.keys():
                 self.tech.set(key, attrs[key])
         elif self.state == 3 and name == 'project':
             self.tech.set('isProject', 1)
-            for key in list(attrs.keys()):
+            for key in attrs.keys():
                 self.tech.set(key, attrs[key])
         elif self.state == 3 and name == 'shiphull':
             self.tech.set('isShipHull', 1)
-            for key in list(attrs.keys()):
+            for key in attrs.keys():
                 self.tech.set(key, attrs[key])
         elif self.state == 3 and name == 'mine':
             self.tech.set('isMine', 1)
-            for key in list(attrs.keys()):
+            for key in attrs.keys():
                 self.tech.set(key, attrs[key])
         elif self.state == 3 and name == 'data':
-            for key in list(attrs.keys()):
+            for key in attrs.keys():
                 self.tech.set(key, attrs[key])
         elif self.state == 3 and name == 'preresearch':
             self.state = 4
@@ -410,9 +407,9 @@ def init(configDir):
         log.message("There is %d technologies" % len(techs))
 
         # clean up 'type' in lists
-        for key in list(attrs.keys()):
+        for key in attrs.keys():
             if type(attrs[key]) == list and len(attrs[key]) == 1:
-                log.debug("Cleaning up", key)
+                log.debug("Cleaning up "+key)
                 attrs[key] = []
 
     else:
@@ -431,19 +428,19 @@ def init(configDir):
         os.walk(moduleDirectory, processDir, None)
 
         # clean up 'type' in lists
-        for key in list(attrs.keys()):
+        for key in attrs.keys():
             if type(attrs[key]) == list and len(attrs[key]) == 1:
-                log.debug("Cleaning up", key)
+                log.debug("Cleaning up "+key)
                 attrs[key] = []
             elif type(attrs[key]) == dict and len(attrs[key]) == 1:
-                log.debug("Cleaning up", key)
+                log.debug("Cleaning up "+key)
                 attrs[key] = {}
 
 
         # link tech tree using researchRequires fields
         # construct researchEnables fields
         log.message('Converting symbolic fields...')
-        for techID in list(techs.keys()):
+        for techID in techs.keys():
             tech = techs[techID]
             # convert symbolic names to numbers
             techIDs = []
@@ -493,12 +490,12 @@ def init(configDir):
 
         # link
         log.message('Linking tech tree...')
-        for techID in list(techs.keys()):
+        for techID in techs.keys():
             tech = techs[techID]
             for tmpTechID, improvement in tech.researchRequires:
                 if techID not in techs[tmpTechID].researchEnables[improvement]:
                     techs[tmpTechID].researchEnables[improvement].append(techID)
-            for improvement in list(tech.researchEnables.keys()):
+            for improvement in tech.researchEnables.keys():
                 for tmpTechID in tech.researchEnables[improvement]:
                     if (techID, improvement) not in techs[tmpTechID].researchRequires:
                         techs[tmpTechID].researchRequires.append((techID, improvement))

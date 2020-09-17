@@ -1,4 +1,5 @@
 
+#
 #  Copyright 2001 - 2017 Ludek Smid [http://www.ospace.net/]
 #
 #  This file is part of Outer Space.
@@ -17,9 +18,6 @@
 #  along with Outer Space; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-
-def _(msg): return msg
-
 import argparse
 import atexit
 import logging as log
@@ -69,15 +67,15 @@ if args.configdir is None:
         #c.createGalaxy("Circle42P")
     else:
         galaxy_type, quantity = args.galaxy_check[0], int(args.galaxy_check[1])
-        for num in range(quantity):
+        for num in xrange(quantity):
             c.createGalaxy(galaxy_type, "{0}.{1}".format(galaxy_type, num + 1))
 
     c.startServerTime()
 
 c.makeScreenshots(args.history)
-for day in range(args.days):
+for day in xrange(args.days):
     start_time = time.time()
-    for _slice in range(24 / args.turnSkip):
+    for _slice in xrange(24 / args.turnSkip):
         c.doTurns(args.turnSkip, args.turnSkip, verbose=False)
         c.makeScreenshots(args.history)
     log.info("Day {0} rendered ({1}s).".format(day + 1, int(time.time() - start_time)))

@@ -18,11 +18,7 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
-import string, gdata
-from . import client
+import client, string, gdata
 from ige.ospace import Rules
 
 SHORT = 1
@@ -105,9 +101,9 @@ def getShortDescr(techID, myDetail = SHORT):
                 if not filter:
                     result.append(_(text))
                 elif eff:
-                    result.append(_(text) % list(filter(techEff * getattr(tech, attr))))
+                    result.append(_(text) % filter(techEff * getattr(tech, attr)))
                 else:
-                    result.append(_(text) % list(filter(getattr(tech, attr))))
+                    result.append(_(text) % filter(getattr(tech, attr)))
     # general
     for detail, attr, text, filter, eff in descr["*"]:
         if tech.isDefault(attr):
@@ -116,11 +112,11 @@ def getShortDescr(techID, myDetail = SHORT):
             if not filter:
                 result.append(_(text))
             elif eff:
-                result.append(_(text) % list(filter(techEff * getattr(tech, attr))))
+                result.append(_(text) % filter(techEff * getattr(tech, attr)))
             else:
-                result.append(_(text) % list(filter(getattr(tech, attr))))
+                result.append(_(text) % filter(getattr(tech, attr)))
     if result:
-        return str.join(result, ", ")
+        return string.join(result, ", ")
     else:
         return _("N/A")
 

@@ -23,7 +23,7 @@ import types
 
 def assert_int(var, name):
 
-    if type(var) in (int, int):
+    if type(var) in (IntType, LongType):
         return
 
     raise TypeError('%s should be an integer, not %s' % (name, var.__class__))
@@ -47,7 +47,7 @@ def decrypt_int(cyphertext, dkey, n):
     """Decrypts a cypher text using the decryption key 'dkey', working
     modulo n"""
 
-    if type(cyphertext) not in (int, int):
+    if type(cyphertext) not in (IntType, LongType):
         raise TypeError('cyphertext should be an integer, not %s' %
                 cyphertext.__type__)
 

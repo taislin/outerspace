@@ -18,9 +18,6 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import hashlib
 import os
 import time
@@ -50,6 +47,7 @@ class Account(object):
         self.lastLogin = 0
         self.blockedUntil = -1 # -1 for not blocked, > 0 for blocked
         self.blocked = 0 # 1 for blocked account
+        self.confToken = hashlib.md5('%s%s%d' % (login, email, time.time())).hexdigest() # when None, it's confirmed TODO make it work
         self.hostIDs = {} # hostids and times
         self.isAI = False
 
@@ -81,5 +79,5 @@ class AIAccount(Account):
 
 class AdminAccount(Account):
     def __init__(self):
-        password = "0"
+        password = passwordGen()
         Account.__init__(self, Const.ADMIN_LOGIN, Const.ADMIN_NICK, None, password, passwdHashed = False)

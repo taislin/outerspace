@@ -17,17 +17,14 @@
 #  along with Outer Space; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-
-def _(msg): return msg
-
 import time
 
-from . import Const
+import Const
 
 from ige import log
 from ige.IDataHolder import IDataHolder
 from ige.IObject import public
-from .IPlayer import IPlayer
+from IPlayer import IPlayer
 
 class INature(IPlayer):
 
@@ -36,7 +33,7 @@ class INature(IPlayer):
     def init(self, obj):
         IPlayer.init(self, obj)
         #
-        obj.name = 'NATURE'
+        obj.name = u'NATURE'
         obj.login = '*NATURE*'
 
     @public(Const.AL_ADMIN)

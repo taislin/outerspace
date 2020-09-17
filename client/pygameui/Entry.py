@@ -18,13 +18,10 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import pygame
 
-from . import Const
-from .Widget import Widget, registerWidget
+import Const
+from Widget import Widget, registerWidget
 
 # keys mapping
 mapping = {
@@ -40,11 +37,11 @@ class Entry(Widget):
     def __init__(self, parent, **kwargs):
         Widget.__init__(self, parent)
         # data
-        self.__dict__['text'] = ''
-        self.__dict__['cursorPos'] = 0
-        self.__dict__['action'] = None
-        self.__dict__['showChar'] = None
-        self.__dict__['reportValueChanged'] = False
+        setattr(self,'text'] = u''
+        setattr(self,'cursorPos'] = 0
+        setattr(self,'action'] = None
+        setattr(self,'showChar'] = None
+        setattr(self,'reportValueChanged'] = False
         # flags
         self.processKWArguments(kwargs)
         parent.registerWidget(self)
@@ -89,12 +86,12 @@ class Entry(Widget):
             if self.cursorPos < len(self.text): self.cursorPos += 1
         elif evt.key == pygame.K_TAB:
             pass
-        elif hasattr(evt, 'unicode') and evt.str:
+        elif hasattr(evt, 'unicode') and evt.unicode:
             # TODO this is ugly windows only hack needed for Win 9x and XP
             # char = unicode(chr(ord(evt.unicode)), 'cp1250')
-            char = evt.str
+            char = evt.unicode
             if self.text:
-                self.text = '%s%c%s' % (
+                self.text = u'%s%c%s' % (
                     self.text[:self.cursorPos], char, self.text[self.cursorPos:]
                 )
             else:

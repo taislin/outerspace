@@ -1,3 +1,6 @@
+
+
+#
 #  Copyright 2001 - 2016 Ludek Smid [http://www.ospace.net/]
 #
 #  This file is part of Outer Space.
@@ -16,9 +19,6 @@
 #  along with Outer Space; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-
-def _(msg): return msg
-
 
 import argparse
 import multiprocessing

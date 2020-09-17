@@ -19,9 +19,6 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 HISTORY_DIR="./history"
 GALAXY=${1}
 BORDER=${2:-0} # instead of resize, create black border this thick

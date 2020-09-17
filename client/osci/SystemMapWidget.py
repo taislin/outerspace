@@ -18,15 +18,12 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 from pygameui.Widget import Widget, registerWidget
 import pygameui as ui
 from pygameui import Fonts
 import ige.ospace.Const as Const
 import pygame, pygame.draw
-from . import gdata, resr, client
+import gdata, res, client
 from ige import log
 
 # number of planet's images
@@ -74,7 +71,7 @@ class SystemMapWidget(Widget):
         self.computeBuoy()
         self._starImg = None
         if hasattr(system, 'starClass'):
-            self._starImg = resr.getBigStarImg(system.starClass[1])
+            self._starImg = res.getBigStarImg(system.starClass[1])
         self._planetImgs = []
         if hasattr(system, 'planets'):
             for planetID in system.planets:
@@ -83,19 +80,19 @@ class SystemMapWidget(Widget):
                     continue
                 # image
                 plType = getattr(planet, 'plType', 'X')
-                img = resr.getPlanetImg(plType, planet.oid + system.oid)
+                img = res.getPlanetImg(plType, planet.oid + system.oid)
                 #if plType != 'G':
                 #    ratio = planet.plDiameter / 19000.0
                 #else:
                 #    ratio = planet.plDiameter / 180000.0
                 #img2 = pygame.transform.scale(img, (int(ratio * img.get_width()), int(ratio * img.get_height())))
-                name = getattr(planet, 'name', resr.getUnknownName()).split(' ')[-1]
+                name = getattr(planet, 'name', res.getUnknownName()).split(' ')[-1]
                 #rel = Const.REL_UNDEF
                 if hasattr(planet, 'owner'):
                     ownerID = planet.owner
                 else:
                     ownerID = Const.OID_NONE
-                self._planetImgs.append((planetID, img, name, resr.getPlayerColor(ownerID)))
+                self._planetImgs.append((planetID, img, name, res.getPlayerColor(ownerID)))
 
     def computeBuoy(self):
         player = client.getPlayer()
@@ -119,15 +116,15 @@ class SystemMapWidget(Widget):
         # mines
         if self.my_mines:
             if self.unknown_mines:
-                textSrfc = Fonts.renderText('small', 'Minefield', 1, resr.getFFColorCode(1250))
+                textSrfc = Fonts.renderText('small', 'Minefield', 1, res.getFFColorCode(1250))
                 surface.blit(textSrfc, (x, self.rect.top + textSrfc.get_height()))
-                textSrfc = Fonts.renderText('small', 'Unknown Minefield Detected', 1, resr.getFFColorCode(0))
+                textSrfc = Fonts.renderText('small', 'Unknown Minefield Detected', 1, res.getFFColorCode(0))
                 surface.blit(textSrfc, (x, self.rect.top + textSrfc.get_height()*2 + 5))
             else:
-                textSrfc = Fonts.renderText('small', 'Minefield', 1, resr.getFFColorCode(1250))
+                textSrfc = Fonts.renderText('small', 'Minefield', 1, res.getFFColorCode(1250))
                 surface.blit(textSrfc, (x, self.rect.top + textSrfc.get_height()))
         elif self.unknown_mines:
-            textSrfc = Fonts.renderText('small', 'Unknown Minefield Detected', 1, resr.getFFColorCode(0))
+            textSrfc = Fonts.renderText('small', 'Unknown Minefield Detected', 1, res.getFFColorCode(0))
             surface.blit(textSrfc, (x, self.rect.top + textSrfc.get_height()))
         # buoy
         if self.buoytext:
@@ -141,9 +138,9 @@ class SystemMapWidget(Widget):
                 if len(line) == 0:
                     break
                 if len(line) > MAX_BOUY_DISPLAY_LEN:
-                    line = "%s..." % line[:MAX_BOUY_DISPLAY_LEN]
+                    line = u"%s..." % line[:MAX_BOUY_DISPLAY_LEN]
                 elif i == MAX_BOUY_DISPLAY_ROWS:
-                    line = "%s..." % line
+                    line = u"%s..." % line
                 textSrfc = Fonts.renderText('small', line, 1, bouycolor)
                 textSrfcs.append(textSrfc)
                 maxW = max(textSrfc.get_width(), maxW)
@@ -218,7 +215,7 @@ class SystemMapWidget(Widget):
 
     def processMMotion(self, evt):
         pos = evt.pos
-        for objID in list(self._actAreas.keys()):
+        for objID in self._actAreas.keys():
             rect = self._actAreas[objID]
             if rect.collidepoint(pos) and self.action:
                 self.processAction(self.hoverAction, objID)
@@ -229,7 +226,7 @@ class SystemMapWidget(Widget):
 
     def processMB1Down(self, evt):
         pos = evt.pos
-        for objID in list(self._actAreas.keys()):
+        for objID in self._actAreas.keys():
             rect = self._actAreas[objID]
             if rect.collidepoint(pos):
                 self.pressedObjID = objID
@@ -238,7 +235,7 @@ class SystemMapWidget(Widget):
 
     def processMB1Up(self, evt):
         pos = evt.pos
-        for objID in list(self._actAreas.keys()):
+        for objID in self._actAreas.keys():
             rect = self._actAreas[objID]
             if rect.collidepoint(pos):
                 if self.pressedObjID == objID and self.action:

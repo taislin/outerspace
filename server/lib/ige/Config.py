@@ -18,13 +18,10 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
-from configparser import ConfigParser
+from configparser import configparser
 
 class Config:
-    """Encapsulation of ConfigParser class.
+    """Encapsulation of configparser class.
 
     Attributes of this class represents sections
     of config file. If some want to assing value
@@ -36,8 +33,8 @@ class Config:
     is returned.
     """
     def __init__(self, _file, defaults = dict()):
-        self.__dict__["_config"] = ConfigParser(defaults)
-        self.__dict__["_file"] = _file
+        setattr(self,"_config",configparser(defaults))
+        setattr(self,"_file",_file)
         self._config.read(_file)
 
     def __getitem__(self, name):
@@ -65,7 +62,7 @@ class Config:
             self._config.write(fh)
 
 class Section:
-    """Represent section of ConfigParser class.
+    """Represent section of configparser class.
 
     Attributes of this class represents options
     of given section. when asking for option
@@ -74,8 +71,8 @@ class Section:
     returned.
     """
     def __init__(self, config, name):
-        self.__dict__["_config"] = config
-        self.__dict__["section"] = name
+        setattr(self,"_config",config)
+        setattr(self,"section",name)
 
     def __getattr__(self, name):
         if self._config.has_option(self.section, name):

@@ -18,13 +18,10 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import pygameui as ui
 from osci.StarMapWidget import StarMapWidget
 from ige.ospace import Rules
-from osci import gdata, resr, client, sequip
+from osci import gdata, res, client, sequip
 import ige.ospace.Const as Const
 from ige import log
 import ige
@@ -87,12 +84,12 @@ class FleetScoutBloomDlg:
             info = _('No target selected')
         else:
             target = client.get(self.targetID, noUpdate = 1)
-            info = getattr(target, 'name', resr.getUnknownName())
+            info = getattr(target, 'name', res.getUnknownName())
         # correct buildingIndex
         if not self.sendShips:
             self.selectedShip = Const.OID_NONE
         elif self.selectedShip not in self.sendShips:
-            self.selectedShip = list(self.sendShips.keys())[0]
+            self.selectedShip = self.sendShips.keys()[0]
         # get target data
         self.win.vTarget.text = info
         fleet = self.fleet
@@ -118,7 +115,7 @@ class FleetScoutBloomDlg:
                 maxDelta = fleetSpeed / Rules.turnsPerDay * speedBoost
                 if maxDelta != 0:
                     eta = lnght / maxDelta
-                    self.win.vEta.text = resr.formatTime(eta)
+                    self.win.vEta.text = res.formatTime(eta)
                 else:
                     self.win.vEta.text = _("N/A")
             else:
@@ -198,7 +195,7 @@ class FleetScoutBloomDlg:
         self.hide()
 
     def onSelectedShipChange(self, widget, action, data):
-        list_of_designs = list(self.sendShips.keys())
+        list_of_designs = self.sendShips.keys()
         try:
             position = list_of_designs.index(self.selectedShip)
             self.selectedShip = list_of_designs[(position + 1) % len(list_of_designs)]

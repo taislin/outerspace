@@ -17,9 +17,6 @@
 #  along with Outer Space; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-
-def _(msg): return msg
-
 from ige import log
 from ige.ospace import Const
 from ige.ospace import Rules
@@ -27,7 +24,7 @@ from ige.ospace import Utils
 from ige.ospace import TechHandlers
 
 import ai_tools as tool
-from .ai import AI
+from ai import AI
 
 import copy, random, math
 
@@ -166,7 +163,7 @@ class Rebel(AI):
         return gov_position, gov_productions
 
     def _empire_manager(self):
-        if not Rules.Tech.GOVCENTER1 in list(self.player.techs.keys()):
+        if not Rules.Tech.GOVCENTER1 in self.player.techs.keys():
             return
         candidates = tool.findPopCenterPlanets(self.db, self.data.myPlanets)
         candidate_planets = candidates[:10]

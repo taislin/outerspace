@@ -18,15 +18,12 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import copy
 import random
 
-from . import Const
-from . import Rules
-from . import Utils
+import Const
+import Rules
+import Utils
 
 from ige import GameException
 from ige import log
@@ -313,7 +310,7 @@ def makeShipFullSpec(player, name, hullID, eqIDs, improvements, raiseExs = True)
         techEff = Rules.techImprEff[player.techs.get(techID, Rules.techBaseImprovement)]
         if eqIDs[techID] < 0 and raiseExs:
             raise GameException("Invalid equipment count (less than 0).")
-        for i in range(0, eqIDs[techID]):
+        for i in xrange(0, eqIDs[techID]):
             counter[tech.subtype] = 1 + counter.get(tech.subtype, 0)
             installations[techID] = 1 + installations.get(techID, 0)
             _checkValidity(ship, tech, installations, equipCounter, raiseExs)
@@ -335,10 +332,10 @@ def makeShipFullSpec(player, name, hullID, eqIDs, improvements, raiseExs = True)
 
 # ROF tables
 rofTable = {}
-for i in range(0, 100):
+for i in xrange(0, 100):
     line = []
     level = i
-    for j in range(0, 100):
+    for j in xrange(0, 100):
         if level >= 100:
             line.append(1)
             level -= 100

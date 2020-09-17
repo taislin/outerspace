@@ -18,13 +18,10 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import types
 import pygameui as ui
 from osci.StarMapWidget import StarMapWidget
-from osci import gdata, resr, client
+from osci import gdata, res, client
 import ige.ospace.Const as Const
 from ige.ospace import Rules
 import ige
@@ -86,7 +83,7 @@ def getCountShips(ships, maxCount):
     return retShips
 
 def appendToDict(dict, key, object):
-    if key not in dict:
+    if not dict.has_key(key):
         dict[key] = [object]
     else:
         dict[key].append(object)
@@ -221,7 +218,7 @@ class FleetSplitDlg:
         self.hide()
 
     def groupShips(self, grouped, by):
-        for key, item in list(grouped.items()):
+        for key, item in grouped.items():
             if type(item) == list:
                 if by & DESIGN:
                     grouped[key] = groupShipsByDesign(item)
@@ -243,7 +240,7 @@ class FleetSplitDlg:
                     self.groupShips(grouped[key], by - SPEED)
 
     def appendShips(self, grouped, items, player, checks):
-        for key, item in list(grouped.items()):
+        for key, item in grouped.items():
             if checks == 0:
                 for ship in item:
                     self.appendItem(ship, items, player, 0)
@@ -349,7 +346,7 @@ class FleetSplitDlg:
             fleet = client.get(self.fleetDlg.fleetID, noUpdate = 1)
             newFleet, origFleet, fleets = client.cmdProxy.splitFleet(self.fleetDlg.fleetID,
                 self.newShips, self.newEn)
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(e.args[0])
             return
         # update related objects

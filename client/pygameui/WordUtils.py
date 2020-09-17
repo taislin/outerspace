@@ -18,9 +18,6 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 delimiters = [" ", ".", "-", "(", ")", "{", "}", "[", "]", ",", ":",\
               ";", "/", "\\", "\"", "<", ">", "?", "!", "+", "*", "&",\
               "^", "@", "#", "$", "%", "^", "=", "|", "~"]
@@ -36,11 +33,11 @@ def splitter(text, delims = None):
         result = ""
         for word in splitter(text, [" "]):
             result = result + text[word[1]:word[2]] + " "
-        print result
+        print(result)
         result = ""
         for word in splitter(text, [" "]):
             result = result + word[0] + " "
-        print result
+        print(result)
     """
     #stores result
     result = []

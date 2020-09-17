@@ -17,13 +17,10 @@
 #  along with Outer Space; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-
-def _(msg): return msg
-
 import types
 
-from . import Const
-from . import log
+import Const
+import log
 
 from ige import GameException, SecurityException
 from ige.IDataHolder import IDataHolder
@@ -61,7 +58,7 @@ class IObject:
         obj.type = self.typeID
         obj.owner = Const.OID_NONE
         obj.compOf = Const.OID_NONE
-        obj.name = 'Unnamed'
+        obj.name = u'Unnamed'
         # not needed
         # obj.accRights = {}
 
@@ -75,8 +72,8 @@ class IObject:
         except:
             log.warning("Cannot execute update method on", obj.oid)
         refObj = self.new(obj.type)
-        new = list(refObj.__dict__.keys())
-        old = list(obj.__dict__.keys())
+        new = refObj.__dict__.keys()
+        old = obj.__dict__.keys()
         changed = 0
         # change attributes
         # remove old
@@ -97,17 +94,17 @@ class IObject:
         pass
 
     def loadDOMAttrs(self, obj, elem):
-        for index in range(0, elem.attributes.length):
+        for index in xrange(0, elem.attributes.length):
             attr = elem.attributes.item(index)
             if hasattr(obj, attr.nodeName):
                 attrType = type(getattr(obj, attr.nodeName))
-                if attrType == int:
+                if attrType == IntType:
                     value = int(attr.nodeValue)
-                elif attrType == float:
+                elif attrType == FloatType:
                     value = float(attr.nodeValue)
-                elif attrType == str:
+                elif attrType == UnicodeType:
                     value = attr.nodeValue
-                elif attrType == bytes:
+                elif attrType == StringType:
                     value = attr.nodeValue
                 else:
                     raise 'Unsupported attribute type %s' % attrType

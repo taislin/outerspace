@@ -18,9 +18,6 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import sys
 sys.path.append('../..')
 
@@ -67,7 +64,7 @@ def menuHandler(widget, action, data):
 # create status window
 progBars = []
 
-for i in range(0, 2):
+for i in xrange(0, 2):
     win = ui.Window(app, font = 'large-bold')
     win.title = 'Test WINDOW 1X'
     #win.alwaysInBackground = 1
@@ -154,8 +151,8 @@ for i in range(0, 2):
         layout = (6, 0, 1, 10)
     ).subscribeAction('*', echoHandler)
 
-    for x in range(8, 20, 2):
-        for y in range(0, 10):
+    for x in xrange(8, 20, 2):
+        for y in xrange(0, 10):
             ui.Button(win,
                 text = '%d,%d' % (x, y),
                 layout = (x, y, 2, 1),
@@ -181,7 +178,7 @@ for i in range(0, 2):
     ).subscribeAction('*', echoHandler)
 
     items = []
-    for i in range(0, 100):
+    for i in xrange(0, 100):
         items.append(ui.Item(str(i), tooltip = 'This is a tooltip', statustip = 'This is a statustip'))
     ui.ButtonArray(win,
         items = items,
@@ -243,7 +240,7 @@ while running:
     now = pygame.time.get_ticks()
     if now - 1000 > time:
         time = now
-        w1.text = 'FPS: %d' % frame
+        w1.text = u'FPS: %d' % frame
         frame = 0
     count += 1
     if count > 100: count = 0

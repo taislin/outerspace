@@ -17,16 +17,13 @@
 #  along with Pygame.UI; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-
-def _(msg): return msg
-
 import pygame
 
-from . import Const
-from .Widget import registerWidget
-from .MetaWidget import MetaWidget
-from .Scrollbar import Scrollbar
-from .Button import Button
+import Const
+from Widget import registerWidget
+from MetaWidget import MetaWidget
+from Scrollbar import Scrollbar
+from Button import Button
 
 class ButtonArray(MetaWidget):
 
@@ -64,8 +61,8 @@ class ButtonArray(MetaWidget):
             self.columns = (r.width - gx) / gx / bwidth
         else:
             self.columns = r.width / gx / bwidth
-        for row in range(0, self.rows):
-            for column in range(0, self.columns):
+        for row in xrange(0, self.rows):
+            for column in xrange(0, self.columns):
                 x = column * gx * bwidth
                 y = row * gy * bheight
                 button = Button(self, action = 'onButtonPressed', rmbAction = 'onRButtonPressed', hoverAction = 'onButtonHighlighted', toggle = 1)
@@ -139,7 +136,7 @@ class ButtonArray(MetaWidget):
                 if item == self.selected:
                     button.pressed = 1
                     # do not trigger auto update
-                    self.__dict__['selectedButton'] = button
+                    setattr(self,'selectedButton'] = button
                 else:
                     button.pressed = 0
             else:

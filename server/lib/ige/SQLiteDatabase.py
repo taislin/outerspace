@@ -18,16 +18,10 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import ige
-import os.path, os, sys, time, types, binascii, bz2
+import os.path, log, os, sys, time, types, binascii, bz2
 import pickle as pickle
 import sqlite3
-from . import log
-
-sys.setrecursionlimit(10000)
 
 IDX_PREV = 0
 IDX_NEXT = 1
@@ -163,7 +157,7 @@ class Database:
         row = self.cursor.fetchone()
         if row is None:
             raise ige.NoSuchObjectException(key)
-        item = pickle.loads(row[1])
+        item = pickle.loads(str(row[1]))
         self._addNewCacheItem(key)
         self.cache[key] = item
         #TODOitem.setModified(0)
@@ -171,18 +165,18 @@ class Database:
 
     def __setitem__(self, key, value):
         key = self.keyMethod(key)
-        if type(value) == types.InstanceType:
+        if type(value) == InstanceType:
             value.oid = key
         # set value
         self._updateCacheItem(key)
         self.cache[key] = value
         #value.setModified(0)
         # write through new objects
-        if key not in self:
+        if not self.has_key(key):
             raise ige.ServerException("'%s' created using set method" % key)
 
     def __contains__(self, key):
-        return key in self
+        return self.has_key(key)
 
     def __delitem__(self, key):
         key = self.keyMethod(key)
@@ -212,7 +206,7 @@ class Database:
     def checkpoint(self):
         log.debug('DB Checkpoint', self.dbName)
         log.debug("Storing all objects")
-        for key, value in self.cache.items():
+        for key, value in self.cache.iteritems():
             self.put(key, pickle.dumps(value, pickle.HIGHEST_PROTOCOL))
         # commit transaction
         log.debug("Commiting transaction")
@@ -272,7 +266,7 @@ class Database:
         #@log.debug("Creating new object", id)
         if not id:
             id = self.nextID
-            while id in self:
+            while self.has_key(id):
                 id += 1
             self.nextID = id + 1
             id = self.keyMethod(id)
@@ -284,7 +278,7 @@ class Database:
         else:
             id = self.keyMethod(id)
         #@log.debug("OID =", id)
-        if id in self:
+        if self.has_key(id):
             raise ige.ServerException("'%s' created twice" % id)
         self.cache[id] = object
         self._addNewCacheItem(id)
@@ -295,7 +289,7 @@ class Database:
         del self[key]
 
     def get(self, key, default = None):
-        if key in self:
+        if self.has_key(key):
             return self[key]
         else:
             return default
@@ -333,7 +327,7 @@ class Database:
         log.message("Creating backup", filename)
         fh = file(filename, "w") #bz2.BZ2File(filename, "w")
         fh.write("IGE OUTER SPACE BACKUP VERSION 1\n")
-        for key in list(self.keys()):
+        for key in self.keys():
             fh.write(binascii.b2a_hex(str(key)))
             fh.write("\n")
             fh.write(binascii.b2a_hex(pickle.dumps(self[key], pickle.HIGHEST_PROTOCOL)))

@@ -18,15 +18,12 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import pygameui as ui
 from osci.StarMapWidget import StarMapWidget
-from osci import gdata, resr, client
+from osci import gdata, res, client
 import ige.ospace.Const as Const
 from ige.ospace import Rules
-from .ColorDefinitionDlg import ColorDefinitionDlg
+from ColorDefinitionDlg import ColorDefinitionDlg
 import ige
 
 # pact actions
@@ -294,7 +291,7 @@ class DiplomacyDlg:
             player.diplomacyRels = client.cmdProxy.changePactCond(player.oid,
                 citem.tContactID, pitem.tPactID, pactState, conditions)
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(e.args[0])
             return
         self.update()
@@ -307,7 +304,7 @@ class DiplomacyDlg:
             player.voteFor = client.cmdProxy.setVoteFor(player.oid,
                 citem.tContactID)
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(e.args[0])
             return
         self.update()
@@ -318,7 +315,7 @@ class DiplomacyDlg:
             player = client.getPlayer()
             player.voteFor = client.cmdProxy.setVoteFor(player.oid, Const.OID_NONE)
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(e.args[0])
             return
         self.update()
@@ -341,14 +338,14 @@ class DiplomacyDlg:
 
     def onDeleteHighlight(self, widget, action, data):
         playerID = self.win.vContacts.selection[0].tContactID
-        if playerID in gdata.playersHighlightColors:
+        if gdata.playersHighlightColors.has_key(playerID):
             del gdata.playersHighlightColors[playerID]
         self.update()
         gdata.mainGameDlg.update()
 
     def onColorDefinition(self, widget, action, data):
         playerID = self.win.vContacts.selection[0].tContactID
-        if playerID in gdata.playersHighlightColors:
+        if gdata.playersHighlightColors.has_key(playerID):
             self.cDlg.display(color = gdata.playersHighlightColors[playerID], confirmAction = self.onColorDefinitionConfirmed)
         else:
             self.cDlg.display(confirmAction = self.onColorDefinitionConfirmed)

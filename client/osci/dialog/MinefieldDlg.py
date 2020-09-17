@@ -18,12 +18,9 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import pygameui as ui
 from osci.StarMapWidget import StarMapWidget
-from osci import gdata, resr, client, sequip
+from osci import gdata, res, client, sequip
 import ige.ospace.Const as Const
 from ige.ospace import ShipUtils, Rules
 from ige import GameException, log
@@ -67,7 +64,7 @@ class MinefieldDlg:
 
     def show(self):
         self.precompute()
-        keys = list(self._mines.keys())
+        keys = self._mines.keys()
         keys.sort()
         items = []
         for minetech in keys:

@@ -18,9 +18,6 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import pygameui as ui
 import re
 from osci import gdata, client
@@ -73,7 +70,7 @@ class SearchDlg:
 
     def doSearch(self):
         found = False
-        for objID in list(client.db.keys()):
+        for objID in client.db.keys():
             obj = client.get(objID, noUpdate = 1)
             if hasattr(obj, 'type') and obj.type in (Const.T_SYSTEM, Const.T_WORMHOLE):
                 name = string.lower(getattr(obj, "name", ""))

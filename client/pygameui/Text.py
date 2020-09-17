@@ -18,13 +18,10 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import unittest
-from . import Const
-from .WordUtils import splitter
-from .Widget import Widget, registerWidget
+import Const
+from WordUtils import splitter
+from Widget import Widget, registerWidget
 import pygame.key
 
 # keys mapping
@@ -59,7 +56,7 @@ class Selection(object):
     def deselect(self):
         self._start = self._end = None
 
-    def __bool__(self):
+    def __nonzero__(self):
         return self._start is not None and self._end is not None
 
 
@@ -69,14 +66,14 @@ class Text(Widget):
     def __init__(self, parent, **kwargs):
         Widget.__init__(self, parent)
         # data
-        self.__dict__['text'] = [""]
-        self.__dict__['offsetRow'] = 0
-        self.__dict__['cursorRow'] = 0
-        self.__dict__['cursorColumn'] = 0
-        self.__dict__['action'] = None
-        self.__dict__['editable'] = 1
-        self.__dict__['vertScrollbar'] = None
-        self.__dict__['selection'] = Selection()
+        setattr(self,'text'] = [""]
+        setattr(self,'offsetRow'] = 0
+        setattr(self,'cursorRow'] = 0
+        setattr(self,'cursorColumn'] = 0
+        setattr(self,'action'] = None
+        setattr(self,'editable'] = 1
+        setattr(self,'vertScrollbar'] = None
+        setattr(self,'selection'] = Selection()
         # flags
         self.processKWArguments(kwargs)
         parent.registerWidget(self)
@@ -232,7 +229,7 @@ class Text(Widget):
         self.cursorColumn = 0
 
     def _processUnicode(self, evt):
-        char = evt.str
+        char = evt.unicode
         self.text[self.cursorRow] = self.text[self.cursorRow][:self.cursorColumn] + char + self.text[self.cursorRow][self.cursorColumn:]
         self.cursorColumn += 1
 
@@ -301,7 +298,7 @@ class Text(Widget):
         elif evt.key == pygame.K_RETURN:
             self.wrapDeleteSelection(self._processReturn, evt)
 
-        elif hasattr(evt, 'unicode') and evt.str:
+        elif hasattr(evt, 'unicode') and evt.unicode:
             self.wrapDeleteSelection(self._processUnicode, evt)
 
         elif evt.key in MAPPING:
@@ -336,7 +333,7 @@ class TextTestCase(unittest.TestCase):
         class Evt:
             def __init__(self, key, letter="", mod=0):
                 self.key = key
-                self.str = str(letter)
+                self.unicode = unicode(letter)
                 self.mod = mod
 
         class App:

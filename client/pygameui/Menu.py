@@ -17,15 +17,12 @@
 #  along with Pygame.UI; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-
-def _(msg): return msg
-
 import pygame
-from . import Const
-from .Window import Window
-from .SimpleGridLM import SimpleGridLM
-from .Title import Title
-from .ActiveLabel import ActiveLabel
+import Const
+from Window import Window
+from SimpleGridLM import SimpleGridLM
+from Title import Title
+from ActiveLabel import ActiveLabel
 from math import ceil
 
 class Menu(Window):
@@ -33,14 +30,14 @@ class Menu(Window):
     def __init__(self, parent, **kwargs):
         Window.__init__(self, parent)
         # data
-        self.__dict__["title"] = None
-        self.__dict__["items"] = None
-        self.__dict__["looseFocusClose"] = 1
-        self.__dict__["columns"] = 1
-        self.__dict__["decorated"] = 0
-        self.__dict__["layoutManager"] = SimpleGridLM()
-        self.__dict__["width"] = 10
-        self.__dict__["_labels"] = []
+        setattr(self,"title",None)
+        setattr(self,"items",None)
+        setattr(self,"looseFocusClose",1)
+        setattr(self,"columns",1)
+        setattr(self,"decorated",0)
+        setattr(self,"layoutManager",SimpleGridLM())
+        setattr(self,"width",10)
+        setattr(self,"_labels",[])
         self.processKWArguments(kwargs)
         # subscribe action
         # add title
@@ -96,10 +93,10 @@ class Menu(Window):
     def processKeyDown(self, evt):
         for item in self.items:
             if getattr(item,'hotkeymod',False):
-                if getattr(item,'hotkey',False) == evt.str and pygame.key.get_mods() & getattr(item,'hotkeymod',False):
+                if getattr(item,'hotkey',False) == evt.unicode and pygame.key.get_mods() & getattr(item,'hotkeymod',False):
                     self.hide()
                     self.processAction(item.action, False)
-            elif getattr(item,'hotkey',False) == evt.str:
+            elif getattr(item,'hotkey',False) == evt.unicode:
                 self.hide()
                 self.processAction(item.action, False)
         if evt.key == pygame.K_ESCAPE:

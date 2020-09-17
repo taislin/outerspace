@@ -18,9 +18,6 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 from igeclient import IClient, IClientDB
 from ige.ospace import Const
 from ige.ospace import Rules
@@ -103,7 +100,7 @@ def updateDatabaseUnsafe(clearDB = 0, force = 0):
     current += 1
     # delete selected objects
     # reset combatCounters
-    for objID in list(db.keys()):
+    for objID in db.keys():
         obj = db[objID]
         if hasattr(obj, "combatCounter"):
             obj.combatCounter = 0
@@ -135,7 +132,7 @@ def updateDatabaseUnsafe(clearDB = 0, force = 0):
 
 def get(objID, forceUpdate = 0, noUpdate = 0, canBePublic = 1, publicOnly = 0):
     global nonexistingObj
-    if objID in nonexistingObj and not forceUpdate:
+    if nonexistingObj.has_key(objID) and not forceUpdate:
         return None
     if noUpdate:
         return db.get(objID, None)
@@ -148,7 +145,7 @@ def get(objID, forceUpdate = 0, noUpdate = 0, canBePublic = 1, publicOnly = 0):
             else:
                 return db.get(objID, None)
         except ige.NoSuchObjectException:
-            if objID in db:
+            if db.has_key(objID):
                 del db[objID]
             nonexistingObj[objID] = None
             return None
@@ -156,7 +153,7 @@ def get(objID, forceUpdate = 0, noUpdate = 0, canBePublic = 1, publicOnly = 0):
         try:
             db[objID] = cmdProxy.getPublicInfo(objID)
         except ige.NoSuchObjectException:
-            if objID in db:
+            if db.has_key(objID):
                 del db[objID]
             nonexistingObj[objID] = None
             return None
@@ -168,7 +165,7 @@ def updateIDs(objIDs):
         db[obj.oid] = obj
         delete.remove(obj.oid)
     for objID in delete:
-        if objID in db:
+        if db.has_key(objID):
             del db[objID]
 
 def getRelationTo(objID):
@@ -194,7 +191,7 @@ def getTechInfo(techID):
     player = db[db.playerID]
     tech = Rules.techs[techID]
     # player possess this technology
-    if techID in player.techs:
+    if player.techs.has_key(techID):
         return tech
 
     if tech.fullInfo:
@@ -205,7 +202,7 @@ def getTechInfo(techID):
     if player.race not in tech.researchRaces:
         canResearch = 0
     for tmpTechID, improvement in tech.researchRequires:
-        if tmpTechID not in player.techs or player.techs[tmpTechID] < improvement:
+        if not player.techs.has_key(tmpTechID) or player.techs[tmpTechID] < improvement:
             canResearch = 0
             break
     for stratRes in tech.researchReqSRes:
@@ -236,7 +233,7 @@ def getTechInfo(techID):
     return result
 
 def getAllTechIDs():
-    return list(Rules.techs.keys())
+    return Rules.techs.keys()
 
 def getPlayerID():
     return db.playerID

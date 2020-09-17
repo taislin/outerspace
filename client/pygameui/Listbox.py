@@ -18,42 +18,39 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import re
 import types
 
 import pygame
 
-from . import Const
-from .Widget import registerWidget
-from .MetaWidget import MetaWidget
-from .Scrollbar import Scrollbar
-from .Entry import Entry
-from .Button import Button
+import Const
+from Widget import registerWidget
+from MetaWidget import MetaWidget
+from Scrollbar import Scrollbar
+from Entry import Entry
+from Button import Button
 
 class Listbox(MetaWidget):
 
     def __init__(self, parent, **kwargs):
         MetaWidget.__init__(self, parent)
         # data
-        self.__dict__["items"] = []
-        self.__dict__["labels"] = []
-        self.__dict__["action"] = None
-        self.__dict__["rmbAction"] = None
-        self.__dict__["hoverAction"] = None
-        self.__dict__["multiselection"] = 0
-        self.__dict__["selection"] = []
-        self.__dict__["highlight"] = None
-        self.__dict__["columns"] = [('Item', 'text', 0, Const.ALIGN_W)]
-        self.__dict__["columnLabels"] = 0
-        self.__dict__["scrollBar"] = 1
-        self.__dict__["sortedBy"] = (None, 1)
-        self.__dict__["sortable"] = 1
-        self.__dict__["_labels"] = []
-        self.__dict__["_buttons"] = []
-        self.__dict__["_entries"] = []
+        setattr(self,"items",[])
+        setattr(self,"labels",[])
+        setattr(self,"action",None)
+        setattr(self,"rmbAction",None)
+        setattr(self,"hoverAction",None)
+        setattr(self,"multiselection",0)
+        setattr(self,"selection",[])
+        setattr(self,"highlight",None)
+        setattr(self,"columns",[('Item', 'text', 0, Const.ALIGN_W)])
+        setattr(self,"columnLabels",0)
+        setattr(self,"scrollBar",1)
+        setattr(self,"sortedBy",(None, 1))
+        setattr(self,"sortable",1)
+        setattr(self,"_labels",[])
+        setattr(self,"_buttons",[])
+        setattr(self,"_entries",[])
         # flags
         self.processKWArguments(kwargs)
         parent.registerWidget(self)
@@ -72,7 +69,7 @@ class Listbox(MetaWidget):
             label = Button(self, action = 'onSortByColumn')
             label.subscribeAction('*', self)
             self._buttons.append(label)
-            for i in range(0, rows):
+            for i in xrange(0, rows):
                 label = Button(self, action = 'onItemSelect', rmbAction = "onRmbItemSelect", hoverAction = "onItemHighlight", style = "listitem", toggle = 1)
                 label.subscribeAction('*', self)
                 self._labels.append(label)
@@ -107,7 +104,7 @@ class Listbox(MetaWidget):
                 x += width * gx
                 remains -= width
             startRow = 1
-        for row in range(startRow, rows):
+        for row in xrange(startRow, rows):
             rowLabels = []
             y = row * gy
             x = 0
@@ -212,11 +209,11 @@ class Listbox(MetaWidget):
         value = widget.text
         t = type(getattr(widget.data, widget._listboxColumn))
         try:
-            if t == int: value = int(value)
-            elif t == float: value = float(value)
-            elif t == bytes: value = str(value)
-            elif t == str: pass
-            elif t == int: value = int(value)
+            if t == IntType: value = int(value)
+            elif t == FloatType: value = float(value)
+            elif t == StringType: value = str(value)
+            elif t == UnicodeType: pass
+            elif t == LongType: value = long(value)
             else:
                 self._setListIndex(widget.data.index, widget.data)
                 return
@@ -269,7 +266,7 @@ class Listbox(MetaWidget):
         """
 
         convert = lambda text: int(text) if text.isdigit() else text.lower()
-        alphaNum = lambda key: [ convert(c) for c in re.split('([0-9]+)', str(key)) ]
+        alphaNum = lambda key: [ convert(c) for c in re.split('([0-9]+)', unicode(key)) ]
         keyF = lambda a: alphaNum(getattr(a, attr))
         items.sort(key=keyF, reverse = reverse)
 
@@ -286,7 +283,7 @@ class Listbox(MetaWidget):
         pos = int(self.bar.slider.position)
         if pos >= len(self.items) - len(self.labels): pos = max(0, len(self.items) - len(self.labels))
         # clear selection without triggering widget update
-        self.__dict__['selection'] = []
+        setattr(self,'selection',[])
         for item in self.items:
             item.index = None
             # reconstruct selection

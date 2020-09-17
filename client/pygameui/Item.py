@@ -18,10 +18,7 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
-from types import *
+from types import StringType, UnicodeType
 
 class Item:
 
@@ -43,14 +40,14 @@ class Item:
         self.background = None
         self.index = None
         self.enabled = 1
-        for key, value in list(kwargs.items()):
+        for key, value in kwargs.items():
             setattr(self, key, value)
 
     def getAsString(self, key):
         if hasattr(self, key):
             value = getattr(self, key)
             valType = type(value)
-            if valType is str:
+            if valType == StringType or valType == UnicodeType:
                 return value
             else:
                 return str(value)

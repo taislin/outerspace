@@ -18,16 +18,13 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import pygameui as ui
 from osci.StarMapWidget import StarMapWidget
-from osci import gdata, resr, client, sequip
+from osci import gdata, res, client, sequip
 import ige.ospace.Const as Const
 from ige import GameException
 from ige.ospace import Rules
-from .ConfirmDlg import ConfirmDlg
+from ConfirmDlg import ConfirmDlg
 
 class ConstrUpgradeDlg:
 
@@ -108,7 +105,7 @@ class ConstrUpgradeDlg:
             player.shipDesigns, player.stratRes, tasksUpgraded, player.prodQueues = \
                 client.cmdProxy.upgradeShipDesign(player.oid, self.designID, designID)
             self.win.setStatus(_('Command has been executed.'))
-        except GameException as e:
+        except GameException, e:
             self.win.setStatus(e.args[0])
             return
         client.updateIDs(player.planets)

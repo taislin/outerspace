@@ -18,12 +18,9 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import pygameui as ui
 from osci.StarMapWidget import StarMapWidget
-from osci import gdata, resr, client
+from osci import gdata, res, client
 import ige.ospace.Const as Const
 import ige
 
@@ -54,7 +51,7 @@ class RenameSysDlg:
 
     def show(self):
         system = client.get(self.systemID, noUpdate = 1)
-        self.win.vName.text = getattr(system, 'name', resr.getUnknownName())
+        self.win.vName.text = getattr(system, 'name', res.getUnknownName())
         items = [
             ui.Item(_('Alpha, Beta, ...'), tIndex = 1),
             ui.Item(_('I, II, III, ...'), tIndex = 2),
@@ -86,7 +83,7 @@ class RenameSysDlg:
             self.hide()
             for dialog in gdata.updateDlgs:
                 dialog.update()
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(_(e.args[0]))
 
     def onCancel(self, widget, action, data):

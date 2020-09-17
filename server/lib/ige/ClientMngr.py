@@ -18,21 +18,18 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import os
 import hashlib
 import random
 import time
-from . import log
+import log
 import ige
 from ige import SecurityException
 from ige.Const import ADMIN_LOGIN
-from . import Authentication
-from .account import Account, AIAccount, AdminAccount, passwordGen
+import Authentication
+from account import Account, AIAccount, AdminAccount, passwordGen
 from ai_parser import AIList
-from .IDataHolder import IDataHolder
+from IDataHolder import IDataHolder
 
 class ClientMngr:
 
@@ -63,22 +60,29 @@ class ClientMngr:
         self.accounts.backup(basename)
 
     def exists(self, login):
-        return str(login) in self.accounts
+        return self.accounts.has_key(str(login))
 
     def __getitem__(self, login):
         return self.accounts[str(login)]
 
     def _initAdminAccount(self):
         # create special key
-        log.message("Loading admin account...")
 
-        log.message("No administator account found! (looking for '%s')" % ADMIN_LOGIN)
-        log.message("Creating default account")
-        # create account
-        account = AdminAccount()
-        # update
-        password = account.passwd
-        log.message("Done.")
+        if self.accounts.has_key(ADMIN_LOGIN):
+            self.accounts[ADMIN_LOGIN].passwdHashed = False # Needs plaintext login from token
+            password = passwordGen()
+            self.accounts[ADMIN_LOGIN].setPassword(password)
+        else:
+            log.message("No administator account found! (looking for '%s')" % ADMIN_LOGIN)
+            log.message("Creating default account")
+            # create account
+            account = AdminAccount()
+            # update
+            password = account.passwd
+            self.accounts.create(account, id = str(account.login))
+        with open(os.path.join(self.configDir, "token"), "w") as tokenFile:
+            tokenFile.write(password)
+
     def createAccount(self, sid, login, safePasswd, nick, email):
         log.message('Creating account', login, nick, email)
         session = self.getSession(sid)
@@ -94,7 +98,7 @@ class ClientMngr:
         if len(nick) < ige.Const.ACCOUNT_NICK_MIN_LEN:
             raise SecurityException('Nick is too short.')
         # check login, nick and uid
-        for key in list(self.accounts.keys()):
+        for key in self.accounts.keys():
             account = self.accounts[key]
             if account.login == login:
                 raise SecurityException('Login already used.')
@@ -106,10 +110,12 @@ class ClientMngr:
         account = Account(login, nick, email, plainPassword)
         # update
         self.accounts.create(account, id = str(account.login))
+        log.message('Account created, confirmation token:', account.confToken)
+        # TODO send confirmation token to the email address
         return 1, None
 
     def createAIAccount(self, login, nick, aiType):
-        if login in self.accounts:
+        if self.accounts.has_key(login):
             log.message('AI account already exists, no work needed.', login, nick)
             password = self.accounts[login].passwd
             return password, None
@@ -126,10 +132,9 @@ class ClientMngr:
         return 1, None
 
     def generateAIList(self):
-        log.message('Generating AI list...')
         aiList = AIList(self.configDir)
         aiList.removeAll()
-        for login in list(self.accounts.keys()):
+        for login in self.accounts.keys():
             account = self.accounts[login]
             if not account.isAI:
                 continue
@@ -143,7 +148,7 @@ class ClientMngr:
         return 1, None
 
     def resetAIAccounts(self):
-        for login in list(self.accounts.keys()):
+        for login in self.accounts.keys():
             account = self.accounts[login]
             if account.isAI:
                 self.accounts.delete(login)
@@ -155,7 +160,7 @@ class ClientMngr:
         # create sort of cookie
         while 1:
             sid = hashlib.sha256(str(random.random())).hexdigest()
-            if sid not in self.sessions:
+            if not self.sessions.has_key(sid):
                 break
         challenge = Authentication.getWelcomeString(self.authMethod)
         session = Session(sid)
@@ -174,7 +179,7 @@ class ClientMngr:
         login = str(login)
         challenge = self.sessions[sid].challenge
         log.debug("Trying local login for user", login)
-        if login not in self.accounts:
+        if not self.accounts.has_key(login):
             raise SecurityException('Wrong login and/or password.')
         account = self.accounts[login]
         plainPassword = Authentication.unwrapUserPassword(safePassword, challenge)
@@ -202,7 +207,7 @@ class ClientMngr:
 
     def getSessionByCID(self, cid):
         # TODO more effective - used by GameMngr.sendMessage
-        for sid in list(self.sessions.keys()):
+        for sid in self.sessions.keys():
             session = self.sessions[sid]
             if session.cid == cid:
                 return session
@@ -242,7 +247,7 @@ class ClientMngr:
             log.debug('cleaning up sessions')
             now = time.time()
             deleted = 0
-            for id in list(self.sessions.keys()):
+            for id in self.sessions.keys():
                 if self.sessions[id].timeout < now:
                     log.debug("Deleting session", self.sessions[id].sid, getattr(self.sessions[id], "login", "<unknown>"))
                     del self.sessions[id]
@@ -259,14 +264,14 @@ class ClientMngr:
             raise SecurityException('You cannot issue this command.')
         # export accounts
         f = open(os.path.join(self.configDir,"accounts.txt"), "w")
-        for account in list(self.accounts.keys()):
+        for account in self.accounts.keys():
             account = self.accounts[account]
-            print("%s\t%s\t%s\t%s" % (
+            print >>f, "%s\t%s\t%s\t%s" % (
                 account.nick.encode("utf-8"),
                 account.login.encode("utf-8"),
                 account.passwd.encode("utf-8"),
                 account.email.encode("utf-8")
-            ), file=f)
+            )
         f.close()
         return None, None
 

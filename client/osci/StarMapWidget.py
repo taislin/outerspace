@@ -18,9 +18,6 @@
 #  along with Outer Space; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-
-def _(msg): return msg
-
 import bisect
 
 from pygameui.Widget import Widget, registerWidget
@@ -28,9 +25,9 @@ import pygameui as ui
 from pygameui import Fonts
 import ige.ospace.Const as Const
 import pygame, pygame.draw, pygame.key, pygame.image
-from .dialog.ShowBuoyDlg import ShowBuoyDlg
-from .dialog.KeyModHelp import KeyModHelp
-from . import gdata, client, resr
+from dialog.ShowBuoyDlg import ShowBuoyDlg
+from dialog.KeyModHelp import KeyModHelp
+import gdata, client, res
 from ige import log
 from osci.dialog.SearchDlg import SearchDlg
 from osci.MiniMap import MiniMap
@@ -103,15 +100,15 @@ class StarMapWidget(Widget):
 
 
     def updateConfigModes(self):
-        self.control_modes['redirects'] = gdata.config.defaults.showredirects != 'no'
-        self.control_modes['coords'] = gdata.config.defaults.showcoords != 'no'
-        self.control_modes['map_grid'] = gdata.config.defaults.showmapgrid != 'no'
-        self.control_modes['scanners'] = gdata.config.defaults.showmapscanners != 'no'
-        self.control_modes['fleet_lines'] = gdata.config.defaults.showfleetlines != 'no'
-        self.control_modes['gate_systems'] = gdata.config.defaults.showgatesystems != 'no'
-        self.control_modes['alternative_mode'] = gdata.config.defaults.alternateviewmode != 'no'
-        self.control_modes['control_areas'] = gdata.config.defaults.showplayerzones != 'no'
-        self.control_modes['minimap'] = gdata.config.defaults.showminimap != 'yes'
+        self.control_modes['redirects'] = gdata.config.defaults.showredirects is not 'no'
+        self.control_modes['coords'] = gdata.config.defaults.showcoords is not 'no'
+        self.control_modes['map_grid'] = gdata.config.defaults.showmapgrid is not 'no'
+        self.control_modes['scanners'] = gdata.config.defaults.showmapscanners is not 'no'
+        self.control_modes['fleet_lines'] = gdata.config.defaults.showfleetlines is not 'no'
+        self.control_modes['gate_systems'] = gdata.config.defaults.showgatesystems is not 'no'
+        self.control_modes['alternative_mode'] = gdata.config.defaults.alternateviewmode is not 'no'
+        self.control_modes['control_areas'] = gdata.config.defaults.showplayerzones is not 'no'
+        self.control_modes['minimap'] = gdata.config.defaults.showminimap is not 'yes'
 
     def precompute(self):
         self.star_map.rect = self.rect
@@ -151,7 +148,7 @@ class StarMapWidget(Widget):
 
         if self.repaint_map:
             mapSurf, self._actAreas, self._actBuoyAreas  = self.star_map.draw(mapSurf)
-            # For some reason, this != just optimization, it's mandatory for proper
+            # For some reason, this is not just optimization, it's mandatory for proper
             # function. BUG?!
             self.repaint_map = 0
             self.repaintHotbuttons = 1
@@ -192,7 +189,7 @@ class StarMapWidget(Widget):
         for buttonkey in self._hotbuttons:
             button = self._hotbuttons[buttonkey]
             self._hotbuttonRects[button[0]] = [button[0],pygame.Rect(button[2]+self._hotbuttonsZone.left,button[3]+self._hotbuttonsZone.top+15,button[4],button[5])]
-            img = resr.getButton(button[0],button[1])
+            img = res.getButton(button[0],button[1])
             if (button[1] and not (self._tempOverlayHotbutton and self._tempOverlayHotbutton == button[0])) or (not button[1] and self._tempOverlayHotbutton and self._tempOverlayHotbutton == button[0]):
                 pygame.draw.rect(mapSurf,(0x90, 0x90, 0x90),(left+button[2]-1,top+15+button[3]-1,button[4]+2,button[5]+2),1)
             mapSurf.blit(img,(left+button[2],top+15+button[3]))
@@ -213,7 +210,7 @@ class StarMapWidget(Widget):
         if not pygame.key.get_mods() & pygame.KMOD_SHIFT:
             for activeObjID in self.activeObjIDs:
                 index = 0
-                if activeObjID in self.star_map._popupInfo:
+                if self.star_map._popupInfo.has_key(activeObjID):
                     # put pop up info on the screen
                     info = self.star_map._popupInfo[activeObjID]
                     # x1, y1 = self._actAreas[self.activeObjID].center
@@ -267,11 +264,11 @@ class StarMapWidget(Widget):
         sx = int((x - self.star_map.currX) * self.star_map.scale) + centerX + self.rect.left
         sy = maxY - (int((y - self.star_map.currY) * self.star_map.scale) + centerY) + self.rect.top
 
-        for i in range(1, turns / 6):
+        for i in xrange(1, turns / 6):
             rng = int(i * speed * self.star_map.scale)
             if rng > 1:
                 pygame.draw.circle(surface, (0x70, 0x70, 0x80), (sx, sy), rng, 1)
-                textSrfc = Fonts.renderText(self.star_map.textSize, resr.formatTime(i * 6), 1, (0x70, 0x70, 0x80), (0x00, 0x00, 0x00))
+                textSrfc = Fonts.renderText(self.star_map.textSize, res.formatTime(i * 6), 1, (0x70, 0x70, 0x80), (0x00, 0x00, 0x00))
                 surface.blit(textSrfc, (sx - rng, sy - textSrfc.get_height() / 2))
                 surface.blit(textSrfc, (sx + rng, sy - textSrfc.get_height() / 2))
                 surface.blit(textSrfc, (sx - textSrfc.get_width() / 2, sy - rng))
@@ -315,7 +312,7 @@ class StarMapWidget(Widget):
             sy = maxY - (int((self.highlightPos[1] - self.star_map.currY) * self.star_map.scale) + centerY) + self.rect.top
             pygame.draw.circle(surface, (0xff, 0xff, 0xff), (sx, sy), 13, 2)
         # fleet range in case of selecting fleet orders
-        if self.alwaysShowRangeFor and self.alwaysShowRangeFor in self.star_map._fleetRanges:
+        if self.alwaysShowRangeFor and self.star_map._fleetRanges.has_key(self.alwaysShowRangeFor):
             self._drawFleetRangesFuel(surface, self.alwaysShowRangeFor)
         for activeObjID in self.activeObjIDs:
             if activeObjID and activeObjID in self.star_map._fleetTarget:
@@ -420,13 +417,13 @@ class StarMapWidget(Widget):
         if self.control_modes['hotbuttons'] and self._hotbuttonsZone.collidepoint(pos):
             return ui.NoEvent
         self.pressedObjIDs = []
-        for objID in list(self._actAreas.keys()):
+        for objID in self._actAreas.keys():
             rect = self._actAreas[objID]
             if rect.collidepoint(pos):
                 self.pressedObjIDs.append(objID)
 
         self.pressedBuoyObjIDs = []
-        for objID in list(self._actBuoyAreas.keys()):
+        for objID in self._actBuoyAreas.keys():
             rect = self._actBuoyAreas[objID]
             if rect.collidepoint(pos):
                 self.pressedBuoyObjIDs.append(objID)
@@ -455,13 +452,13 @@ class StarMapWidget(Widget):
                 self.toggleHotButtons(button)
             return ui.NoEvent
         objIDs = []
-        for objID in list(self._actAreas.keys()):
+        for objID in self._actAreas.keys():
             rect = self._actAreas[objID]
             if rect.collidepoint(pos):
                 objIDs.append(objID)
 
         bObjIDs = []
-        for objID in list(self._actBuoyAreas.keys()):
+        for objID in self._actBuoyAreas.keys():
             rect = self._actBuoyAreas[objID]
             if rect.collidepoint(pos):
                 bObjIDs.append(objID)
@@ -495,19 +492,19 @@ class StarMapWidget(Widget):
                 obj = client.get(objID)
                 if obj.type == Const.T_SYSTEM:
                     name = getattr(obj, "name", None)
-                    name = _("System: %s [ID: %d]") % (name or resr.getUnknownName(), obj.oid)
+                    name = _("System: %s [ID: %d]") % (name or res.getUnknownName(), obj.oid)
                 elif obj.type == Const.T_WORMHOLE:
                     name = getattr(obj, "name", None)
-                    name = _("Worm hole: %s [ID: %d]") % (name or resr.getUnknownName(), obj.oid)
+                    name = _("Worm hole: %s [ID: %d]") % (name or res.getUnknownName(), obj.oid)
                 elif obj.type == Const.T_PLANET:
                     name = getattr(obj, "name", None)
-                    name = _("Planet: %s [ID: %d]") % (name or resr.getUnknownName(), obj.oid)
+                    name = _("Planet: %s [ID: %d]") % (name or res.getUnknownName(), obj.oid)
                 elif obj.type == Const.T_FLEET:
                     if hasattr(obj,'customname') and obj.customname:
                         name = obj.customname
                     else:
                         name = getattr(obj, "name", None)
-                    name = _("Fleet: %s [ID: %d]") % (name or resr.getUnknownName(), obj.oid)
+                    name = _("Fleet: %s [ID: %d]") % (name or res.getUnknownName(), obj.oid)
                 else:
                     name = _("Unknown object [ID: %d]") % obj.oid
                 item = ui.Item(name, action = "onObjectSelected", data = objID)
@@ -516,10 +513,10 @@ class StarMapWidget(Widget):
                 obj = client.get(objID)
                 if obj.type == Const.T_SYSTEM:
                     name = getattr(obj, "name", None)
-                    name = _("Buoy on system: %s [ID: %d]") % (name or resr.getUnknownName(), obj.oid)
+                    name = _("Buoy on system: %s [ID: %d]") % (name or res.getUnknownName(), obj.oid)
                 elif obj.type == Const.T_WORMHOLE:
                     name = getattr(obj, "name", None)
-                    name = _("Buoy on worm hole: %s [ID: %d]") % (name or resr.getUnknownName(), obj.oid)
+                    name = _("Buoy on worm hole: %s [ID: %d]") % (name or res.getUnknownName(), obj.oid)
                 else:
                     name = _("Buoy on unknown object [ID: %d]") % obj.oid
                 item = ui.Item(name, action = "onBuoySelected", data = objID)
@@ -595,7 +592,7 @@ class StarMapWidget(Widget):
             self.toggleTempButton(False)
         self.activeObjID = Const.OID_NONE
         self.activeObjIDs = []
-        for objID in list(self._actAreas.keys()):
+        for objID in self._actAreas.keys():
             rect = self._actAreas[objID]
             if rect.collidepoint(pos):
                 self.activeObjID = objID
@@ -643,17 +640,17 @@ class StarMapWidget(Widget):
                 self.app.setStatus(_("Ready."))
                 self.selectobject = False
             return ui.NoEvent
-        if not evt.str:
+        if not evt.unicode:
             # force update
             self.star_map.scale += 1
             self.star_map.scale -= 1
             return ui.NoEvent
-        if evt.str in '+=':
+        if evt.unicode in u'+=':
             self._rescaleMap(evt, 5)
-        elif evt.str == '-':
+        elif evt.unicode == u'-':
             self._rescaleMap(evt, -5)
         # Space Bar - Recenter
-        elif evt.str == ' ':
+        elif evt.unicode == u' ':
             x, y = pygame.mouse.get_pos()
             centerX, centerY = self._mapSurf.get_rect().center
             self.star_map.currX -= float(centerX - x) / self.star_map.scale
@@ -663,17 +660,17 @@ class StarMapWidget(Widget):
         # ==== Standard Hotkeys ====
         # Reserve CTRL-C for copy (future editor support)
         # Ctrl+F
-        toggleMapping = {'\x01': 'alternate',  # Alternative system info
-                         '\x07': 'grid',       # Grid
-                         '\x08': 'civ',        # Civilian ships
-                         '\x0C': 'lines',      # Fleet lines
-                         '\x10': 'pzone',      # Control areas
-                         '\x12': 'redir',      # Redirections
-                         '\x13': 'scanner'}    # Scanner circles
-        if evt.str in toggleMapping and pygame.key.get_mods() & pygame.KMOD_CTRL:
-            self.toggleHotButtons(toggleMapping[evt.str])
+        toggleMapping = {u'\x01': 'alternate',  # Alternative system info
+                         u'\x07': 'grid',       # Grid
+                         u'\x08': 'civ',        # Civilian ships
+                         u'\x0C': 'lines',      # Fleet lines
+                         u'\x10': 'pzone',      # Control areas
+                         u'\x12': 'redir',      # Redirections
+                         u'\x13': 'scanner'}    # Scanner circles
+        if evt.unicode in toggleMapping and pygame.key.get_mods() & pygame.KMOD_CTRL:
+            self.toggleHotButtons(toggleMapping[evt.unicode])
         # Ctrl+F to open the search (find) dialog
-        elif evt.str == '\x06' and pygame.key.get_mods() & pygame.KMOD_CTRL:
+        elif evt.unicode == u'\x06' and pygame.key.get_mods() & pygame.KMOD_CTRL:
             self.searchDlg.display()
         # Reserve CTRL-V,X,and Z for paste, cut, and undo (future editor support)
         # ==== Else ====

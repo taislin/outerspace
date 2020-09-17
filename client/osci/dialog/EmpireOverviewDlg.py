@@ -18,17 +18,14 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import pygameui as ui
 import re
 from osci import gdata, client
 import ige.ospace.Const as Const
 from ige.ospace import Rules
 import string, math
-from .PlanetsAnalysisDlg import PlanetsAnalysisDlg
-from .FleetsAnalysisDlg import FleetsAnalysisDlg
+from PlanetsAnalysisDlg import PlanetsAnalysisDlg
+from FleetsAnalysisDlg import FleetsAnalysisDlg
 
 class EmpireOverviewDlg:
     """Displays Empire overview dialog.
@@ -91,7 +88,7 @@ class EmpireOverviewDlg:
         if player.stratRes or srChange:
             text.append(_("Strategic resources:"))
             # merge owned and change
-            srList = list(player.stratRes.keys())
+            srList = player.stratRes.keys()
             for sr in srChange:
                 if sr not in srList:
                     srList.append(sr)
@@ -99,7 +96,7 @@ class EmpireOverviewDlg:
             for sr in srList:
                 # srChange is printed as integer - assumption is there are only
                 # full generators of special resources (i.e. planets)
-                text.append('    %s: %s (+%d)' % (
+                text.append(u'    %s: %s (+%d)' % (
                     gdata.stratRes[sr],
                     player.stratRes.get(sr, 0) / float(Rules.stratResAmountBig),
                     srChange.get(sr, 0) / float(Rules.stratResAmountBig),
@@ -117,43 +114,43 @@ class EmpireOverviewDlg:
             fleet = client.get(fleetID)
         # display data
         text.append(_("Statistics:"))
-        text.append('    %s: %s' % (_("Population"), getattr(player.stats, "storPop", "?")))
+        text.append(u'    %s: %s' % (_("Population"), getattr(player.stats, "storPop", "?")))
         if hasattr(player.stats, "storPop") and player.govPwr > player.stats.storPop and player.stats.storPop > 0:
-            text.append('    %s: %s (%d %% %s)' % (_("Gov. power"), player.govPwr, 100 * (player.govPwr - player.stats.storPop) / player.govPwr, _("unused")))
+            text.append(u'    %s: %s (%d %% %s)' % (_("Gov. power"), player.govPwr, 100 * (player.govPwr - player.stats.storPop) / player.govPwr, _("unused")))
         else:
-            text.append('    %s: %s' % (_("Gov. power"), player.govPwr))
-        text.append('    %s: %s' % (_("Planets"), getattr(player.stats, "planets", "?")))
-        text.append('    %s: %s' % (_("Structures"), getattr(player.stats, "structs", "?")))
-        text.append('    %s: %s' % (_("Raw production"), getattr(player.stats, "prodProd", "?")))
-        text.append('    %s: %d' % (_("Total production"), realProd))
-        text.append('    %s: %s' % (_("Raw research"), getattr(player.stats, "prodSci", "?")))
-        text.append('    %s: %s' % (_("Total reseach"), player.effSciPoints))
-        text.append('    %s: %s' % (_("Military power"), getattr(player.stats, "fleetPwr", "?")))
+            text.append(u'    %s: %s' % (_("Gov. power"), player.govPwr))
+        text.append(u'    %s: %s' % (_("Planets"), getattr(player.stats, "planets", "?")))
+        text.append(u'    %s: %s' % (_("Structures"), getattr(player.stats, "structs", "?")))
+        text.append(u'    %s: %s' % (_("Raw production"), getattr(player.stats, "prodProd", "?")))
+        text.append(u'    %s: %d' % (_("Total production"), realProd))
+        text.append(u'    %s: %s' % (_("Raw research"), getattr(player.stats, "prodSci", "?")))
+        text.append(u'    %s: %s' % (_("Total reseach"), player.effSciPoints))
+        text.append(u'    %s: %s' % (_("Military power"), getattr(player.stats, "fleetPwr", "?")))
         if hasattr(player, "pirateFame"):
-            text.append('    %s: %s (%+d %% %s)' % (
+            text.append(u'    %s: %s (%+d %% %s)' % (
                 _("Fame"),
                 player.pirateFame,
                 player.pirateFame,
                 _("production eff.")
             ))
-            text.append('    %s: %s fame' % (
+            text.append(u'    %s: %s fame' % (
                 _("New colony on planet with TL3 resouce cost"),
                 int(Rules.pirateTL3StratResColonyCostMod * Rules.pirateColonyCostMod * len(player.planets)),
             ))
-            text.append('    %s: %s fame' % (
+            text.append(u'    %s: %s fame' % (
                 _("New colony cost multiplier"),
                 int(Rules.pirateColonyCostMod * len(player.planets)),
             ))
-            text.append('        %s' % (
+            text.append(u'        %s' % (
                 _("(hover over system/planet to view actual cost)"),
             ))
         text.append("")
         # Production
         text.append(_("Production:"))
-        text.append('    %s: %s' % (_("Raw production"), getattr(player.stats, "prodProd", "?")))
+        text.append(u'    %s: %s' % (_("Raw production"), getattr(player.stats, "prodProd", "?")))
         if player.prodIncreasePool > 0:
             ratio = (Rules.unusedProdMod * player.prodIncreasePool) / player.stats.prodProd
-            text.append('    %s: %d (%+d %% %s)' % (
+            text.append(u'    %s: %d (%+d %% %s)' % (
                 _("Unused production"), player.prodIncreasePool, min(ratio * 100, math.sqrt(ratio) * 100), _("effectivity")
             ))
         # fleet support
@@ -162,7 +159,7 @@ class EmpireOverviewDlg:
             effectivity = - 100 * (total - player.stats.prodProd / 10) / max(player.stats.prodProd, 1)
         else:
             effectivity = 0
-        text.append('    %s: %+d (%s %d %s, %+d %% %s)' % (
+        text.append(u'    %s: %+d (%s %d %s, %+d %% %s)' % (
             _("Fleet support"),
             - total,
             _("first"),
@@ -171,22 +168,22 @@ class EmpireOverviewDlg:
             effectivity,
             _("effectivity")
         ))
-        text.append("    %s: %d %%" % (_("Empire effectivity"), int(100 * player.prodEff)))
-        text.append('    %s: %d' % (_("Total production"), realProd))
+        text.append(u"    %s: %d %%" % (_("Empire effectivity"), int(100 * player.prodEff)))
+        text.append(u'    %s: %d' % (_("Total production"), realProd))
         text.append("")
         # Research
         text.append(_("Research:"))
-        text.append("    %s: %d %%" % (_("Empire effectivity"), int(100 * player.sciEff)))
+        text.append(u"    %s: %d %%" % (_("Empire effectivity"), int(100 * player.sciEff)))
         if hasattr(player.stats, "prodSci"):
-            text.append("    %s: %s" % (_("Raw production"), getattr(player.stats, "prodSci", "?")))
-        text.append('    %s: %s' % (_("Real production"), realSci))
+            text.append(u"    %s: %s" % (_("Raw production"), getattr(player.stats, "prodSci", "?")))
+        text.append(u'    %s: %s' % (_("Real production"), realSci))
         if player.techLevel < 7:
             popSupp = int(player.stats.storPop * Rules.sciPtsPerCitizen[player.techLevel])
         else:
             popSupp = 0
-        text.append('    %s: %+d' % (_("Population support"), -popSupp))
-        text.append('    %s: %+d' % (_("From pacts"), player.effSciPoints + popSupp - player.sciPoints))
-        text.append('    %s: %d' % (_("Total research"), player.effSciPoints))
+        text.append(u'    %s: %+d' % (_("Population support"), -popSupp))
+        text.append(u'    %s: %+d' % (_("From pacts"), player.effSciPoints + popSupp - player.sciPoints))
+        text.append(u'    %s: %d' % (_("Total research"), player.effSciPoints))
         text.append("")
         # Fleet
         civ = [0, 0, 0, 0]
@@ -202,31 +199,31 @@ class EmpireOverviewDlg:
                     civ[tech.combatClass] += 1
                 mp[tech.combatClass] += int(tech.combatPwr * float(hp + shield) / (tech.maxHP + tech.shieldHP))
         text.append(_("Fleet:"))
-        text.append('    %s: %d (%d %s)' % (_("Upgrade Pool"), player.fleetUpgradePool, - player.fleetUpgradePool * Rules.operProdRatio,_("CP to support")))
-        text.append('    %s: %d %s + %d %s, %d %s' % (_("Small ships"), civ[0], _("civ"), mil[0], _("mil"), mp[0],_("MP")))
-        text.append('    %s: %d %s + %d %s, %d %s' % (_("Medium ships"), civ[1], _("civ"), mil[1], _("mil"), mp[1],_("MP")))
-        text.append('    %s: %d %s + %d %s, %d %s' % (_("Large ships"), civ[2], _("civ"), mil[2], _("mil"), mp[2],_("MP")))
+        text.append(u'    %s: %d (%d %s)' % (_("Upgrade Pool"), player.fleetUpgradePool, - player.fleetUpgradePool * Rules.operProdRatio,_("CP to support")))
+        text.append(u'    %s: %d %s + %d %s, %d %s' % (_("Small ships"), civ[0], _("civ"), mil[0], _("mil"), mp[0],_("MP")))
+        text.append(u'    %s: %d %s + %d %s, %d %s' % (_("Medium ships"), civ[1], _("civ"), mil[1], _("mil"), mp[1],_("MP")))
+        text.append(u'    %s: %d %s + %d %s, %d %s' % (_("Large ships"), civ[2], _("civ"), mil[2], _("mil"), mp[2],_("MP")))
 
         # Planetary Weapons
         weapons = player.planetWeapons
         if weapons[0] or weapons[1] or weapons[2]:
             text.append("")
-            text.append('Planetary Weapons:')
+            text.append(u'Planetary Weapons:')
             if weapons[0] != None:
-                if weapons[0] in list(player.techs.keys()):
+                if weapons[0] in player.techs.keys():
                     tech = client.getTechInfo(weapons[0])
                     sweapon = tech.name
-                    text.append('    Anti-small: %s' % sweapon)
+                    text.append(u'    Anti-small: %s' % sweapon)
             if weapons[1] != None:
-                if weapons[1] in list(player.techs.keys()):
+                if weapons[1] in player.techs.keys():
                     tech = client.getTechInfo(weapons[1])
                     mweapon = tech.name
-                    text.append('    Anti-medium: %s' % mweapon)
+                    text.append(u'    Anti-medium: %s' % mweapon)
             if weapons[2] != None:
-                if weapons[2] in list(player.techs.keys()):
+                if weapons[2] in player.techs.keys():
                     tech = client.getTechInfo(weapons[2])
                     lweapon = tech.name
-                    text.append('    Anti-large: %s' % lweapon)
+                    text.append(u'    Anti-large: %s' % lweapon)
 
         self.win.vText.text = text
         self.win.vText.offsetRow = 0

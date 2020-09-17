@@ -135,14 +135,14 @@ class os_filesystem:
         # I think we should glob, but limit it to the current
         # directory only.
         ld = os.listdir (p)
-        if not int:
+        if not long:
             return list_producer (ld, 0, None)
         else:
             old_dir = os.getcwd()
             try:
                 os.chdir (p)
                 # if os.stat fails we ignore that file.
-                result = [_f for _f in map (safe_stat, ld) if _f]
+                result = filter (None, map (safe_stat, ld))
             finally:
                 os.chdir (old_dir)
             return list_producer (result, 1, self.longify)
@@ -183,13 +183,12 @@ class os_filesystem:
         # path components, and do it safely.
         # <real_root>/<current_directory>/<path>
         # use the operating system's path separator.
-        path = str.join (string.split (path, '/'), os.sep)
+        path = string.join (string.split (path, '/'), os.sep)
         p = self.normalize (self.path_module.join (self.wd, path))
         p = self.normalize (self.path_module.join (self.root, p[1:]))
         return p
 
-    def longify (self, xxx_todo_changeme):
-        (path, stat_info) = xxx_todo_changeme
+    def longify (self, (path, stat_info)):
         return unix_longify (path, stat_info)
 
     def __repr__ (self):
@@ -214,14 +213,14 @@ if os.name == 'posix':
             self.persona = persona
 
         def become_persona (self):
-            if self.persona != (None, None):
+            if self.persona is not (None, None):
                 uid, gid = self.persona
                 # the order of these is important!
                 os.setegid (gid)
                 os.seteuid (uid)
 
         def become_nobody (self):
-            if self.persona != (None, None):
+            if self.persona is not (None, None):
                 os.seteuid (self.PROCESS_UID)
                 os.setegid (self.PROCESS_GID)
 
@@ -250,7 +249,7 @@ if os.name == 'posix':
         def listdir (self, path, long=0):
             try:
                 self.become_persona()
-                return os_filesystem.listdir (self, path, int)
+                return os_filesystem.listdir (self, path, long)
             finally:
                 self.become_nobody()
 
@@ -274,7 +273,7 @@ if os.name == 'posix':
 #                 return list_producer (os.listdir (p), 0, None)
 #             else:
 #                 command = '/bin/ls -l %s' % p
-#                 print 'opening pipe to "%s"' % command
+#                 print('opening pipe to "%s"' % command)
 #                 fd = os.popen (command, 'rt')
 #                 return pipe_channel (fd)
 #
@@ -319,8 +318,7 @@ if os.name == 'posix':
 # [yes, I think something like this "\\.\c\windows"]
 
 class msdos_filesystem (os_filesystem):
-    def longify (self, xxx_todo_changeme1):
-        (path, stat_info) = xxx_todo_changeme1
+    def longify (self, (path, stat_info)):
         return msdos_longify (path, stat_info)
 
 # A merged filesystem will let you plug other filesystems together.
@@ -390,12 +388,12 @@ import time
 def unix_longify (file, stat_info):
     # for now, only pay attention to the lower bits
     mode = ('%o' % stat_info[stat.ST_MODE])[-3:]
-    mode = str.join ([mode_table[x] for x in mode], '')
+    mode = string.join (map (lambda x: mode_table[x], mode), '')
     if stat.S_ISDIR (stat_info[stat.ST_MODE]):
         dirchar = 'd'
     else:
         dirchar = '-'
-    date = ls_date (int(time.time()), stat_info[stat.ST_MTIME])
+    date = ls_date (long(time.time()), stat_info[stat.ST_MTIME])
     return '%s%s %3d %-8d %-8d %8d %s %s' % (
         dirchar,
         mode,
@@ -441,7 +439,7 @@ def ls_date (now, t):
 class list_producer:
     def __init__ (self, file_list, long, longify):
         self.file_list = file_list
-        self.long = int
+        self.long = long
         self.longify = longify
         self.done = 0
 
@@ -462,7 +460,7 @@ class list_producer:
             # do a few at a time
             bunch = self.file_list[:50]
             if self.long:
-                bunch = list(map (self.longify, bunch))
+                bunch = map (self.longify, bunch)
             self.file_list = self.file_list[50:]
-            return str.joinfields (bunch, '\r\n') + '\r\n'
+            return string.joinfields (bunch, '\r\n') + '\r\n'
 

@@ -18,9 +18,6 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 def runServer(options):
     import os
     import shutil
@@ -66,6 +63,12 @@ def runServer(options):
     #~ h.setFormatter(logging.Formatter('%(created)d %(levelname)-5s %(name)-8s %(message)s'))
     #~ log.addHandler(h)
 
+
+    # record my pid
+    pidFd = os.open(os.path.join(options.configDir,"server.pid"), os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+    os.write(pidFd, str(os.getpid()))
+    # TODO: check if server.pid points to the running process
+
     game = None
     msgMngr = None
     clientMngr = None
@@ -102,6 +105,20 @@ def runServer(options):
         config.save()
         log.message('Shutted down')
         log.message("Cleaning up...")
+
+    def _cleanup(pidFd):
+        _save()
+        # delete my pid
+        os.close(pidFd)
+        os.remove(os.path.join(options.configDir,"server.pid"))
+
+    cleanup = _cleanup
+
+    atexit.register(cleanup, pidFd)
+
+    #~fh = open(pidFilename, 'w')
+    #~print >> fh, os.getpid()
+    #~fh.close()
 
     # startup game
     log.debug('Importing IGE modules...')
@@ -169,7 +186,7 @@ def runServer(options):
     bookingMngr = BookingMngr(clientMngr, game, bookingDB)
 
     # either forced reset, or uninitialized server
-    if options.reset or not list(gameDB.keys()):
+    if options.reset or not gameDB.keys():
         # reset game
         log.message('Resetting game \'%s\'...' % gameName)
         game.reset()

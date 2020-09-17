@@ -17,9 +17,6 @@
 #  along with Outer Space; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-
-def _(msg): return msg
-
 import copy
 import json
 import os
@@ -81,7 +78,7 @@ class AIList:
         self.listname = "ais_list"
         try:
             self.records = json.load(open(os.path.join(self.configDir, self.listname), "r"), object_hook=aiRecordDecoder)
-        except Exception as e:
+        except Exception, e:
             listfile = open(os.path.join(self.configDir, self.listname), "a")
             listfile.close()
 
@@ -105,7 +102,7 @@ class AIList:
         return self.records
 
     def getLogins(self):
-        return [x.login for x in self.records]
+        return map(lambda x: x.login, self.records)
 
     def removeAll(self):
         self.records = []

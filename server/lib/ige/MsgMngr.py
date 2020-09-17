@@ -18,11 +18,7 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
-import time, ige
-from . import log
+import time, log, ige
 
 class MsgMngrException(Exception):
     pass
@@ -138,7 +134,7 @@ class MailboxRoot:
     def scan(self, db):
         log.debug("*** SCANNING MAILBOXES ***")
         self.mailboxNames = []
-        for key in list(db.keys()):
+        for key in db.keys():
             if key.count("-") == 1:
                 # mailbox
                 self.mailboxNames.append(key)

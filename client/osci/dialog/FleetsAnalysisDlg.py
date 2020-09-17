@@ -18,9 +18,6 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import pygameui as ui
 from osci import gdata, client
 import ige.ospace.Const as Const
@@ -70,9 +67,9 @@ class FleetsAnalysisDlg:
                         count += 1
                         fleets[fleet] = 1
                 fleetCounts[fleetID] = count
-            self.fleetsByDesign[designID] = list(fleets.keys())
+            self.fleetsByDesign[designID] = fleets.keys()
             self.fleetCountsByDesign[designID] = fleetCounts
-            item = ui.Item(spec.name, tDesignID = designID, tShipsCount = len(list(fleets.keys())))
+            item = ui.Item(spec.name, tDesignID = designID, tShipsCount = len(fleets.keys()))
             items.append(item)
         self.win.vDesigns.items = items
         self.win.vDesigns.itemsChanged()

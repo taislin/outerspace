@@ -18,12 +18,9 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import pygameui as ui
-from osci import client, gdata, resr
-from .MainGameDlg import MainGameDlg
+from osci import client, gdata, res
+from MainGameDlg import MainGameDlg
 from ige import SecurityException
 
 class NewAccountDlg:
@@ -59,7 +56,7 @@ class NewAccountDlg:
         self.win.hide()
         try:
             result = client.createAccount(login, password, nick, email)
-        except SecurityException as e:
+        except SecurityException, e:
             # failed
             self.win.vMessage.text = _(e.args[0])
             self.win.show()
@@ -142,4 +139,4 @@ class NewAccountDlg:
         ui.Title(self.win, layout = (0, 5, 13, 1), id = 'vMessage', align = ui.ALIGN_W)
         ui.TitleButton(self.win, layout = (13, 5, 4, 1), text = _('Cancel'), action = 'onCancel')
         ui.TitleButton(self.win, layout = (17, 5, 4, 1), text = _('Create'), action = 'onCreate')
-        ui.Label(self.win, layout = (0, 0, 5, 4), icons = ((resr.loginLogoImg, ui.ALIGN_W),))
+        ui.Label(self.win, layout = (0, 0, 5, 4), icons = ((res.loginLogoImg, ui.ALIGN_W),))

@@ -116,7 +116,7 @@ class PublicKey(AbstractKey):
         return getattr(self, key)
 
     def __repr__(self):
-        return 'PublicKey(%i, %i)' % (self.n, self.e)
+        return u'PublicKey(%i, %i)' % (self.n, self.e)
 
     def __eq__(self, other):
         if other is None:
@@ -272,7 +272,7 @@ class PrivateKey(AbstractKey):
         return getattr(self, key)
 
     def __repr__(self):
-        return 'PrivateKey(%(n)i, %(e)i, %(d)i, %(p)i, %(q)i)' % self
+        return u'PrivateKey(%(n)i, %(e)i, %(d)i, %(p)i, %(q)i)' % self
 
     def __eq__(self, other):
         if other is None:

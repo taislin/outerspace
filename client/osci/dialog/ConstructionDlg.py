@@ -18,9 +18,6 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import pygame
 
 import pygameui as ui
@@ -29,12 +26,12 @@ from ige import GameException
 from ige.ospace import ShipUtils, Rules
 import ige.ospace.Const as Const
 
-from osci import gdata, resr, client, sequip
+from osci import gdata, res, client, sequip
 from osci.StarMapWidget import StarMapWidget
 
-from .ConstrSelTechDlg import ConstrSelTechDlg
-from .ConstrUpgradeDlg import ConstrUpgradeDlg
-from .ConfirmDlg import ConfirmDlg
+from ConstrSelTechDlg import ConstrSelTechDlg
+from ConstrUpgradeDlg import ConstrUpgradeDlg
+from ConfirmDlg import ConfirmDlg
 
 class ConstructionDlg:
 
@@ -81,7 +78,7 @@ class ConstructionDlg:
     def _getNumberInBuild(self, designID):
         count = 0
         # planet queues
-        for planetID in list(client.db.keys()):
+        for planetID in client.db.keys():
             planet = client.get(planetID, noUpdate=1)
             # skip non-planets
             try:
@@ -196,7 +193,7 @@ class ConstructionDlg:
             result = ShipUtils.makeShipFullSpec(player, None, self.hullID, eqIDs, improvements)
             if self.editMode:
                 self.win.vConstruct.enabled = 1
-        except GameException as e:
+        except GameException, e:
             self.win.setStatus(e.args[0])
             self.win.vConstruct.enabled = 0
             try:
@@ -348,7 +345,7 @@ class ConstructionDlg:
                 client.cmdProxy.addShipDesign(player.oid, name, self.hullID, eqIDs)
             self.win.vDuplDesign.enabled = 1
             self.win.setStatus(_('Command has been executed.'))
-        except GameException as e:
+        except GameException, e:
             self.win.setStatus(_(e.args[0]))
             return
         self.editMode = False
@@ -499,7 +496,7 @@ class ConstructionDlg:
                 client.cmdProxy.scrapShipDesign(player.oid, self.selectedDesignID)
             self.selectedDesignID = None
             self.win.setStatus(_('Command has been executed.'))
-        except GameException as e:
+        except GameException, e:
             self.win.setStatus(_(e.args[0]))
             return
         # reread information about fleets and planets
@@ -521,7 +518,7 @@ class ConstructionDlg:
                 player.shipDesigns = \
                     client.cmdProxy.cancelUpgradeShipDesign(player.oid, self.selectedDesignID)
                 self.win.setStatus(_('Command has been executed.'))
-            except GameException as e:
+            except GameException, e:
                 self.win.setStatus(_(e.args[0]))
                 return
             self.update()

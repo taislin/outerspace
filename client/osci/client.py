@@ -18,17 +18,13 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import os.path
 
 from igeclient import IClient, IClientDB
 from ige.ospace import Rules
 import ige.ospace.Const as Const
 from ige.IDataHolder import IDataHolder
-import ige, osci, math, time
-from . import gdata
+import ige, gdata, osci, math, time
 from ige import log
 
 # module globals
@@ -109,7 +105,7 @@ def saveDB():
     ## Message handler
 
 def msgHandler(mid, data):
-    if mid in ignoreMsgs:
+    if ignoreMsgs.has_key(mid):
         log.debug('OSClient', 'ignoring message', mid, data)
         return
     if mid == Const.SMESSAGE_NEWTURN:
@@ -129,7 +125,7 @@ def messageIgnore(mid):
 
 def messageEnable(mid):
     global ignoreMsgs
-    if mid in ignoreMsgs:
+    if ignoreMsgs.has_key(mid):
         del ignoreMsgs[mid]
 
 ## Idle handler
@@ -178,7 +174,7 @@ def updateDatabaseUnsafe(clearDB = 0, force = 0):
     callbackObj.onUpdateProgress(current, max, _("Deleting obsolete data..."))
     # delete selected objects
     # reset combatCounters
-    for objID in list(db.keys()):
+    for objID in db.keys():
         obj = db[objID]
         if hasattr(obj, "combatCounter"):
             obj.combatCounter = 0
@@ -236,7 +232,7 @@ def keepAlive(force = False):
 
 def get(objID, forceUpdate = 0, noUpdate = 0, canBePublic = 1, publicOnly = 0):
     global nonexistingObj
-    if objID in nonexistingObj and not forceUpdate:
+    if nonexistingObj.has_key(objID) and not forceUpdate:
         return None
     if noUpdate:
         return db.get(objID, None)
@@ -249,7 +245,7 @@ def get(objID, forceUpdate = 0, noUpdate = 0, canBePublic = 1, publicOnly = 0):
             else:
                 return db.get(objID, None)
         except ige.NoSuchObjectException:
-            if objID in db:
+            if db.has_key(objID):
                 del db[objID]
             nonexistingObj[objID] = None
             return None
@@ -257,7 +253,7 @@ def get(objID, forceUpdate = 0, noUpdate = 0, canBePublic = 1, publicOnly = 0):
         try:
             db[objID] = cmdProxy.getPublicInfo(objID)
         except ige.NoSuchObjectException:
-            if objID in db:
+            if db.has_key(objID):
                 del db[objID]
             nonexistingObj[objID] = None
             return None
@@ -269,7 +265,7 @@ def updateIDs(objIDs):
         db[obj.oid] = obj
         delete.remove(obj.oid)
     for objID in delete:
-        if objID in db:
+        if db.has_key(objID):
             del db[objID]
 
 def getRelationTo(objID):
@@ -334,7 +330,7 @@ def getTechInfo(techID):
     return result
 
 def getAllTechIDs():
-    return list(Rules.techs.keys())
+    return Rules.techs.keys()
 
 def getPlayerID():
     return db.playerID

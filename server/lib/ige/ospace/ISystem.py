@@ -17,18 +17,15 @@
 #  along with Outer Space; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-
-def _(msg): return msg
-
 import random
 import copy
 
 from xml.dom.minidom import Node
 
 import ige
-from . import Const
-from . import Rules
-from . import Utils
+import Const
+import Rules
+import Utils
 
 from ige import log
 from ige.IObject import IObject, public
@@ -46,7 +43,7 @@ class ISystem(IObject):
         obj.planets = []
         obj.fleets = []
         obj.closeFleets = []
-        obj.starClass = '---' # Star clasification
+        obj.starClass = u'---' # Star clasification
         obj.signature = 100
         # renaming
         obj.lastNameChng = 0
@@ -61,7 +58,7 @@ class ISystem(IObject):
         # check existence of all planets
         if 0:
             for planetID in obj.planets:
-                if planetID not in tran.db:
+                if not tran.db.has_key(planetID):
                     log.debug("CONSISTENCY - planet %d from system %d does not exists" % (planetID, obj.oid))
                 elif tran.db[planetID].type != Const.T_PLANET:
                     log.debug("CONSISTENCY - planet %d from system %d is not a Const.T_PLANET" % (planetID, obj.oid))
@@ -72,7 +69,7 @@ class ISystem(IObject):
                 obj.closeFleets.append(fleetID)
         # check existence of all fleets
         for fleetID in obj.closeFleets:
-            if fleetID not in tran.db:
+            if not tran.db.has_key(fleetID):
                 log.debug("CONSISTENCY - fleet %d from system %d does not exists" % (fleetID, obj.oid))
             elif tran.db[fleetID].type != Const.T_FLEET:
                 log.debug("CONSISTENCY - fleet %d from system %d is not a Const.T_FLEET" % (fleetID, obj.oid))
@@ -88,7 +85,7 @@ class ISystem(IObject):
             else:
                 index += 1
         # check compOf
-        if obj.compOf not in tran.db or tran.db[obj.compOf].type != Const.T_GALAXY:
+        if not tran.db.has_key(obj.compOf) or tran.db[obj.compOf].type != Const.T_GALAXY:
             log.debug("CONSISTENCY invalid compOf for system", obj.oid)
         # rebuild closeFleets attribute
         old = obj.closeFleets
@@ -176,7 +173,7 @@ class ISystem(IObject):
         # group planets if owners are allied
         # TODO
         # process each group
-        for owner in list(planets.keys()):
+        for owner in planets.keys():
             # skip alone planets
             if len(planets[owner]) < 2:
                 continue
@@ -462,17 +459,17 @@ class ISystem(IObject):
             # send messages about mine effects to the owner of the minefield
             # collect hit players
             players = {}
-            for triggerID in list(firing.keys()):
+            for triggerID in firing.keys():
                 players[owners[triggerID]] = None
             controllerPlanet = tran.db.get(controlPlanetID, None)
             damageCausedSum = 0
             killsCausedSum = 0
-            for mineID in list(damageCaused.keys()):
+            for mineID in damageCaused.keys():
                 damageCausedSum = damageCausedSum + damageCaused.get(mineID, 0)
                 killsCausedSum = killsCausedSum + killsCaused.get(mineID, 0)
-            Utils.sendMessage(tran, controllerPlanet, Const.MSG_MINES_OWNER_RESULTS, system.oid, (list(players.keys()),(damageCaused, killsCaused, minesTriggered),damageCausedSum,killsCausedSum))
+            Utils.sendMessage(tran, controllerPlanet, Const.MSG_MINES_OWNER_RESULTS, system.oid, (players.keys(),(damageCaused, killsCaused, minesTriggered),damageCausedSum,killsCausedSum))
         # send messages to the players whose fleets got hit by minefields
-        for targetID in list(damageTaken.keys()):
+        for targetID in damageTaken.keys():
             targetFleet = tran.db.get(targetID, None)
             if targetFleet:
                 Utils.sendMessage(tran, targetFleet, Const.MSG_MINES_FLEET_RESULTS, system.oid, (damageTaken[targetID], shipsLost[targetID]))
@@ -538,7 +535,7 @@ class ISystem(IObject):
                         # process from weaponClass up
                         # never shoot on smaller ships than weaponClass
                         applied = 0
-                        for tmpWpnClass in range(weaponClass, 4):
+                        for tmpWpnClass in xrange(weaponClass, 4):
                             #@log.debug('ISystem', 'Trying target class', tmpWpnClass, totalClass[tmpWpnClass])
                             # select target
                             if totalClass[tmpWpnClass]:
@@ -587,7 +584,7 @@ class ISystem(IObject):
                 l = shipsLost.get(objID, 0)
                 if d1 or d2 or l:
                     # send only if damage is taken/caused
-                    Utils.sendMessage(tran, source, Const.MSG_COMBAT_RESULTS, system.oid, (d1, d2, l, list(players.keys())))
+                    Utils.sendMessage(tran, source, Const.MSG_COMBAT_RESULTS, system.oid, (d1, d2, l, players.keys()))
                 if not obj:
                     # report DESTROYED status
                     Utils.sendMessage(tran, source, Const.MSG_DESTROYED_FLEET, system.oid, ())
@@ -610,10 +607,10 @@ class ISystem(IObject):
                 continue
             surrenderTo = []
             for attID in attack[objID]:
-                if firing[attID] and attID in tran.db:
+                if firing[attID] and tran.db.has_key(attID):
                     surrenderTo.append(tran.db[attID].owner)
             for allyID in allies[objID]:
-                if allyID not in tran.db:
+                if not tran.db.has_key(allyID):
                     continue
                 ally = tran.db[allyID]
                 if firing[allyID] and ally.type != Const.T_PLANET:
@@ -648,7 +645,7 @@ class ISystem(IObject):
             planet = tran.db[planetID]
             if planet.owner not in owners:
                 owners.append(planet.owner)
-        for ownerid in list(obj.minefield.keys()):
+        for ownerid in obj.minefield.keys():
             if ownerid not in owners:
                 self.clearMines(obj, ownerid)
         return obj.planets[:] + obj.closeFleets[:]

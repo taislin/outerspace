@@ -17,9 +17,6 @@
 #  along with Outer Space; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-
-def _(msg): return msg
-
 import math
 
 import pygameui as ui
@@ -28,10 +25,10 @@ import ige
 from ige.ospace import Rules, Utils, TechHandlers
 import ige.ospace.Const as Const
 
-from osci import client, resr, gdata
+from osci import client, res, gdata
 
-from .TechInfoDlg import TechInfoDlg
-from .ConfirmDlg import ConfirmDlg
+from TechInfoDlg import TechInfoDlg
+from ConfirmDlg import ConfirmDlg
 
 class ResearchDlg:
 
@@ -73,7 +70,7 @@ class ResearchDlg:
         item.tShip = '*' if getattr(tech, 'isShipEquip', None) else ''
 
         neededSci = Utils.getTechRCost(player, tech.id)
-        item.tETC = resr.formatTime(float(neededSci) / player.effSciPoints) if player.effSciPoints > 0 else _("N/A")
+        item.tETC = res.formatTime(float(neededSci) / player.effSciPoints) if player.effSciPoints > 0 else _("N/A")
         item.foreground = None
 
         if client.getFullTechInfo(tech.id).finishResearchHandler == TechHandlers.finishResTLAdvance:
@@ -113,18 +110,18 @@ class ResearchDlg:
             etc = float(researchSci - task.currSci) / max(task.changeSci, player.effSciPoints)
             totalSci += researchSci - task.currSci
             if player.effSciPoints > 0:
-                item.tETC = resr.formatTime(etc)
+                item.tETC = res.formatTime(etc)
             else:
-                item.tETC = resr.getNA()
+                item.tETC = res.getNA()
         elif task.changeSci < 0:
             etc = - float(task.currSci) / min(task.changeSci, player.effSciPoints)
-            item.tETC = _("[%s]") % resr.formatTime(etc)
+            item.tETC = _("[%s]") % res.formatTime(etc)
         elif player.effSciPoints > 0:
             etc = float(researchSci) / player.effSciPoints
             totalSci += researchSci
-            item.tETC = resr.formatTime(etc)
+            item.tETC = res.formatTime(etc)
         else:
-            item.tETC = resr.getNA()
+            item.tETC = res.getNA()
 
         if task.improveToMax:
             for impr in range(task.improvement + 1, fulltech.maxImprovement + 1):
@@ -156,7 +153,7 @@ class ResearchDlg:
         self.win.vRQueueRepat.enabled = 0
         self.win.vRQueueRepat.pressed = 0
         self.win.vRQueueInfo.enabled = 0
-        self.win.vRTotal.text = resr.formatTime(totalSci) if totalSci else _("N/A")
+        self.win.vRTotal.text = res.formatTime(totalSci) if totalSci else _("N/A")
         return queued
 
     def _processImprovableTech(self, tech, scheduledIDs):
@@ -168,7 +165,7 @@ class ResearchDlg:
                        tStruct=(' ', '*')[tech.isStructure],
                        tShip=(' ', '*')[tech.isShipEquip])
         neededSci = Utils.getTechRCost(player, tech.id)
-        item.tETC = resr.formatTime(float(neededSci) / player.effSciPoints) if player.effSciPoints > 0 else _("N/A")
+        item.tETC = res.formatTime(float(neededSci) / player.effSciPoints) if player.effSciPoints > 0 else _("N/A")
         item.foreground = (0xd0, 0xd0, 0xd0) if tech.id in scheduledIDs else None
         item.foreground = (0x80, 0x40, 0x40) if tech.id in player.obsoleteTechs else item.foreground
         return item
@@ -179,7 +176,7 @@ class ResearchDlg:
         items = []
         disabled = []
         scheduledIDs = set([task.techID for task in player.rsrchQueue])
-        for techID in list(player.techs.keys()):
+        for techID in player.techs.keys():
             if techID in player.obsoleteTechs and not self.showObsolete:
                 continue
             tech = client.getTechInfo(techID)
@@ -254,7 +251,7 @@ class ResearchDlg:
             player = client.getPlayer()
             player.rsrchQueue = client.cmdProxy.startResearch(player.oid, techID)
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(e.args[0])
             return
         self.update()
@@ -270,7 +267,7 @@ class ResearchDlg:
             player = client.getPlayer()
             player.rsrchQueue = client.cmdProxy.startResearch(player.oid, techID)
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(e.args[0])
             return
         self.update()
@@ -329,7 +326,7 @@ class ResearchDlg:
             player = client.getPlayer()
             player.obsoleteTechs = client.cmdProxy.addObsoleteTechs(player.oid, techID)
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(e.args[0])
             return
         self.update()
@@ -345,7 +342,7 @@ class ResearchDlg:
             player = client.getPlayer()
             player.obsoleteTechs = client.cmdProxy.delObsoleteTechs(player.oid, techID)
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(e.args[0])
             return
         self.update()

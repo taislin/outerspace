@@ -53,14 +53,14 @@ def bytes2int(bytes):
     8405007
     """
 
-    if not (type(bytes) is list or type(bytes) is bytes):
+    if not (type(bytes) is list or type(bytes) is StringType):
         raise TypeError("You must pass a string or a list")
 
     # Convert byte stream to integer
     integer = 0
     for byte in bytes:
         integer *= 256
-        if type(byte) is bytes: byte = ord(byte)
+        if type(byte) is StringType: byte = ord(byte)
         integer += byte
 
     return integer
@@ -72,7 +72,7 @@ def int2bytes(number):
     123456789
     """
 
-    if not (type(number) is int or type(number) is int):
+    if not (type(number) is LongType or type(number) is IntType):
         raise TypeError("You must pass a long or an int")
 
     string = ""
@@ -266,7 +266,7 @@ def extended_euclid_gcd(a, b):
         return (a, 1, 0)
 
     q = abs(a % b)
-    r = int(a / b)
+    r = long(a / b)
     (d, k, l) = extended_euclid_gcd(b, q)
 
     return (d, l, k - l*r)
@@ -328,10 +328,10 @@ def encrypt_int(message, ekey, n):
     """Encrypts a message using encryption key 'ekey', working modulo
     n"""
 
-    if type(message) is int:
-        return encrypt_int(int(message), ekey, n)
+    if type(message) is IntType:
+        return encrypt_int(long(message), ekey, n)
 
-    if not type(message) is int:
+    if not type(message) is LongType:
         raise TypeError("You must pass a long or an int")
 
     if message > 0 and \

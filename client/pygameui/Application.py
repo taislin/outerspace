@@ -18,15 +18,12 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import pygame
 import pygame, pygame.time, pygame.mouse
 
-from . import SkinableTheme
-from .Tooltip import Tooltip
-from . import Const
+import SkinableTheme
+from Tooltip import Tooltip
+import Const
 
 # enable only if you want OpenGL support
 #try:

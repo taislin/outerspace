@@ -17,12 +17,9 @@
 #  along with Outer Space; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-
-def _(msg): return msg
-
 import types
 
-from .IDataHolder import IDataHolder
+from IDataHolder import IDataHolder
 import zlib, string
 
 __all__ = ('EncodeException', 'DecodeException', 'IPacket', 'IMarshal')
@@ -46,7 +43,7 @@ class IPacket:
 
     def __repr__(self):
         result = '<%s.%s %d ' % (self.__class__.__module__, self.__class__.__name__, id(self))
-        for key, value in list(self.__dict__.items()):
+        for key, value in self.__dict__.items():
             result += '%s=%s, ' % (key, repr(value))
         result += '>'
         return result
@@ -64,7 +61,7 @@ class IMarshal:
 
     def decode(self, str):
         prefix = str[:3]
-        if prefix == 'V20':
+        if prefix == u'V20':
             data = pickle.loads(zlib.decompress(str[3:]))
         else:
             raise DecodeException('Cannot handle version %s [message: %s]' % (prefix, str))
@@ -78,7 +75,7 @@ compress = {}
 
 decompress = {}
 
-for key, value in list(compress.items()):
+for key, value in compress.items():
     decompress[str(value)] = key
 
 # statistics
@@ -100,9 +97,9 @@ try:
     fh = open('var/marshal.stats.data', 'rb')
     stats = pickle.load(fh)
     fh.close()
-except IOError as e:
+except IOError, e:
     stats = Stats()
-except EOFError as e:
+except EOFError, e:
     stats = Stats()
 
 def saveStats(directory):
@@ -113,41 +110,41 @@ def saveStats(directory):
     fh.close()
     # various data
     keys = []
-    for key in list(stats.data.keys()):
+    for key in stats.data.keys():
         keys.append((len(key) * stats.data[key],key))
     keys.sort()
     keys.reverse()
     fstats = open(os.path.join(directory, 'marshal.stats'), 'w')
     fscheme = open(os.path.join(directory, 'marshal.cscheme'), 'w')
     fpysrc = open(os.path.join(directory, 'marshal.cscheme.py'), 'w')
-    print('compress = {', file=fpysrc)
-    print('# Summary', file=fstats)
-    print('# Total strings:', stats.total, file=fstats)
-    print('# Compressed strings:', stats.hits, file=fstats)
-    print('# Uncompressed strings:', stats.total - stats.hits, file=fstats)
-    print('# Ratio:', stats.hits / stats.total * 100, '%', file=fstats)
-    print('# Uncompressed size:', stats.totalBytes, file=fstats)
-    print('# Compressed size:', stats.totalBytes - stats.savedBytes, file=fstats)
-    print('# Saved bytes:', stats.savedBytes, file=fstats)
-    print('# Ratio:', stats.savedBytes / stats.totalBytes * 100, '%', file=fstats)
-    print('# Encoded pckt bytes total:', stats.encBytes, file=fstats)
-    print('# Encoded pckt bytes total (no compression, est.):', stats.encBytes + stats.savedBytes, file=fstats)
-    print('# Ratio:', stats.encBytes / (stats.encBytes + stats.savedBytes) * 100, '%', file=fstats)
-    print('# Encoded pckt bytes total (zipped):', stats.zipBytes, file=fstats)
-    print('# Ratio (to compressed):', stats.zipBytes / stats.encBytes * 100, '%', file=fstats)
-    print('# Ratio (to uncompressed):', stats.zipBytes / (stats.encBytes + stats.savedBytes)* 100 , '%', file=fstats)
-    print('# total bytes,number of items,string', file=fstats)
+    print >> fpysrc, 'compress = {'
+    print >> fstats, '# Summary'
+    print >> fstats, '# Total strings:', stats.total
+    print >> fstats, '# Compressed strings:', stats.hits
+    print >> fstats, '# Uncompressed strings:', stats.total - stats.hits
+    print >> fstats, '# Ratio:', stats.hits / stats.total * 100L, '%'
+    print >> fstats, '# Uncompressed size:', stats.totalBytes
+    print >> fstats, '# Compressed size:', stats.totalBytes - stats.savedBytes
+    print >> fstats, '# Saved bytes:', stats.savedBytes
+    print >> fstats, '# Ratio:', stats.savedBytes / stats.totalBytes * 100L, '%'
+    print >> fstats, '# Encoded pckt bytes total:', stats.encBytes
+    print >> fstats, '# Encoded pckt bytes total (no compression, est.):', stats.encBytes + stats.savedBytes
+    print >> fstats, '# Ratio:', stats.encBytes / (stats.encBytes + stats.savedBytes) * 100L, '%'
+    print >> fstats, '# Encoded pckt bytes total (zipped):', stats.zipBytes
+    print >> fstats, '# Ratio (to compressed):', stats.zipBytes / stats.encBytes * 100L, '%'
+    print >> fstats, '# Ratio (to uncompressed):', stats.zipBytes / (stats.encBytes + stats.savedBytes)* 100L , '%'
+    print >> fstats, '# total bytes,number of items,string'
     index = 0
     for key in keys:
         count, name = key
-        print('%d,%d,%s' % (count, stats.data[name], name), file=fstats)
+        print >> fstats, '%d,%d,%s' % (count, stats.data[name], name)
         code = makeCode(index)
         # include in scheme when there is save in bytes
         if len(code) < len(name):
-            print(code, name, file=fscheme)
-            print("    '%s' : '%s'," % (name, code), file=fpysrc)
+            print >> fscheme, code, name
+            print >> fpysrc, "    '%s' : '%s'," % (name, code)
         index += 1
-    print('}', file=fpysrc)
+    print >>fpysrc, '}'
     fstats.close()
     fscheme.close()
     fpysrc.close()
@@ -171,7 +168,7 @@ if __name__ == '__main__':
     packet = IPacket()
     packet.sid = '0123456789'
     packet.method = 'test'
-    packet.params = { 'name':'Corvus', 'componentOf':1001, 'rules':[1,2], 'isA': (1,2) }
+    packet.params = { 'name':u'Corvus', 'componentOf':1001, 'rules':[1,2], 'isA': (1,2) }
     marshal = IMarshal()
 
     str = marshal.encode(packet)

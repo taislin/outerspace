@@ -17,21 +17,18 @@
 #  along with Outer Space; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-
-def _(msg): return msg
-
 import math
 import random
 import sys
 
-from . import Const
-from . import Rules
-from . import Utils
+import Const
+import Rules
+import Utils
 
 from ige import log
 from ige.IDataHolder import IDataHolder
 from ige.IObject import public
-from .IPlayer import IPlayer
+from IPlayer import IPlayer
 
 class IPiratePlayer(IPlayer):
 
@@ -102,7 +99,7 @@ class IPiratePlayer(IPlayer):
 
     def distToNearestPiratePlanet(self,tran,obj,srcObj):
         # srcObj can be Planet or System type
-        dist = sys.maxsize
+        dist = sys.maxint
         for objID in obj.planets:
             pirPl = tran.db[objID]
             d = math.hypot(srcObj.x - pirPl.x, srcObj.y - pirPl.y)
@@ -154,7 +151,7 @@ class IPiratePlayer(IPlayer):
         Utils.sendMessage(tran, piratePlayer, Const.MSG_GAINED_TECH, stealFromPlanetID, (techID, piratePlayer.techs[techID]))
 
     def forceAllyWithEDEN(self,tran,obj):
-        for partyID in list(obj.diplomacyRels.keys()):
+        for partyID in obj.diplomacyRels.keys():
             party = tran.db.get(partyID, None)
             if party.type == Const.T_AIEDENPLAYER:
                 diplSelf = obj.diplomacyRels.get(party.oid, None)

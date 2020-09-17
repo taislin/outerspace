@@ -18,13 +18,10 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import pygameui as ui
 from osci.StarMapWidget import StarMapWidget
 from ige.ospace import Rules
-from osci import gdata, resr, client, sequip
+from osci import gdata, res, client, sequip
 import ige.ospace.Const as Const
 from ige import log
 import ige
@@ -106,17 +103,17 @@ class FleetCommandDlg:
             info = _('No target selected')
         elif self.command in (Const.FLACTION_MOVE, Const.FLACTION_REFUEL, Const.FLACTION_ENTERWORMHOLE):
             target = client.get(self.targetID, noUpdate = 1)
-            info = getattr(target, 'name', resr.getUnknownName())
+            info = getattr(target, 'name', res.getUnknownName())
         elif self.command == Const.FLACTION_DEPLOY:
             target = client.get(self.targetID, noUpdate = 1)
             if target.type == Const.T_PLANET:
-                info = getattr(target, 'name', resr.getUnknownName())
+                info = getattr(target, 'name', res.getUnknownName())
             else:
                 info = _('No planet selected')
         elif self.command == Const.FLACTION_DECLAREWAR:
             if self.targetPlayerID not in (Const.OID_NONE, client.getPlayerID()):
                 target = client.get(self.targetPlayerID, noUpdate = 1)
-                info = getattr(target, 'name', resr.getUnknownName())
+                info = getattr(target, 'name', res.getUnknownName())
             else:
                 info = _("No commander specified.")
         else:
@@ -146,7 +143,7 @@ class FleetCommandDlg:
         if eta is None or not targetIDs:
             self.win.vEta.text = _("N/A")
         else:
-            self.win.vEta.text = resr.formatTime(eta)
+            self.win.vEta.text = res.formatTime(eta)
 
         # ships
         fleet = client.get(self.fleetDlg.fleetID, noUpdate = 1)
@@ -268,7 +265,7 @@ class FleetCommandDlg:
             self.hide()
             self.fleetDlg.update()
             gdata.mainGameDlg.update()
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(_(e.args[0]))
 
     def createUI(self):

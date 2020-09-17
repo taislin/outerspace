@@ -18,15 +18,12 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import pygameui as ui
-from osci import client, gdata, resr
-from .NewAccountDlg import NewAccountDlg
-from .PlayerSelectDlg import PlayerSelectDlg
-from .ConfirmDlg import ConfirmDlg
-from .OptionsDlg import OptionsDlg
+from osci import client, gdata, res
+from NewAccountDlg import NewAccountDlg
+from PlayerSelectDlg import PlayerSelectDlg
+from ConfirmDlg import ConfirmDlg
+from OptionsDlg import OptionsDlg
 import binascii
 from ige import log
 from igeclient.IClient import IClientException
@@ -236,7 +233,7 @@ class LoginDlg:
         ui.Title(self.win, layout = (0, 6, 11, 1), id = 'vMessage', align = ui.ALIGN_W)
         ui.TitleButton(self.win, layout = (11, 6, 5, 1), text = _('Exit'), action = 'onCancel')
         loginBtn = ui.TitleButton(self.win, layout = (16, 6, 5, 1), text = _('Login'), action = 'onLogin')
-        ui.Label(self.win, layout = (0, 0, 5, 4), icons = ((resr.loginLogoImg, ui.ALIGN_W),))
+        ui.Label(self.win, layout = (0, 0, 5, 4), icons = ((res.loginLogoImg, ui.ALIGN_W),))
         self.win.acceptButton = loginBtn
         # Universe selection
         self.universeMenu = ui.Menu(self.app, title = _("Universes"),

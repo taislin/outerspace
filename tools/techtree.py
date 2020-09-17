@@ -1,4 +1,5 @@
 
+#
 #  Copyright 2001 - 2018 Ludek Smid [http://www.ospace.net/]
 #
 #  This file is part of Outer Space.
@@ -17,9 +18,6 @@
 #  along with Outer Space; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-
-def _(msg): return msg
-
 
 # setup library path
 import sys
@@ -105,7 +103,7 @@ class Node(object):
     @property
     def subtree_row(self):
         if self.children:
-            return sum([x.subtree_row for x in self.children])
+            return sum(map(lambda x: x.subtree_row, self.children))
         else:
             return 1
 
@@ -144,7 +142,7 @@ class Node(object):
         if self.tech.level > tl:
             return 0
         if self.children:
-            child_offset = max([x.tl_offset(tl) for x in self.children])
+            child_offset = max(map(lambda x: x.tl_offset(tl), self.children))
         else:
             child_offset = 0
         if self.tech.level == tl:
@@ -189,7 +187,7 @@ class RootNode(Node):
 
     def tl_offset(self, tl):
         if self.children:
-            return max([x.tl_offset(tl) for x in self.children])
+            return max(map(lambda x: x.tl_offset(tl), self.children))
         else:
             return 0
 
@@ -237,7 +235,7 @@ class Grid(object):
         return new_list
     
     def print_ascii(self):
-        print((len(self.get_list()), self.get_list()))
+        print(len(self.get_list()), self.get_list())
 
     def cell_size(self, node):
         font = pygame.font.Font(FONT_TYPE, FONT_SIZE)
@@ -350,7 +348,7 @@ def add_techs(grid, techs):
 def techtree(filename, races):
     # process tree
     grid = Grid()
-    techs = [tech for tech in list(Rules.techs.values()) if useful_tech(tech, races)]
+    techs = [tech for tech in list(Rules.techs.itervalues()) if useful_tech(tech, races)]
     techs = sorted(techs, key=lambda x: x.level)
     # adding roots
     for tech in techs:

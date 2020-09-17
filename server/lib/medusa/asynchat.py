@@ -47,7 +47,7 @@ you - by calling your self.found_terminator() method.
 """
 
 import socket
-from . import asyncore
+import asyncore
 import string
 
 class async_chat (asyncore.dispatcher):
@@ -81,11 +81,11 @@ class async_chat (asyncore.dispatcher):
 
         try:
             data = self.recv (self.ac_in_buffer_size)
-        except socket.error as why:
+        except socket.error, why:
             self.handle_error()
             return
 
-        self.ac_in_buffer = str(self.ac_in_buffer).join(str(data))
+        self.ac_in_buffer = self.ac_in_buffer + data
 
         # Continue to search for self.terminator in self.ac_in_buffer,
         # while calling self.collect_incoming_data.  The while loop
@@ -120,7 +120,7 @@ class async_chat (asyncore.dispatcher):
                 # 3) end of buffer does not match any prefix:
                 #    collect data
                 terminator_len = len(terminator)
-                index = self.ac_in_buffer.find(terminator)
+                index = string.find (self.ac_in_buffer, terminator)
                 if index != -1:
                     # we found the terminator
                     if index > 0:
@@ -166,7 +166,7 @@ class async_chat (asyncore.dispatcher):
         # return len(self.ac_out_buffer) or len(self.producer_fifo) or (not self.connected)
         # this is about twice as fast, though not as clear.
         return not (
-            (self.ac_out_buffer == '') and
+            (self.ac_out_buffer is '') and
             self.producer_fifo.is_empty() and
             self.connected
             )
@@ -215,7 +215,7 @@ class async_chat (asyncore.dispatcher):
                 if num_sent:
                     self.ac_out_buffer = self.ac_out_buffer[num_sent:]
 
-            except socket.error as why:
+            except socket.error, why:
                 self.handle_error()
                 return
 

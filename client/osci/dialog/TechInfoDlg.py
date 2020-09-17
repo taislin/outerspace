@@ -17,9 +17,6 @@
 #  along with Outer Space; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-
-def _(msg): return msg
-
 import string
 
 import pygameui as ui
@@ -27,9 +24,8 @@ import pygameui as ui
 from ige.ospace import Rules, Utils
 import ige.ospace.Const as Const
 
-from osci import gdata, resr, client
+from osci import gdata, res, client
 
-def _(msg): return msg
 
 def cclass2Text(cclass):
     return [_("small"), _("medium"), _("large"), _("planet")][cclass]
@@ -377,7 +373,7 @@ class TechInfoDlg:
 
         # description
         descr.append(_('Description:'))
-        if tech.textDescr != 'Not specified':
+        if tech.textDescr != u'Not specified':
             descr.extend(tech.textDescr.split('\n'))
         else:
             descr.extend(tech.textPreRsrch.split('\n'))

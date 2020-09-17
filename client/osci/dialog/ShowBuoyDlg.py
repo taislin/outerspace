@@ -18,9 +18,6 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import pygameui as ui, string
 from osci import client, gdata
 import ige.ospace.Const as Const
@@ -37,9 +34,9 @@ class ShowBuoyDlg:
         if hasattr(player, "buoys") and objID in player.buoys:
             label = _("Private buoy text")
             if player.buoys[objID][1] == Const.BUOY_TO_ALLY:
-                label = "%s%s:" % (label, _(" (visible to allies)"))
+                label = u"%s%s:" % (label, _(" (visible to allies)"))
             else:
-                label = "%s:" % label
+                label = u"%s:" % label
             text.append(label)
             text.extend(player.buoys[objID][0].split("\n"))
             text.append("")

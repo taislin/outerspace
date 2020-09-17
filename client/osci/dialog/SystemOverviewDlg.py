@@ -18,12 +18,9 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import pygameui as ui
 from osci.StarMapWidget import StarMapWidget
-from osci import gdata, resr, client, sequip
+from osci import gdata, res, client, sequip
 import ige.ospace.Const as Const
 from ige.ospace import ShipUtils, Rules
 from ige import GameException
@@ -61,7 +58,7 @@ class SystemOverviewDlg:
         items = []
         player = client.getPlayer()
         #
-        for systemID in list(client.db.keys()):
+        for systemID in client.db.keys():
             if systemID == player.oid:
                 continue
             system = client.get(systemID, noUpdate=1)
@@ -135,11 +132,11 @@ class SystemOverviewDlg:
                 else:
                     speedBoost = ''
                 if self.showProblems:
-                    color = resr.getSystemOverviewProblemColor(useOwner, problem)
+                    color = res.getSystemOverviewProblemColor(useOwner, problem)
                 else:
-                    color = resr.getPlayerColor(useOwner)
+                    color = res.getPlayerColor(useOwner)
                 item = ui.Item(
-                    getattr(system, 'name', resr.getUnknownName()),
+                    getattr(system, 'name', res.getUnknownName()),
                     tSyPnum=planetsMine + planetsOwned + planetsUnowned + planetsGA,
                     tSyPTnum=planetsNotMine,
                     tSyPYnum=planetsMine,

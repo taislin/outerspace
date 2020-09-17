@@ -18,11 +18,8 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import pygameui as ui
-from osci import gdata, resr, client
+from osci import gdata, res, client
 import ige.ospace.Const as Const
 import ige, string
 
@@ -79,7 +76,7 @@ class NewMessageDlg:
             text = ""
             for objId in self.recipientObjID:
                 recipient = client.get(objId)
-                text = "%s, %s" % (text, _("%s / %s") % (recipient.name, _(self.msgSpec[0])))
+                text = u"%s, %s" % (text, _("%s / %s") % (recipient.name, _(self.msgSpec[0])))
             self.win.vRecipient.text = text[2:]
             self.win.vRecipient.action = None
         else:
@@ -114,7 +111,7 @@ class NewMessageDlg:
         for item in self.cwin.vContacts.selection:
             self.recipientObjID.append(item.tRecipientID)
             recipient = client.get(item.tRecipientID)
-            text = "%s, %s" % (text, _("%s / %s") % (recipient.name, _(self.msgSpec[0])))
+            text = u"%s, %s" % (text, _("%s / %s") % (recipient.name, _(self.msgSpec[0])))
         self.win.vRecipient.text = text[2:]
         self.cwin.hide()
 
@@ -136,7 +133,7 @@ class NewMessageDlg:
             message = {
                 "forum": self.recipientForum,
                 "topic": self.win.vTopic.text,
-                "text": str.join(self.win.vText.text, "\n"),
+                "text": string.join(self.win.vText.text, "\n"),
             }
             # send message to all recipients
             for objID in self.recipientObjID:
@@ -147,7 +144,7 @@ class NewMessageDlg:
                 recipients = ""
                 for objID in self.recipientObjID:
                     recipient = client.get(objID)
-                    recipients = "%s, %s" % (recipients, recipient.name)
+                    recipients = u"%s, %s" % (recipients, recipient.name)
 
                 message = {
                     "forum": "OUTBOX",
@@ -163,7 +160,7 @@ class NewMessageDlg:
                 }
                 client.cmdProxy.sendMsg(client.getPlayerID(), message)
             self.win.setStatus(_("Command has been executed."))
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(e.args[0])
             return
         client.getMessages()

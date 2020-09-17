@@ -124,7 +124,7 @@ class AbstractSimpleAsn1Item(Asn1ItemBase):
 # * Value initialization is made for defaulted components only
 # * Primary method of component addressing is by-position. Data model for base
 #   type is Python sequence. Additional type-specific addressing methods
-#   may be implemented for particular types.
+#   may be implemented for particular 
 # * SequenceOf and SetOf types do not implement any additional methods
 # * Sequence, Set and Choice types also implement by-identifier addressing
 # * Sequence, Set and Choice types also implement by-asn1-type (tag) addressing

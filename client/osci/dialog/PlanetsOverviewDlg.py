@@ -18,12 +18,9 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import pygameui as ui
 from osci.StarMapWidget import StarMapWidget
-from osci import gdata, resr, client, sequip
+from osci import gdata, res, client, sequip
 import ige.ospace.Const as Const
 from ige.ospace import ShipUtils, Rules
 from ige import GameException
@@ -90,8 +87,8 @@ class PlanetsOverviewDlg:
                     etc = math.ceil(float(prodFirst) / planet.effProdProd)
                 totalProd += prodFirst + prodNext
                 index += 1
-            etc = resr.formatTime(etc)
-            totalEtc = resr.formatTime(math.ceil(float(totalProd) / planet.effProdProd))
+            etc = res.formatTime(etc)
+            totalEtc = res.formatTime(math.ceil(float(totalProd) / planet.effProdProd))
         elif planet.prodQueue:
             task = planet.prodQueue[0]
             if task.isShip:
@@ -112,7 +109,7 @@ class PlanetsOverviewDlg:
         player = client.getPlayer()
 
         items = []
-        for planetID in list(client.db.keys()):
+        for planetID in client.db.keys():
             planet = client.get(planetID, noUpdate=1)
             # skip non-planets
             if not hasattr(planet, "type") or planet.type != Const.T_PLANET:
@@ -140,7 +137,7 @@ class PlanetsOverviewDlg:
 
             plType = gdata.planetTypes[getattr(planet, 'plType', None)]
             # list item
-            item = ui.Item(getattr(planet, 'name', resr.getUnknownName()),
+            item = ui.Item(getattr(planet, 'name', res.getUnknownName()),
                            tPlType=_(plType),
                            tPlBio=getattr(planet, 'plBio', '?'),
                            tPlMin=getattr(planet, 'plMin', '?'),

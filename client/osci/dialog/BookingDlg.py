@@ -17,9 +17,6 @@
 #  along with Outer Space; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-
-def _(msg): return msg
-
 import time
 
 import pygameui as ui
@@ -28,7 +25,7 @@ import ige
 import ige.ospace.Const as Const
 from osci import client
 from osci import gdata
-from .PasswordDlg import PasswordDlg
+from PasswordDlg import PasswordDlg
 
 
 class BookingDlg:
@@ -119,10 +116,10 @@ class BookingDlg:
             self.win.vPlanets.text = _('{0} - {1}'.format(selection.minPlanets, selection.maxPlanets))
             self.win.vRadius.text = selection.radius
             self.win.vPlayerGroup.text = selection.playerGroup
-            self.win.vResources.text = [", ".join([gdata.stratRes[x] for x in selection.resources])]
+            self.win.vResources.text = [", ".join(map(lambda x: gdata.stratRes[x], selection.resources))]
             self.win.vResources.offsetRow = 0
             if selection.challenges:
-                self.win.vChallenges.text = ", ".join([gdata.gameChallenges[x] for x in selection.challenges])
+                self.win.vChallenges.text = ", ".join(map(lambda x: gdata.gameChallenges[x], selection.challenges))
             else:
                 self.win.vChallenges.text = ""
 

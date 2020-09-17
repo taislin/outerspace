@@ -17,15 +17,12 @@
 #  along with Pygame.UI; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-
-def _(msg): return msg
-
 import pygame
 
-from . import Const
-from .Widget import widgets, registerWidget
-from .MetaWidget import MetaWidget
-from .Button import Button
+import Const
+from Widget import widgets, registerWidget
+from MetaWidget import MetaWidget
+from Button import Button
 
 class Window(MetaWidget):
 

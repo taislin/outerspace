@@ -68,7 +68,7 @@ def int2bytes(number, block_size=None):
     '''
 
     # Type checking
-    if type(number) not in (int, int):
+    if type(number) not in (LongType, IntType):
         raise TypeError("You must pass an integer for 'number', not %s" %
             number.__class__)
 

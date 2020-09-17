@@ -18,8 +18,7 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-from collections import UserDict
+from UserDict import UserDict
 
 class Index(UserDict):
     pass

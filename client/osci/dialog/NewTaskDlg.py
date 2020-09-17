@@ -18,9 +18,6 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import math
 
 import pygameui as ui
@@ -29,11 +26,11 @@ from ige import GameException
 from ige.ospace import Rules
 import ige.ospace.Const as Const
 
-from osci import gdata, client, resr
-from .TechInfoDlg import TechInfoDlg
-from .ConstructionDlg import ConstructionDlg
-from .ConfirmDlg import ConfirmDlg
-from . import Utils
+from osci import gdata, client, res
+from TechInfoDlg import TechInfoDlg
+from ConstructionDlg import ConstructionDlg
+from ConfirmDlg import ConfirmDlg
+import Utils
 
 
 class NewTaskDlg:
@@ -94,7 +91,7 @@ class NewTaskDlg:
             etc = math.ceil(float(tech.buildProd) / self.prodProd)
             if self.targetID != self.planetID:
                 etc *= Rules.buildOnAnotherPlanetMod
-            etc = resr.formatTime(etc)
+            etc = res.formatTime(etc)
         else:
             etc = _("N/A")
 
@@ -128,7 +125,7 @@ class NewTaskDlg:
     def _showStructures(self):
         items = []
 
-        for techID in list(client.getPlayer().techs.keys()):
+        for techID in client.getPlayer().techs.keys():
             tech = client.getTechInfo(techID)
             if not tech.isStructure or tech.level not in self.showLevels or \
                (tech.isStructure and not self._filterStructure(tech)):
@@ -139,7 +136,7 @@ class NewTaskDlg:
 
     def _showProjects(self):
         items = []
-        for techID in list(client.getPlayer().techs.keys()):
+        for techID in client.getPlayer().techs.keys():
             tech = client.getTechInfo(techID)
             if tech.level not in self.showLevels or not tech.isProject:
                 continue
@@ -151,7 +148,7 @@ class NewTaskDlg:
         items = []
         player = client.getPlayer()
 
-        for designID in list(player.shipDesigns.keys()):
+        for designID in player.shipDesigns.keys():
             tech = player.shipDesigns[designID]
             if not self._filterShipSize(tech) or not self._filterShipMilitary(tech):
                 continue
@@ -160,7 +157,7 @@ class NewTaskDlg:
                 # skip ships that are set to upgrade
                 continue
             if self.prodProd > 0:
-                etc = resr.formatTime(math.ceil(float(tech.buildProd) / self.prodProd))
+                etc = res.formatTime(math.ceil(float(tech.buildProd) / self.prodProd))
             else:
                 etc = _("N/A")
             item = ui.Item(tech.name,
@@ -173,7 +170,7 @@ class NewTaskDlg:
         return items
 
     def _processTarget(self, planet):
-        ownerName = resr.getUnknownName()
+        ownerName = res.getUnknownName()
         ownerID = Const.OID_NONE
         if hasattr(planet, 'owner'):
             ownerID = planet.owner
@@ -182,8 +179,8 @@ class NewTaskDlg:
         if planet.plType in ("A", "G"):
             color = gdata.sevColors[gdata.DISABLED]
         else:
-            color = resr.getPlayerColor(ownerID)
-        plname = getattr(planet, 'name', resr.getUnknownName())
+            color = res.getPlayerColor(ownerID)
+        plname = getattr(planet, 'name', res.getUnknownName())
         item = ui.Item(plname,
                        text_raw=getattr(planet, 'plEn', plname),
                        planetID=planet.oid,
@@ -256,7 +253,7 @@ class NewTaskDlg:
                         techs[struct[Const.STRUCT_IDX_TECHID]] = 1
                     else:
                         techs[struct[Const.STRUCT_IDX_TECHID]] += 1
-                for tech in list(techs.keys()):
+                for tech in techs.keys():
                     techInfo = client.getTechInfo(tech)
                     item = ui.Item("%s (%d)" % (techInfo.name, techs[tech]), techID=tech)
                     items.append(item)
@@ -325,7 +322,7 @@ class NewTaskDlg:
                     self.techID, self.quantity, self.targetID, self.techID < 1000,
                     self.win.vReportFin.checked, self.structToDemolish)
                 self.win.setStatus(_('Command has been executed.'))
-            except GameException as e:
+            except GameException, e:
                 self.win.setStatus(e.args[0])
                 return
         self.hide()

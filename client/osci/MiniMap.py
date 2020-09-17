@@ -18,14 +18,11 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 from pygameui.Widget import Widget, registerWidget
 import ige.ospace.Const as Const
 import pygame, pygame.draw
 from ige import log
-from . import resr, client
+import res, client
 
 borderColor = (0x00, 0x00, 0x90)
 rectColor = (29, 118, 229)
@@ -57,7 +54,7 @@ class MiniMap:
         galaxy = client.get(galaxy_id, noUpdate = 1)
         minX, maxX = galaxy.x - galaxy.radius, galaxy.x + galaxy.radius
         minY, maxY = galaxy.y - galaxy.radius, galaxy.y + galaxy.radius
-        for objID in list(client.db.keys()):
+        for objID in client.db.keys():
             if objID < Const.OID_FREESTART:
                 continue
             obj = client.get(objID, noUpdate = 1)
@@ -72,7 +69,7 @@ class MiniMap:
                         if int(owner) != 0:
                             ownerID = owner
                             break
-                color = resr.getPlayerColor(ownerID)
+                color = res.getPlayerColor(ownerID)
                 self._map.append((obj.oid, obj.x, obj.y, color))
 
         self._minX = minX

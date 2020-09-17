@@ -18,9 +18,6 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import math
 import random
 import sys
@@ -286,7 +283,7 @@ def OLDgetPirateFameMod(tran, player, system):
 
 def distToNearestPiratePlanet(tran,obj,srcObj):
     # srcObj can be Planet or System type
-    dist = sys.maxsize
+    dist = sys.maxint
     for objID in obj.planets:
         pirPl = tran.db[objID]
         d = math.hypot(srcObj.x - pirPl.x, srcObj.y - pirPl.y)

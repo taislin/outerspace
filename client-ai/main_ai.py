@@ -1,4 +1,3 @@
-import importlib
 #
 #  Copyright 2001 - 2016 Ludek Smid [http://www.ospace.net/]
 #
@@ -18,9 +17,6 @@ import importlib
 #  along with Outer Space; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-
-def _(msg): return msg
-
 
 def runAIClient(options):
     import time
@@ -72,26 +68,30 @@ def runAIClient(options):
             traceback.print_exc()
             raise
     else:
-        raise Exception('You have to provide AI.')
+        raise Exception, 'You have to provide AI.'
 
     import ige.ospace.Const as Const
 
     import gdata
     # reload is here for multiprocessing support (as the process is used more
     # than once
-    importlib.reload(client)
+    reload(client)
     gdata.config = Config(os.path.join(options.configDir, 'ais_dummy'))
     client.initialize(options.server, options)
+
+    import gettext
+    tran = gettext.NullTranslations()
+    tran.install(unicode = 1)
 
     if options.login:
         login = options.login
     else:
-        raise Exception('You have to provide login.')
+        raise Exception, 'You have to provide login.'
 
     if options.password:
         password = options.password
     else:
-        raise Exception('You have to provide password.')
+        raise Exception, 'You have to provide password.'
 
     # first get list of sessions, then iterate over them
     # this is to prevent exceptions flooding logs

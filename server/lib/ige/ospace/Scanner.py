@@ -18,9 +18,6 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import time, math
 from ige.ospace import Rules
 import ige
@@ -39,7 +36,7 @@ def computeScanner(obj1, obj2, playerMaps, signatures):
     if hasattr(obj1, "scannerPwr"):
         recordScanLevel(d, obj2, sigMod, obj1.scannerPwr, obj1.owner, playerMaps)
     elif hasattr(obj1, "scannerPwrs"):
-        for owner, scannerPwr in obj1.scannerPwrs.items():
+        for owner, scannerPwr in obj1.scannerPwrs.iteritems():
             recordScanLevel(d, obj2, sigMod, scannerPwr, owner, playerMaps)
     else:
         raise ige.ServerException("Unsupported object")
@@ -74,7 +71,7 @@ def computeMap(galaxyCmdObj, tran, galaxy):
 
     # add always visible items
     for owner in playerMaps:
-        for visibleObject in list(alwaysVisible.values()):
+        for visibleObject in alwaysVisible.values():
             playerMaps[owner][visibleObject] = max(Rules.level1InfoScanPwr, playerMaps[owner].get(visibleObject, 0))
     stop = time.time()
     log.debug("Time    : %0.3f s" % (stop - start))
@@ -114,7 +111,7 @@ def generateSectors(_map, sectorSize = 5, size = 10):
     # generate sector map
     sectors = {}
     # can be optimized to not include corner sectors
-    surroundingSectors = list(range(-size / sectorSize, size / sectorSize + 1))
+    surroundingSectors = range(-size / sectorSize, size / sectorSize + 1)
 
     for i in _map:
         obj = _map[i]

@@ -18,11 +18,8 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import pygameui as ui
-from osci import client, gdata, resr
+from osci import client, gdata, res
 from ige import SecurityException
 
 class ChangePasswordDlg:
@@ -53,7 +50,7 @@ class ChangePasswordDlg:
         self.win.hide()
         try:
             client.cmdProxy.changePassword(oldPassword, newPassword)
-        except SecurityException as e:
+        except SecurityException, e:
             # failed
             self.win.vMessage.text = _(e.args[0])
             self.win.show()

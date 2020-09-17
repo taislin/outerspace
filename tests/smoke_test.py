@@ -1,4 +1,7 @@
-Copyright 2001 - 2016 Ludek Smid [http://www.ospace.net/]
+
+
+#
+#  Copyright 2001 - 2016 Ludek Smid [http://www.ospace.net/]
 #
 #  This file is part of Outer Space.
 #
@@ -17,12 +20,9 @@ Copyright 2001 - 2016 Ludek Smid [http://www.ospace.net/]
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import argparse
 import atexit
-import http.client
+import httplib
 import json
 import logging as log
 import os
@@ -39,7 +39,7 @@ def assertGrep(pattern, text, flags=0):
     return False
 
 def checkServerStatus():
-    conn = http.client.HTTPConnection('localhost', '9080', timeout = 10)
+    conn = httplib.HTTPConnection('localhost', '9080', timeout = 10)
     conn.request('GET', '/status')
     response = conn.getresponse()
     content = response.read()

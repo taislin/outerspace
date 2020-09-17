@@ -18,9 +18,6 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 from ige.Const import *
 
 ## additional object types
@@ -85,7 +82,7 @@ MSG_DOWNGRADED_PLANET_ECO = 1024 # planet's ecology system was downgraded
 MSG_UPGRADED_PLANET_ECO = 1025 # planet's ecology system was upgraded
 MSG_UPGRADED_SHIP = 1026 # ship upgraded
 MSG_DELETED_DESIGN = 1027 # design has been deleted
-MSG_CANNOT_UPGRADE_SR = 1028 # cannot upgrade ship, strat. resr. missing
+MSG_CANNOT_UPGRADE_SR = 1028 # cannot upgrade ship, strat. res. missing
 MSG_DELETED_RESEARCH = 1029 # research deleted (disabled)
 MSG_DAMAGE_BY_SG = 1030 # deceleration damage from Star Gate
 MSG_GAINED_FAME = 1031 # pirate gained fame

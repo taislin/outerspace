@@ -18,19 +18,16 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 from ige import log
 from ige.version import version as clientVersion
 import os
-from osci import client, gdata, resr
+from osci import client, gdata, res
 import pygame
 import pygameui as ui
 import re
 import shutil
 import sys
-import urllib.request, urllib.error, urllib.parse
+import urllib2
 import tarfile
 
 class UpdateDlg:
@@ -77,9 +74,9 @@ class UpdateDlg:
         # get file
         try:
             # open URL
-            opener = urllib.request.build_opener(urllib.request.ProxyHandler(proxies))
+            opener = urllib2.build_opener(urllib2.ProxyHandler(proxies))
             # it unfortunately is not completely reliable
-            for i in range(1,5):
+            for i in xrange(1,5):
                 try:
                     ifh = opener.open(self.url)
                     log.debug("Retrieving URL", ifh.geturl())
@@ -109,7 +106,7 @@ class UpdateDlg:
             ifh.close()
             ofh.close()
             return filename
-        except urllib.error.URLError as e:
+        except urllib2.URLError, e:
             log.warning("Cannot download file")
             self.reportFailure(_("Cannot finish download: %(s)") % str(e.reason))
             return None
@@ -183,7 +180,7 @@ class UpdateDlg:
 
     def onRestart(self, widget, action, data):
         if os.name == 'nt':
-            quoted = ['"' + str(x) + '"' for x in sys.argv]
+            quoted = map(lambda x: '"' + str(x) + '"', sys.argv)
             os.execl(sys.executable, sys.executable, *quoted)
         else:
             os.execl(sys.executable, sys.executable, *sys.argv)
@@ -292,7 +289,7 @@ class UpdateDlg:
         self.win.subscribeAction('*', self)
         ui.Text(self.win, layout = (5, 0, 16, 4), id = 'vText', background = self.win.app.theme.themeBackground, editable = 0)
         ui.ProgressBar(self.win, layout = (0, 4, 21, 1), id = 'vProgress')
-        ui.Label(self.win, layout = (0, 0, 5, 4), icons = ((resr.loginLogoImg, ui.ALIGN_W),))
+        ui.Label(self.win, layout = (0, 0, 5, 4), icons = ((res.loginLogoImg, ui.ALIGN_W),))
         ui.Title(self.win, layout = (0, 5, 13, 1), id = 'vStatusBar', align = ui.ALIGN_W)
         ui.TitleButton(self.win, layout = (13, 5, 4, 1), id = 'vCancel', text = _("No"), action = 'onCancel')
         ui.TitleButton(self.win, layout = (17, 5, 4, 1), id = 'vConfirm', text = _("Yes"), action = 'onConfirm')

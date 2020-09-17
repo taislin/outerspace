@@ -18,30 +18,27 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import pygameui as ui
-from osci import client, resr, gdata
+from osci import client, res, gdata
 from osci.SystemMapWidget import SystemMapWidget
-from .NewTaskDlg import NewTaskDlg
-from .StructTaskDlg import StructTaskDlg
-from .RenameSysDlg import RenameSysDlg
-from .TechInfoDlg import TechInfoDlg
-from .ConfirmDlg import ConfirmDlg
-from .BuoyDlg import BuoyDlg
-from .ConstructionDlg import ConstructionDlg
-from .FleetRedirectionDlg import FleetRedirectionDlg
-from .FleetMassRedirectionDlg import FleetMassRedirectionDlg
-from .MinefieldDlg import MinefieldDlg
-from .ChangeQtyDlg import ChangeQtyDlg
-from .LocateDlg import LocateDlg
+from NewTaskDlg import NewTaskDlg
+from StructTaskDlg import StructTaskDlg
+from RenameSysDlg import RenameSysDlg
+from TechInfoDlg import TechInfoDlg
+from ConfirmDlg import ConfirmDlg
+from BuoyDlg import BuoyDlg
+from ConstructionDlg import ConstructionDlg
+from FleetRedirectionDlg import FleetRedirectionDlg
+from FleetMassRedirectionDlg import FleetMassRedirectionDlg
+from MinefieldDlg import MinefieldDlg
+from ChangeQtyDlg import ChangeQtyDlg
+from LocateDlg import LocateDlg
 import ige
 import ige.ospace.Const as Const
 from ige.ospace import Rules
 from ige import log
 import math
-from . import Utils
+import Utils
 
 INFO_NONE = 0
 INFO_TASK = 1
@@ -129,7 +126,7 @@ class StarSystemDlg:
     def update(self):
         if self.win.visible:
             system = client.get(self.systemID,noUpdate =1)
-            name = getattr(system,'name',resr.getUnknownName());
+            name = getattr(system,'name',res.getUnknownName());
             if gdata.config.defaults.showcoords == 'yes':
                 self.win.title = _('System: %s [%.02f, %.02f]') % (name,system.x,system.y)
             else:
@@ -145,9 +142,9 @@ class StarSystemDlg:
 
     def appendTechIcon(self, index, planet, task, items, extraSlot = False, setIndex = True):
         if index < planet.plSlots:
-            shift = resr.whiteShift
+            shift = res.whiteShift
         else:
-            shift = resr.redShift
+            shift = res.redShift
 
         if type(task) == int:
             imgID = task
@@ -159,7 +156,7 @@ class StarSystemDlg:
         else:
             indexToSet = None
 
-        icons = ((resr.getTechImg(imgID), ui.ALIGN_NONE),)
+        icons = ((res.getTechImg(imgID), ui.ALIGN_NONE),)
         item = ui.Item(None, icons = icons, index = indexToSet, extraSlot = extraSlot)
         items.append(item)
 
@@ -172,14 +169,14 @@ class StarSystemDlg:
 
         if hasattr(planet, 'revoltLen') and planet.revoltLen > 0:
             self.win.vPName.text = _('Planet %s: POPULATION IS REVOLTING') % \
-                getattr(planet, 'name', resr.getUnknownName())
+                getattr(planet, 'name', res.getUnknownName())
         elif hasattr(planet, 'morale') and hasattr(planet, "morale"):
             prodState = gdata.moraleStates[Rules.moraleProdBonus[int(planet.morale / Rules.moraleProdStep)]]
             self.win.vPName.text = _('Planet %s: %s') % \
-                (getattr(planet, 'name', resr.getUnknownName()), _(prodState))
+                (getattr(planet, 'name', res.getUnknownName()), _(prodState))
         else:
             self.win.vPName.text = _('Planet %s') % \
-                getattr(planet, 'name', resr.getUnknownName())
+                getattr(planet, 'name', res.getUnknownName())
             self.win.vPName.foreground = None
         # structures
         items = []
@@ -187,11 +184,11 @@ class StarSystemDlg:
             index = 0
             for struct in planet.slots:
                 tech = client.getTechInfo(struct[Const.STRUCT_IDX_TECHID])
-                icons = [(resr.getTechImg(struct[Const.STRUCT_IDX_TECHID]), ui.ALIGN_NONE)]
+                icons = [(res.getTechImg(struct[Const.STRUCT_IDX_TECHID]), ui.ALIGN_NONE)]
                 if not struct[Const.STRUCT_IDX_STATUS] & Const.STRUCT_STATUS_ON:
-                    icons.append((resr.structOffImg, ui.ALIGN_NE))
+                    icons.append((res.structOffImg, ui.ALIGN_NE))
                 elif struct[Const.STRUCT_IDX_STATUS] & ~Const.STRUCT_STATUS_ON & ~Const.STRUCT_STATUS_REPAIRING:
-                    icons.append((resr.structProblemImg, ui.ALIGN_NE))
+                    icons.append((res.structProblemImg, ui.ALIGN_NE))
                 item = ui.Item(None, icons = icons, tooltip = tech.name, statustip = tech.name, index = index,
                     align = ui.ALIGN_W, techID = struct[Const.STRUCT_IDX_TECHID])
                 items.append(item)
@@ -242,7 +239,7 @@ class StarSystemDlg:
             self.win.vQueueSelector.visible = 1
             self.win.vTaskTitleWithQueue.visible = 1
             self.win.vTaskTitleNoQueue.visible = 0
-            self.win.vQueueSelector.text = _('Queue \"{0}\"'.format(resr.globalQueueName(planet.globalQueue)))
+            self.win.vQueueSelector.text = _('Queue \"{0}\"'.format(res.globalQueueName(planet.globalQueue)))
         else:
             self.win.vQueueSelector.visible = 0
             self.win.vTaskTitleWithQueue.visible = 0
@@ -258,10 +255,10 @@ class StarSystemDlg:
             for task in planet.prodQueue:
                 if task.isShip:
                     tech = player.shipDesigns[task.techID]
-                    icons = ((resr.getShipImg(tech.combatClass, tech.isMilitary), ui.ALIGN_NONE),)
+                    icons = ((res.getShipImg(tech.combatClass, tech.isMilitary), ui.ALIGN_NONE),)
                 else:
                     tech = client.getFullTechInfo(task.techID)
-                    icons = ((resr.getTechImg(task.techID), ui.ALIGN_NONE),)
+                    icons = ((res.getTechImg(task.techID), ui.ALIGN_NONE),)
 
                 if task.targetID != self.planetID:
                     mod = Rules.buildOnAnotherPlanetMod
@@ -274,7 +271,7 @@ class StarSystemDlg:
                         etc = math.ceil(float(tech.buildProd * Rules.buildOnAnotherPlanetMod - task.currProd) / planet.effProdProd)
                     else:
                         etc = math.ceil(float(tech.buildProd - task.currProd) / planet.effProdProd)
-                    text = _("%s") % resr.formatTime(etc)
+                    text = _("%s") % res.formatTime(etc)
                 else:
                     text = _('N/A')
                 item = ui.Item(text, font = 'small', align = ui.ALIGN_NE, icons = icons, tooltip = tech.name, statustip = tech.name, index = index)
@@ -284,7 +281,7 @@ class StarSystemDlg:
                     item.background = (0x44, 0x44, 0x44)
                 items.append(item)
                 index += 1
-            icons = ((resr.getTechImg(1), ui.ALIGN_NONE),)
+            icons = ((res.getTechImg(1), ui.ALIGN_NONE),)
             item = ui.Item(_('New'), font = 'small-bold', align = ui.ALIGN_SW, icons = icons, index = None)
             items.append(item)
         self.win.vPQueue.items = items
@@ -399,12 +396,12 @@ class StarSystemDlg:
             if planet.changeEnv > 0:
                 time = int((maxVal - planet.plEnv) / planet.changeEnv)
                 tip = _('Enviroment (%d / %d) is improving (%d per turn), %s turns to improve.') \
-                    % (planet.plEnv, maxVal, planet.changeEnv, resr.formatTime(time))
+                    % (planet.plEnv, maxVal, planet.changeEnv, res.formatTime(time))
                 self.win.vPCEnvStatus.foreground = None
             elif planet.changeEnv < 0:
                 time = - int(planet.plEnv / planet.changeEnv)
                 tip = _('Enviroment (%d / %d) is deteriorating (%d per turn), %s turns to deteriorate.') % \
-                    (planet.plEnv, maxVal, -planet.changeEnv, resr.formatTime(time))
+                    (planet.plEnv, maxVal, -planet.changeEnv, res.formatTime(time))
                 self.win.vPCEnvStatus.foreground = gdata.sevColors[gdata.CRI]
             else:
                 tip = _('Enviroment (%d / %d) is stable.') % (planet.plEnv, maxVal)
@@ -529,7 +526,7 @@ class StarSystemDlg:
         if hasattr(system, 'planets'):
             for planetID in system.planets:
                 planet = client.get(planetID, noUpdate = 1)
-                owner = resr.getUnknownName()
+                owner = res.getUnknownName()
                 #rel = Const.REL_UNDEF
                 ownerID = Const.OID_NONE
                 if hasattr(planet, 'owner'):
@@ -557,7 +554,7 @@ class StarSystemDlg:
                 else:
                     usedSlots = '?'
                 item = ui.Item(
-                    getattr(planet, 'name', resr.getUnknownName()).split(' ')[-1],
+                    getattr(planet, 'name', res.getUnknownName()).split(' ')[-1],
                     plType = gdata.planetTypes[getattr(planet, 'plType', None)],
                     plBio = getattr(planet, 'plBio', '?'),
                     plMin = getattr(planet, 'plMin', '?'),
@@ -577,8 +574,8 @@ class StarSystemDlg:
                     ),
                     planetID = planetID,
                     plOwner = owner,
-                    #foreground = resr.getFFColorCode(rel),
-                    foreground = resr.getPlayerColor(ownerID)
+                    #foreground = res.getFFColorCode(rel),
+                    foreground = res.getPlayerColor(ownerID)
                 )
                 # show effective con/sci pts
                 if hasattr(planet, "owner") and planet.owner == player.oid:
@@ -629,7 +626,7 @@ class StarSystemDlg:
             self.win.vSMassRedirect.enabled = 0
 
         if hasattr(player, "buoys"):
-            if self.systemID in list(player.buoys.keys()):
+            if self.systemID in player.buoys.keys():
                 self.win.vSBuoy.text = _("Edit buoy")
                 self.win.vSDeleteBuoy.enabled = 1
             else:
@@ -702,12 +699,12 @@ class StarSystemDlg:
                     etc = math.ceil(float(tech.buildProd * Rules.buildOnAnotherPlanetMod - task.currProd) / planet.effProdProd)
                 else:
                     etc = math.ceil(float(tech.buildProd - task.currProd) / planet.effProdProd)
-                self.win.vITEtc.text = resr.formatTime(etc)
+                self.win.vITEtc.text = res.formatTime(etc)
             else:
                 self.win.vITEtc.text = _('N/A')
             self.win.vITProd.text = _('%d / %d') % (task.currProd, tech.buildProd * mod)
             self.win.vITQuantity.text = _('%d') % task.quantity
-            self.win.vITTarget.text = getattr(client.get(task.targetID, noUpdate = 1), 'name', resr.getUnknownName())
+            self.win.vITTarget.text = getattr(client.get(task.targetID, noUpdate = 1), 'name', res.getUnknownName())
             if hasattr(task, "demolishStruct") and task.demolishStruct != 0:
                 structTech = client.getFullTechInfo(task.demolishStruct)
                 self.win.vITTargetSlot.text = structTech.name
@@ -938,7 +935,7 @@ class StarSystemDlg:
             self.showPlanet()
             self.win.vPSlots.selectItem(self.win.vPSlots.items[self.plInfoData])
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(e.args[0])
             return
 
@@ -958,7 +955,7 @@ class StarSystemDlg:
             self.showPlanet()
             self.win.vPSlots.selectItem(self.win.vPSlots.items[self.plInfoData])
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(e.args[0])
             return
 
@@ -972,7 +969,7 @@ class StarSystemDlg:
             self.showPlanet()
             self.win.vPSlots.selectItem(self.win.vPSlots.items[self.plInfoData])
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(e.args[0])
             return
 
@@ -989,7 +986,7 @@ class StarSystemDlg:
             self.plInfoData = self.plInfoDataSelected = None
             self.win.vPSlots.selectItem(None)
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(e.args[0])
             return
         self.showPlanet()
@@ -1015,7 +1012,7 @@ class StarSystemDlg:
             self.showPlanet()
             self.win.vPQueue.selectItem(self.win.vPQueue.items[self.plInfoData])
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(e.args[0])
             return
 
@@ -1029,7 +1026,7 @@ class StarSystemDlg:
             self.showPlanet()
             self.win.vPQueue.selectItem(self.win.vPQueue.items[self.plInfoData])
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(e.args[0])
             return
 
@@ -1051,7 +1048,7 @@ class StarSystemDlg:
                 planet.prodQueue, player.stratRes = client.cmdProxy.changeConstruction(self.planetID, self.plInfoData, self.changeQtyDlg.quantity)
                 self.showPlanet()
                 self.win.setStatus(_('Command has been executed.'))
-            except ige.GameException as e:
+            except ige.GameException, e:
                 self.win.setStatus(e.args[0])
                 return
 
@@ -1066,7 +1063,7 @@ class StarSystemDlg:
             self.win.vPQueue.selectItem(None)
             self.showPlanet()
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(e.args[0])
             return
 
@@ -1109,7 +1106,7 @@ class StarSystemDlg:
         buoyType = Const.BUOY_PRIVATE
         player = client.getPlayer()
         if hasattr(player, "buoys"):
-            if self.systemID in list(player.buoys.keys()):
+            if self.systemID in player.buoys.keys():
                 buoyText = player.buoys[self.systemID][0]
                 buoyType = player.buoys[self.systemID][1]
         self.buoyDlg.display(buoyText, buoyType, self.onBuoyConfirmed)
@@ -1123,7 +1120,7 @@ class StarSystemDlg:
             self.win.vSystemMap.computeBuoy()
             self.showSystem()
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(e.args[0])
             return
 
@@ -1136,7 +1133,7 @@ class StarSystemDlg:
             self.win.vSystemMap.computeBuoy()
             self.showSystem()
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(e.args[0])
             return
 
@@ -1148,8 +1145,8 @@ class StarSystemDlg:
 
     def onGlobalQueuesMenu(self, widget, action, data):
         items = []
-        for queue in range(5):
-            items.append(ui.Item(resr.globalQueueName(queue),tQue = queue))
+        for queue in xrange(5):
+            items.append(ui.Item(res.globalQueueName(queue),tQue = queue))
         self.queueWin.vGlobalQueues.items = items
         self.queueWin.vGlobalQueues.itemsChanged()
         self.queueWin.show()
@@ -1164,11 +1161,11 @@ class StarSystemDlg:
             self.win.setStatus(_('Executing CHANGE PLANETS GLOBAL QUEUE command...'))
             newQueue = client.cmdProxy.changePlanetsGlobalQueue(planet.oid, newQueue)
             planet.globalQueue = newQueue
-            self.win.vQueueSelector.text = resr.globalQueueName(newQueue)
+            self.win.vQueueSelector.text = res.globalQueueName(newQueue)
             self.queueWin.hide()
             self.win.setStatus(_('Command has been executed.'))
             self.update()
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(e.args[0])
             return
 
@@ -1264,69 +1261,69 @@ class StarSystemDlg:
             align = ui.ALIGN_E, tags = ['pl'])
         # environment
         ui.Label(self.win, layout = (0, 12, 5, 2), id = 'vPBioAbund',
-            icons=[(resr.getUIIcon('planet_biomatter'), ui.ALIGN_W)],
+            icons=[(res.getUIIcon('planet_biomatter'), ui.ALIGN_W)],
             tooltipTitle=_("Environment"),
             align = ui.ALIGN_NONE, tags = ['pl'])
         # minerals
         ui.Label(self.win, layout = (5, 12, 5, 2), id = 'vPMinAbund',
-            icons=[(resr.getUIIcon('planet_minerals'), ui.ALIGN_W)],
+            icons=[(res.getUIIcon('planet_minerals'), ui.ALIGN_W)],
             tooltipTitle=_("Mineral abundance"),
             align = ui.ALIGN_NONE, tags = ['pl'])
         # en. abundance
         ui.Label(self.win, layout = (10, 12, 5, 2), id = 'vPEnAbund',
-            icons=[(resr.getUIIcon('planet_energy'), ui.ALIGN_W)],
+            icons=[(res.getUIIcon('planet_energy'), ui.ALIGN_W)],
             tooltipTitle=_("Energy abundance"),
             align = ui.ALIGN_NONE, tags = ['pl'])
         # available space
         ui.Label(self.win, layout = (15, 12, 5, 2), id = 'vPSlotsAbund',
-            icons=[(resr.getUIIcon('planet_free_slots'), ui.ALIGN_W)],
+            icons=[(res.getUIIcon('planet_free_slots'), ui.ALIGN_W)],
             tooltipTitle=_("Available space"),
             align = ui.ALIGN_NONE, tags = ['pl'])
         ## colony data
         ui.Title(self.win, layout = (0, 14, 20, 1), text = _('Colony data'),
             align = ui.ALIGN_W, font = 'normal-bold', tags = ['pl'])
         ui.Label(self.win, layout = (0, 15, 5, 2), id = 'vPCPop',
-            icons=[(resr.getUIIcon('population'), ui.ALIGN_W)],
+            icons=[(res.getUIIcon('population'), ui.ALIGN_W)],
             tooltipTitle=_("Population"),
             align = ui.ALIGN_NONE, tags = ['pl'])
         ui.Label(self.win, layout = (5, 15, 5, 2), id = 'vPCUnempl',
-            icons=[(resr.getUIIcon('unemployed'), ui.ALIGN_W)],
+            icons=[(res.getUIIcon('unemployed'), ui.ALIGN_W)],
             tooltipTitle=_("Free workers"),
             align = ui.ALIGN_NONE, tags = ['pl'])
         ui.Label(self.win, layout = (10, 15, 5, 2), id = 'vPCStorBio',
-            icons=[(resr.getUIIcon('bio_stored'), ui.ALIGN_W)],
+            icons=[(res.getUIIcon('bio_stored'), ui.ALIGN_W)],
             tooltipTitle=_("Biomatter"),
             align = ui.ALIGN_NONE, tags = ['pl'])
         ui.Label(self.win, layout = (15, 15, 5, 2), id = 'vPCStorEn',
-            icons=[(resr.getUIIcon('en_stored'), ui.ALIGN_W)],
+            icons=[(res.getUIIcon('en_stored'), ui.ALIGN_W)],
             tooltipTitle=_("Energy"),
             align = ui.ALIGN_NONE, tags = ['pl'])
 
 
         ui.Label(self.win, layout = (0, 18, 7, 2), id = 'vPCProd',
-            icons=[(resr.getUIIcon('planet_cp_production'), ui.ALIGN_W)],
+            icons=[(res.getUIIcon('planet_cp_production'), ui.ALIGN_W)],
             tooltipTitle=_("Construction pts"),
             align = ui.ALIGN_NONE, tags = ['pl'])
         ui.Label(self.win, layout = (7, 18, 7, 2), id = 'vPCSci',
-            icons=[(resr.getUIIcon('planet_rp_production'), ui.ALIGN_W)],
+            icons=[(res.getUIIcon('planet_rp_production'), ui.ALIGN_W)],
             tooltipTitle=_("Research pts"),
             align = ui.ALIGN_NONE, tags = ['pl'])
         ui.Label(self.win, layout = (14, 18, 6, 2), id = 'vPCMorale',
-            icons=[(resr.getUIIcon('morale'), ui.ALIGN_W)],
+            icons=[(res.getUIIcon('morale'), ui.ALIGN_W)],
             tooltipTitle=_("Morale"),
             align = ui.ALIGN_NONE, tags = ['pl'])
 
 
         ui.Label(self.win, layout = (0, 21, 7, 2), id = 'vPCEnvStatus',
-            icons=[(resr.getUIIcon('environment_status'), ui.ALIGN_W)],
+            icons=[(res.getUIIcon('environment_status'), ui.ALIGN_W)],
             tooltipTitle=_("Environment status"),
             align = ui.ALIGN_NONE, tags = ['pl'])
         ui.Label(self.win, layout = (7, 21, 7, 2), id = 'vPCShield',
-            icons=[(resr.getUIIcon('planetary_shield'), ui.ALIGN_W)],
+            icons=[(res.getUIIcon('planetary_shield'), ui.ALIGN_W)],
             tooltipTitle=_("Planetary shield"),
             align = ui.ALIGN_NONE, tags = ['pl'])
         ui.Label(self.win, layout = (14, 21, 6, 2), id = 'vPCSRes',
-            icons=[(resr.getUIIcon('strategic_resource'), ui.ALIGN_W)],
+            icons=[(res.getUIIcon('strategic_resource'), ui.ALIGN_W)],
             tooltipTitle=_("Strategic resource"),
             align = ui.ALIGN_NONE, tags = ['pl'])
         ui.Button(self.win, layout = (10, 23, 10, 1), text = _('Show Terraforming Data'),
@@ -1334,19 +1331,19 @@ class StarSystemDlg:
         ui.Title(self.win, layout = (0, 24, 20, 1), text = _('System data'),
             align = ui.ALIGN_W, font = 'normal-bold', tags = ['pl'])
         ui.Label(self.win, layout = (0, 25, 5, 2), id = 'vSTPBio',
-            icons=[(resr.getUIIcon('system_biomatter'), ui.ALIGN_W)],
+            icons=[(res.getUIIcon('system_biomatter'), ui.ALIGN_W)],
             tooltipTitle=_("Net Bio +/-"),
             align = ui.ALIGN_NONE, tags = ['pl'])
         ui.Label(self.win, layout = (5, 25, 5, 2), id = 'vSTPEn',
-            icons=[(resr.getUIIcon('system_energy'), ui.ALIGN_W)],
+            icons=[(res.getUIIcon('system_energy'), ui.ALIGN_W)],
             tooltipTitle=_("Net Energy +/-"),
             align = ui.ALIGN_NONE, tags = ['pl'])
         ui.Label(self.win, layout = (10, 25, 5, 2), id = 'vSTPProd',
-            icons=[(resr.getUIIcon('system_cp_production'), ui.ALIGN_W)],
+            icons=[(res.getUIIcon('system_cp_production'), ui.ALIGN_W)],
             tooltipTitle=_("Net Construction"),
             align = ui.ALIGN_NONE, tags = ['pl'])
         ui.Label(self.win, layout = (15, 25, 5, 2), id = 'vSTPSci',
-            icons=[(resr.getUIIcon('system_rp_production'), ui.ALIGN_W)],
+            icons=[(res.getUIIcon('system_rp_production'), ui.ALIGN_W)],
             tooltipTitle=_("Net Research"),
             align = ui.ALIGN_NONE, tags = ['pl'])
         ## info

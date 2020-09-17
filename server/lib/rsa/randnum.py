@@ -38,7 +38,7 @@ def read_random_bits(nbits):
     if rbits > 0:
         randomvalue = ord(os.urandom(1))
         randomvalue >>= (8 - rbits)
-        randomdata = chr(randomvalue).encode() + randomdata
+        randomdata = chr(randomvalue) + randomdata
 
     return randomdata
 

@@ -17,9 +17,6 @@
 #  along with Outer Space; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-
-def _(msg): return msg
-
 import math
 
 import pygameui as ui
@@ -28,9 +25,9 @@ from ige import GameException
 from ige.ospace import Rules
 import ige.ospace.Const as Const
 
-from osci import gdata, client, resr
-from .TechInfoDlg import TechInfoDlg
-from .ConfirmDlg import ConfirmDlg
+from osci import gdata, client, res
+from TechInfoDlg import TechInfoDlg
+from ConfirmDlg import ConfirmDlg
 
 class StructTaskDlg:
 
@@ -92,7 +89,7 @@ class StructTaskDlg:
                 planet = client.get(planetID, noUpdate=1)
                 # only player owned planets can be source planets
                 enabled = getattr(planet, "owner") == playerID
-                buttonText = "%s / %s" % (getattr(planet, 'name', resr.getUnknownName()), getattr(planet, "effProdProd", "?"))
+                buttonText = "%s / %s" % (getattr(planet, 'name', res.getUnknownName()), getattr(planet, "effProdProd", "?"))
                 item = ui.Item(buttonText,
                                planetID=planetID,
                                enabled=enabled,
@@ -126,7 +123,7 @@ class StructTaskDlg:
     def _showStructures(self, prodProd):
         items = []
 
-        for techID in list(client.getPlayer().techs.keys()):
+        for techID in client.getPlayer().techs.keys():
             tech = client.getTechInfo(techID)
             if not tech.isStructure or tech.level not in self.showLevels or \
                (tech.isStructure and not self._filterStructure(tech)):
@@ -136,7 +133,7 @@ class StructTaskDlg:
                 etc = math.ceil(float(tech.buildProd) / prodProd)
                 if self.sourceID != self.planetID:
                     etc *= Rules.buildOnAnotherPlanetMod
-                etc = resr.formatTime(etc)
+                etc = res.formatTime(etc)
             else:
                 etc = _("N/A")
 
@@ -146,7 +143,7 @@ class StructTaskDlg:
                            name=tech.name,
                            tl=tech.level,
                            subtype=tech.subtype,
-                           icons=((resr.getTechImg(techID), ui.ALIGN_N),),
+                           icons=((res.getTechImg(techID), ui.ALIGN_N),),
                            font="small-bold",
                            align=ui.ALIGN_S,
                            tooltipTitle=_("Details"),
@@ -175,7 +172,7 @@ class StructTaskDlg:
         self.win.vTechs.itemsChanged()
 
         # filter
-        for i in range(1, 10):
+        for i in xrange(1, 10):
             widget = getattr(self.win, 'vLevel%d' % i)
             if i in self.showLevels and i <= self.maxTechLevel:
                 widget.visible = 1
@@ -269,7 +266,7 @@ class StructTaskDlg:
                         data.techID, self.quantity, self.planetID, data.techID < 1000,
                         self.win.vReportFin.checked, self.structToDemolish)
                 self.win.setStatus(_('Command has been executed.'))
-            except GameException as e:
+            except GameException, e:
                 self.win.setStatus(e.args[0])
                 return
 

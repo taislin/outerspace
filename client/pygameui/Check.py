@@ -18,25 +18,22 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
-from . import Const
-from .Widget import Widget, registerWidget
+import Const
+from Widget import Widget, registerWidget
 
 class Check(Widget):
 
     def __init__(self, parent, **kwargs):
         Widget.__init__(self, parent)
         # data
-        self.__dict__['text'] = None
-        self.__dict__['icons'] = []
+        setattr(self,'text', None)
+        setattr(self,'icons', [])
         # flags
-        self.__dict__['action'] = None
-        self.__dict__['rmbAction'] = None
-        self.__dict__['checked'] = 0
-        self.__dict__['_processingMB1'] = 0
-        self.__dict__['_processingMB3'] = 0
+        setattr(self,'action', None)
+        setattr(self,'rmbAction', None)
+        setattr(self,'checked', 0)
+        setattr(self,'_processingMB1', 0)
+        setattr(self,'_processingMB3', 0)
         self.align = Const.ALIGN_W
         self.processKWArguments(kwargs)
         parent.registerWidget(self)

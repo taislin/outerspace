@@ -18,9 +18,6 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import os
 import os.path
 import gettext
@@ -28,17 +25,17 @@ import re
 
 import pygame
 import pygameui as ui
-from osci import client, gdata, resr
+from osci import client, gdata, res
 import ige.ospace.Const as Const
 from ige import log
 import resources
 
-from .ChangePasswordDlg import ChangePasswordDlg
+from ChangePasswordDlg import ChangePasswordDlg
 
 class OptionsDlg:
     """Displays options dialog.
 
-    Dialog can change display flags, display resolution
+    Dialog can change display flags, display resolution, client language
     and proxy settings.
     Proxy can have one of following formats:
     http://username:password@host:port
@@ -55,6 +52,9 @@ class OptionsDlg:
         self.changePasswordDlg = ChangePasswordDlg(app)
         self.languages = {}
         self.languages['en']=_('English')
+        self.languages['cs']=_('Czech')
+        self.languages['fr']=_('French')
+        self.languages['de']=_('German')
         self.resolutions = ["FULLSCREEN", "800x600", "1024x768", "1280x800", "1280x1024", "1366x768", "1440x900","1400x1050","1600x900","1680x1050","1600x1200","1920x1080","1920x1200"]
         self.curLang = gdata.config.client.language
         self.createUI()
@@ -327,7 +327,7 @@ class OptionsDlg:
         curTheme = self.twin.vThemes.selection[0].tTheme
         # set theme for ui
         ui.SkinableTheme.setSkin(os.path.join(resources.get("themes"), curTheme))
-        resr.prepareUIIcons(ui.SkinableTheme.themeIcons)
+        res.prepareUIIcons(ui.SkinableTheme.themeIcons)
         ui.SkinableTheme.loadMusic(gdata.config.defaults.mymusic)
         ui.SkinableTheme.playMusic()
         # update foreground colors
@@ -340,6 +340,43 @@ class OptionsDlg:
         gdata.config.client.theme = curTheme
         self.win.vTheme2.text = curTheme
         self.twin.hide()
+
+    def onSelectLanguage(self, widget, action, data):
+        items = []
+        items.append(ui.Item(self.languages['en'],tLanguage = 'en'))
+        langDir = resources.get('translations')
+        for term in os.listdir(langDir):
+            if os.path.isfile(os.path.join(langDir, term,"LC_MESSAGES", "OSPACE.mo")) and not term.startswith("."):
+                if self.languages.has_key(term):
+                    item = ui.Item(self.languages[term], tLanguage = term)
+                else:
+                    item = ui.Item(term, tLanguage = term)
+                items.append(item)
+        self.lwin.vLanguages.items = items
+        self.lwin.vLanguages.itemsChanged()
+        self.lwin.show()
+
+    def onLanguageCancel(self, widget, action, data):
+        self.lwin.hide()
+
+    def onLanguageSelected(self, widget, action, data):
+        self.recipientObjID = []
+        text = ""
+        if not self.lwin.vLanguages.selection:
+            return
+        self.curLang = self.lwin.vLanguages.selection[0].tLanguage
+        self.lwin.hide()
+        if self.curLang == 'en':
+            tran = gettext.NullTranslations()
+        else:
+            tran = gettext.translation('OSPACE', resources.get('translations'), languages = [self.curLang])
+        tran.install(unicode = 1)
+        try:
+            self.win.vLangSel.text = self.languages[self.curLang]
+        except:
+            self.win.vLangSel.text = self.curLang
+        self.win.setStatus(_("You should restart client to change the language."))
+
 
     def onSelectResolution(self, widget, action, data):
         items = []
@@ -430,6 +467,36 @@ class OptionsDlg:
         ui.TitleButton(self.reswin, layout = (10, 11, 5, 1), text = _("Select"), action = 'onResolutionSelected')
         ui.TitleButton(self.reswin, layout = (5, 11, 5, 1), text = _("Cancel"), action = 'onResolutionCancel')
         ui.Title(self.reswin, id = 'vStatusBar', layout = (0, 11, 5, 1), align = ui.ALIGN_W)
+
+        # Languages
+        ui.Title(self.win, layout = (1, 5, 5, 1), text = _('Language'),
+            align = ui.ALIGN_NONE, font = 'normal-bold')
+        try:
+            longLang = self.languages[self.curLang]
+        except:
+            longLang = self.curLang
+        ui.Button(self.win, layout = (1, 6, 5, 1), text = longLang, id = 'vLangSel', action = 'onSelectLanguage')
+        lcols = 12
+        lrows = 6
+        width = lcols * 20 + 4
+        height = lrows * 20 + 4
+        self.lwin = ui.Window(self.app,
+            modal = 1,
+            escKeyClose = 1,
+            titleOnly = 0,
+            movable = 0,
+            title = _("Select language"),
+            rect = ui.Rect((screenWidth - width) / 2, (screenHeight - height) / 2, width, height),
+            layoutManager = ui.SimpleGridLM(),
+        )
+        self.lwin.subscribeAction('*', self)
+        # rename
+        ui.Listbox(self.lwin, layout = (0, 0, lcols, lrows-2), id = 'vLanguages', columnLabels = 0,
+            columns = ((None, 'text', 0, ui.ALIGN_W),), multiselection = 0, sortedBy=('text', 1))
+        # status bar + submit/cancel
+        ui.TitleButton(self.lwin, layout = (lcols-5, lrows-2, 5, 1), text = _("Select"), action = 'onLanguageSelected')
+        ui.TitleButton(self.lwin, layout = (lcols-10, lrows-2, 5, 1), text = _("Cancel"), action = 'onLanguageCancel')
+        ui.Title(self.lwin, id = 'vStatusBar', layout = (0, lrows-2, lcols-10, 1), align = ui.ALIGN_W)
 
         # Theme
         ui.Title(self.win, layout = (1, 9, 5, 1), text = _('Themes'),

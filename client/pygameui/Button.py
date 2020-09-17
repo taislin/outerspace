@@ -18,28 +18,25 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
-from . import Const
-from .Widget import Widget, registerWidget
+import Const
+from Widget import Widget, registerWidget
 
 class Button(Widget):
 
     def __init__(self, parent, **kwargs):
         Widget.__init__(self, parent)
         # data
-        self.__dict__['text'] = None
-        self.__dict__['icons'] = []
+        setattr(self,'text', None)
+        setattr(self,'icons', [])
         # flags
-        self.__dict__['toggle'] = 0
-        self.__dict__['pressed'] = 0
-        self.__dict__['highlighted'] = 0
-        self.__dict__['action'] = None
-        self.__dict__['rmbAction'] = None
-        self.__dict__['hoverAction'] = None
-        self.__dict__['_processingMB1'] = 0
-        self.__dict__['_processingMB3'] = 0
+        setattr(self,'toggle', 0)
+        setattr(self,'pressed', 0)
+        setattr(self,'highlighted', 0)
+        setattr(self,'action', None)
+        setattr(self,'rmbAction', None)
+        setattr(self,'hoverAction', None)
+        setattr(self,'_processingMB1', 0)
+        setattr(self,'_processingMB3', 0)
         self.processKWArguments(kwargs)
         parent.registerWidget(self)
 

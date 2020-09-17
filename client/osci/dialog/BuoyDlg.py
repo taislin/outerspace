@@ -18,11 +18,8 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import pygameui as ui, string
-from osci import client, gdata, resr
+from osci import client, gdata, res
 from ige import log
 import ige.ospace.Const as Const
 
@@ -54,7 +51,7 @@ class BuoyDlg:
         self.win.show()
 
     def onOK(self, widget, action, data):
-        self.buoyText = str.join(self.win.vText.text, "\n")
+        self.buoyText = string.join(self.win.vText.text, "\n")
         if self.win.vAllied.checked:
             self.buoyType = Const.BUOY_TO_ALLY
         elif self.win.vScanner.checked:

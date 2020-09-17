@@ -17,18 +17,15 @@
 #  along with Outer Space; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-
-def _(msg): return msg
-
 import copy
 import math
 import random
 import re
 
-from . import Const
-from . import Rules
-from . import ShipUtils
-from . import Utils
+import Const
+import Rules
+import ShipUtils
+import Utils
 
 from ige import GameException, log
 from ige.IObject import IObject, public
@@ -104,9 +101,9 @@ class IFleet(IObject):
             names[tran.db[fleetID].name] = None
         # create name
         counter = 1
-        name = 'Fleet %d' % counter
+        name = u'Fleet %d' % counter
         while True:
-            name = 'Fleet %d' % counter
+            name = u'Fleet %d' % counter
             counter += 1
             if name not in names:
                 break
@@ -154,7 +151,7 @@ class IFleet(IObject):
         # remove from index if necessary
         if obj.orbiting != Const.OID_NONE:
             try:
-                if obj.orbiting in tran.db:
+                if tran.db.has_key(obj.orbiting):
                     tran.db[obj.orbiting].fleets.remove(obj.oid)
             except Exception:
                 log.warning('IFleet', 'disbandFleet: cannot remove fleet from system.')
@@ -162,7 +159,7 @@ class IFleet(IObject):
         # remove from close fleets
         if obj.closeSystem != Const.OID_NONE:
             try:
-                if obj.closeSystem in tran.db:
+                if tran.db.has_key(obj.closeSystem):
                     tran.db[obj.closeSystem].closeFleets.remove(obj.oid)
             except Exception:
                 log.warning("IFleet", "disbandFleet: cannot remove fleet from the close system.")
@@ -350,7 +347,7 @@ class IFleet(IObject):
         else:
             log.debug("Skipping ship (re)sorting [fleet in combat]", obj.oid)
         # closest system
-        if obj.closeSystem not in tran.db or tran.db[obj.closeSystem].type not in (Const.T_SYSTEM, Const.T_WORMHOLE):
+        if not tran.db.has_key(obj.closeSystem) or tran.db[obj.closeSystem].type not in (Const.T_SYSTEM, Const.T_WORMHOLE):
             if obj.orbiting == Const.OID_NONE:
                 log.debug("No close system for fleet", obj.oid)
                 # select any system
@@ -364,7 +361,7 @@ class IFleet(IObject):
             if obj.oid not in system.closeFleets:
                 system.closeFleets.append(obj.oid)
         # verify close system
-        if obj.closeSystem in tran.db:
+        if tran.db.has_key(obj.closeSystem):
             system = tran.db[obj.closeSystem]
             if system.type in (Const.T_SYSTEM, Const.T_WORMHOLE):
                 if obj.oid not in system.closeFleets:
@@ -594,7 +591,7 @@ class IFleet(IObject):
                 index += 1
             self.cmd(obj).removeShips(tran, obj, destroyed)
             # if fleet has been destroyed -> abort action processing and send message
-            if obj.oid not in tran.db:
+            if not tran.db.has_key(obj.oid):
                 if obj.orbiting:
                     system = tran.db[obj.orbiting]
                     Utils.sendMessage(tran, player, Const.MSG_FUEL_LOST_ORBITING, system.oid, (obj.name, system.oid))
@@ -679,7 +676,7 @@ class IFleet(IObject):
                 break
         # it there is nothing to do -> join other idle fleets
         # the fleet could joined with another fleet
-        if obj.oid in tran.db and Utils.isIdleFleet(obj):
+        if tran.db.has_key(obj.oid) and Utils.isIdleFleet(obj):
             # reset retreat counter
             obj.combatRetreatWait = 0
             # try to join some fleet
@@ -757,7 +754,7 @@ class IFleet(IObject):
             if designID == actionData:
                 removeShip = 0
                 for deployHandlerID in tech.deployHandlers: #do handlers first so that structures can deploy on new planets
-                    if not (type(deployHandlerID) in (str,int,int)): #just a double check...
+                    if not (type(deployHandlerID) in (str,int,long)): #just a double check...
                         continue
                     if not deployHandlerID.isdigit():
                         continue
@@ -773,7 +770,7 @@ class IFleet(IObject):
                             deployHandler.deployHandlerFunction(tran, obj, planet, deployHandler)
                             Utils.sendMessage(tran, obj, Const.MSG_DEPLOY_HANDLER, planet.oid, deployHandlerID)
                             removeShip = 1
-                        except GameException as e:
+                        except GameException, e:
                             log.warning('IFleet -','Deploy handler error - internal error')
                             Utils.sendMessage(tran, obj, Const.MSG_CANNOTBUILD_SHLOST, planet.oid, None)
                     else:
@@ -781,7 +778,7 @@ class IFleet(IObject):
                         Utils.sendMessage(tran, obj, Const.MSG_CANNOTBUILD_SHLOST, planet.oid, None)
 
                 for structTechID in tech.deployStructs:
-                    if not (type(structTechID) in (int,int)): #just a double check...
+                    if not (type(structTechID) in (int,long)): #just a double check...
                         continue
                     structTech = Rules.techs[structTechID]
                     # validate
@@ -793,7 +790,7 @@ class IFleet(IObject):
                                 planet.slots.insert(0, Utils.newStructure(tran, structTechID, obj.owner, hpRatio = Rules.structFromShipHpRatio))
                                 removeShip = 1
                                 Utils.sendMessage(tran, obj, Const.MSG_COMPLETED_STRUCTURE, planet.oid, structTech.id)
-                            except GameException as e:
+                            except GameException, e:
                                 # cannot build (planet already occupied?)
                                 log.warning('IFleet -', 'Build on planet - cannot complete')
                                 Utils.sendMessage(tran, obj, Const.MSG_CANNOTBUILD_SHLOST, planet.oid, None)
@@ -892,7 +889,7 @@ class IFleet(IObject):
             return
         upgraded = 0
         # perform upgrade
-        for designID in list(player.shipDesigns.keys()):
+        for designID in player.shipDesigns.keys():
             spec = player.shipDesigns[designID]
             if spec.upgradeTo:
                 #@log.debug("Upgrading design", designID, "to", spec.upgradeTo, "for player", player.oid)
@@ -906,7 +903,7 @@ class IFleet(IObject):
                     continue
                 # scan all ships for design
                 designExists = 0
-                for index in range(0, len(obj.ships)):
+                for index in xrange(0, len(obj.ships)):
                     if obj.ships[index][Const.SHIP_IDX_DESIGNID] == designID:
                         # find planet with free upgrade points
                         needsUPts = Rules.shipUpgradePts[upgradeToSpec.combatClass]
@@ -1191,7 +1188,7 @@ class IFleet(IObject):
                 count = obj.combatCounter + desCount[designID] + wpnCount[weaponID] - 3
                 # add to attacks
                 #@log.debug('IFleet', obj.oid, designID, "Count", count, 'Shots', weapon.name, ShipUtils.getRounds(weapon.weaponROF, count))
-                for round in range(0, ShipUtils.getRounds(weapon.weaponROF * rofMod, count)):
+                for round in xrange(0, ShipUtils.getRounds(weapon.weaponROF * rofMod, count)):
                     shots[weapon.weaponClass].append((attack, weaponID))
         log.debug(obj.oid, "Combat limit settings", obj.maxHits)
         return shots, targets, firing

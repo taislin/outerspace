@@ -18,18 +18,15 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import pygameui as ui
-from osci import client, resr, gdata, sequip
-from .FleetCommandDlg import FleetCommandDlg
-from .FleetSpecsDlg import FleetSpecsDlg
-from .FleetSplitDlg import FleetSplitDlg
-from .FleetScoutBloomDlg import FleetScoutBloomDlg
-from .ConfirmDlg import ConfirmDlg
-from .RenameFleetDlg import RenameFleetDlg
-from .LocateDlg import LocateDlg
+from osci import client, res, gdata, sequip
+from FleetCommandDlg import FleetCommandDlg
+from FleetSpecsDlg import FleetSpecsDlg
+from FleetSplitDlg import FleetSplitDlg
+from FleetScoutBloomDlg import FleetScoutBloomDlg
+from ConfirmDlg import ConfirmDlg
+from RenameFleetDlg import RenameFleetDlg
+from LocateDlg import LocateDlg
 import ige.ospace.Const as Const
 from ige.ospace import Rules
 import ige
@@ -77,7 +74,7 @@ class FleetDlg:
         if hasattr(fleet,'customname') and fleet.customname:
             self.win.title = _('Fleet: %s') % fleet.customname
         else:
-            self.win.title = _('Fleet: %s') % getattr(fleet, 'name', resr.getUnknownName())
+            self.win.title = _('Fleet: %s') % getattr(fleet, 'name', res.getUnknownName())
         # fill listbox
         items = []
         # serial ships
@@ -108,7 +105,7 @@ class FleetDlg:
         # fleet info
         self.win.vFCoordinates.text = '[%.1f, %.1f]' % (fleet.x, fleet.y)
         if fleet.orbiting != Const.OID_NONE:
-            self.win.vFOrbiting.text = getattr(client.get(fleet.orbiting, noUpdate = 1), 'name', resr.getUnknownName())
+            self.win.vFOrbiting.text = getattr(client.get(fleet.orbiting, noUpdate = 1), 'name', res.getUnknownName())
         else:
             self.win.vFOrbiting.text = _('N/A')
         if hasattr(fleet, "speedBoost") and hasattr(fleet, "maxSpeed"):
@@ -131,14 +128,14 @@ class FleetDlg:
             for action, target, data in fleet.actions:
                 info = "-"
                 if target != Const.OID_NONE:
-                    targetName = getattr(client.get(target, noUpdate = 1), 'name', resr.getUnknownName())
+                    targetName = getattr(client.get(target, noUpdate = 1), 'name', res.getUnknownName())
                 else:
                     targetName = '-'
                 if index == fleet.actionIndex: current = '>'
                 else: current = ''
                 # additional info
                 if action == Const.FLACTION_DECLAREWAR:
-                    info = getattr(client.get(data, noUpdate = 1), 'name', resr.getUnknownName())
+                    info = getattr(client.get(data, noUpdate = 1), 'name', res.getUnknownName())
                 elif action == Const.FLACTION_DEPLOY:
                     info = client.getPlayer().shipDesigns[data].name
                 elif action == Const.FLACTION_REPEATFROM:
@@ -191,7 +188,7 @@ class FleetDlg:
             short = sequip.getShortDescr(techID)
             long = sequip.getLongDescr(techID)
             item = ui.Item(_("%d x %s") % (tech.eqIDs[techID], eq.name),
-                tData = short, tooltip = int, statustip = int)
+                tData = short, tooltip = long, statustip = long)
             items.append(item)
         self.win.vShipEquipment.items = items
         self.win.vShipEquipment.itemsChanged()
@@ -235,7 +232,7 @@ class FleetDlg:
                 self.update()
                 gdata.mainGameDlg.update()
             return 0
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(_(e.args[0]))
             return 1
 
@@ -265,7 +262,7 @@ class FleetDlg:
             self.update()
             gdata.mainGameDlg.update()
             return 0
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(_(e.args[0]))
             return 1
 
@@ -282,7 +279,7 @@ class FleetDlg:
             self.win.setStatus(_('Command has been executed.'))
             self.onSelectCommand(widget, action, None)
             gdata.mainGameDlg.update()
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(_(e.args[0]))
             return 1
 

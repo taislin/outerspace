@@ -18,22 +18,19 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-def _(msg): return msg
-
-
 import math
 import re
 import time
 
 import ige
-from . import Rules
-from . import Utils
-from . import ShipUtils
+import Rules
+import Utils
+import ShipUtils
 
 from ige import log
 from ige.IObject import IObject, public
 from ige.IDataHolder import IDataHolder
-from . import Const
+import Const
 
 class IPlayer(IObject):
 
@@ -44,9 +41,9 @@ class IPlayer(IObject):
     def init(self, obj):
         IObject.init(self, obj)
         #
-        obj.login = ''
-        obj.name = ''
-        obj.fullName = ''
+        obj.login = u''
+        obj.name = u''
+        obj.fullName = u''
         #
         obj.buoys = {}
         obj.alliedBuoys = {}
@@ -104,7 +101,7 @@ class IPlayer(IObject):
         # refresh technologies
         self.setStartingTechnologies(obj)
         # clean up obsoleted technologies
-        obsoleted = set(obj.techs.keys()).difference(list(Rules.techs.keys()))
+        obsoleted = set(obj.techs.keys()).difference(Rules.techs.keys())
         for techID in obsoleted:
             log.debug("Deleting obsoleted technology", obj.oid, techID)
             del obj.techs[techID]
@@ -118,21 +115,21 @@ class IPlayer(IObject):
                 new.upgradeTo = old.upgradeTo
             obj.shipDesigns[designID] = new
         # check all diplomacyRels
-        for partyID in list(obj.diplomacyRels.keys()):
+        for partyID in obj.diplomacyRels.keys():
             party = tran.db.get(partyID, None)
             if not party or party.type not in Const.PLAYER_TYPES:
                 log.debug("Deleting party", obj.oid, partyID)
                 del obj.diplomacyRels[partyID]
         # delete obj with low scan pwr
         # check type of the objects in the map
-        for objID in list(obj.staticMap.keys()):
+        for objID in obj.staticMap.keys():
             obj.staticMap[objID] = min(obj.staticMap[objID], Rules.maxScanPwr)
             if obj.staticMap[objID] < Rules.level1InfoScanPwr:
                 del obj.staticMap[objID]
             if objID not in tran.db or tran.db[objID].type not in (Const.T_SYSTEM, Const.T_WORMHOLE):
                 log.debug("Deleting non system %d from static map of player %d" % (objID, obj.oid))
                 del obj.staticMap[objID]
-        for objID in list(obj.dynamicMap.keys()):
+        for objID in obj.dynamicMap.keys():
             if obj.dynamicMap[objID] < Rules.level1InfoScanPwr:
                 del obj.dynamicMap[objID]
             if objID not in tran.db or tran.db[objID].type != Const.T_FLEET:
@@ -151,7 +148,7 @@ class IPlayer(IObject):
                 log.warning("There is a problem when processing planet - removing", obj.oid, objID)
                 obj.planets.remove(objID)
         # check if systems in buoys are systems
-        for objID in list(obj.buoys.keys()):
+        for objID in obj.buoys.keys():
             try:
                 if objID not in tran.db:
                     log.debug("System for buoy does not exists - removing", obj.oid, objID)
@@ -177,7 +174,7 @@ class IPlayer(IObject):
         wip = 1
         while wip:
             wip = 0
-            for techID in list(obj.techs.keys()):
+            for techID in obj.techs.keys():
                 if techID not in Rules.techs:
                     wip = 1
                     log.debug("Deleting nonexistent tech", techID, "player", obj.oid)
@@ -258,7 +255,7 @@ class IPlayer(IObject):
 
     @staticmethod
     def setStartingTechnologies(obj):
-        for techID, tech in Rules.techs.items():
+        for techID, tech in Rules.techs.iteritems():
             if tech.isStarting and techID not in obj.techs:
                 obj.techs[techID] = (Rules.techBaseImprovement + tech.maxImprovement) / 2
 
@@ -482,7 +479,7 @@ class IPlayer(IObject):
             raise ige.GameException("Design name must not be entirely whitespace.")
         # find free design id
         index = 1
-        ids = list(obj.shipDesigns.keys())
+        ids = obj.shipDesigns.keys()
         while 1:
             if index not in ids:
                 break
@@ -538,9 +535,9 @@ class IPlayer(IObject):
             planet = tran.db[planetID]
             self.cmd(planet).deleteDesign(tran, planet, designID)
         # delete from global queues
-        for queueID in range(len(obj.prodQueues)):
+        for queueID in xrange(len(obj.prodQueues)):
             queue = obj.prodQueues[queueID][:]
-            for taskID in range(len(queue)):
+            for taskID in xrange(len(queue)):
                 if obj.prodQueues[queueID][taskID].techID == designID:
                     self.cmd(obj).abortGlobalConstruction(tran, obj, queueID, taskID)
         # clear upgradeTo
@@ -888,7 +885,7 @@ class IPlayer(IObject):
         systems = {}
         for planetID in obj.planets:
             systems[tran.db[planetID].compOf] = None
-        for systemID in list(systems.keys()):
+        for systemID in systems.keys():
             scanLevels[systemID] = Rules.partnerScanPwr
         # player's map
         for objID in obj.staticMap:
@@ -912,7 +909,7 @@ class IPlayer(IObject):
 
         # create map
         map = dict()
-        for objID, level in scanLevels.items():
+        for objID, level in scanLevels.iteritems():
             tmpObj = tran.db.get(objID, None)
             if not tmpObj:
                 continue
@@ -929,7 +926,7 @@ class IPlayer(IObject):
     def mergeScannerMap(self, tran, obj, map):
         #@log.debug(obj.oid, "Merging scanner map")
         contacts = {}
-        for object, level in map.items():
+        for object, level in map.iteritems():
             objID = object.oid
             if object.type in (Const.T_SYSTEM, Const.T_WORMHOLE):
                 obj.staticMap[objID] = max(obj.staticMap.get(objID, 0), level)
@@ -1053,7 +1050,7 @@ class IPlayer(IObject):
                 if obj.rsrchQueue:
                     continue
             # oops we must find technology to degrade
-            avail = list(obj.techs.keys())
+            avail = obj.techs.keys()
             # do not degrade technologies, which enables others
             for techID in obj.techs:
                 tech = Rules.techs[techID]
@@ -1144,7 +1141,7 @@ class IPlayer(IObject):
         # do not process other cmds if time disabled
         # clear contacts and delete too old rels
         turn = tran.db[Const.OID_UNIVERSE].turn
-        for objID in list(obj.diplomacyRels.keys()):
+        for objID in obj.diplomacyRels.keys():
             dipl = obj.diplomacyRels[objID]
             # reset contact type
             obj.diplomacyRels[objID].contactType = Const.CONTACT_NONE
@@ -1222,7 +1219,7 @@ class IPlayer(IObject):
         # compute government controll range
         if not hasattr(obj,"tmpPopDistr"): #when player is force-resigned, tmpPopDistr is unset. This is easiest fix.
             obj.tmpPopDistr = {}
-        ranges = list(obj.tmpPopDistr.keys())
+        ranges = obj.tmpPopDistr.keys()
         ranges.sort()
         sum = 0
         range = 1
@@ -1278,7 +1275,7 @@ class IPlayer(IObject):
         systems = {}
         for planetID in obj.planets:
             systems[tran.db[planetID].compOf] = None
-        for systemID in list(obj.shipRedirections.keys()):
+        for systemID in obj.shipRedirections.keys():
             if systemID not in systems:
                 del obj.shipRedirections[systemID]
 
@@ -1286,7 +1283,7 @@ class IPlayer(IObject):
         obj.alliedBuoys = {}
 
         # find all allies
-        for partnerID in list(obj.diplomacyRels.keys()):
+        for partnerID in obj.diplomacyRels.keys():
             dipl = obj.diplomacyRels[partnerID]
             getAllyBuoys = False
             getScannerBuoys = False
@@ -1297,7 +1294,7 @@ class IPlayer(IObject):
             if (getAllyBuoys or getScannerBuoys):
                 partner = tran.db[partnerID]
                 if hasattr(partner, "buoys"):
-                    for systemID in list(partner.buoys.keys()):
+                    for systemID in partner.buoys.keys():
                         toAllyBuoy = Const.BUOY_NONE
                         if getAllyBuoys and partner.buoys[systemID][1] == Const.BUOY_TO_ALLY:
                             toAllyBuoy = (partner.buoys[systemID][0], Const.BUOY_FROM_ALLY, partner.name)

@@ -17,9 +17,6 @@
 #  along with Outer Space; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
-
-def _(msg): return msg
-
 import copy
 import random
 from ige import log
@@ -62,7 +59,7 @@ class AI(object):
     def _get_researchable(self):
         researchable = set()
         # already available
-        for tech_id in list(self.player.techs.keys()):
+        for tech_id in self.player.techs.keys():
             tech = self.client.getTechInfo(tech_id)
             improvement = self.player.techs[tech_id]
             if improvement < Rules.techMaxImprovement and\
@@ -87,7 +84,7 @@ class AI(object):
         researchable = self._get_researchable()
         weights = []
         tech_choices = []
-        for weight, techs in weighted_techs.items():
+        for weight, techs in weighted_techs.iteritems():
             for tech in researchable.intersection(techs):
                 weights.append(weight)
                 tech_choices.append(tech)

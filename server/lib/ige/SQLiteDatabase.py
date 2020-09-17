@@ -163,7 +163,7 @@ class Database:
         row = self.cursor.fetchone()
         if row is None:
             raise ige.NoSuchObjectException(key)
-        item = pickle.loads(str(row[1]))
+        item = pickle.loads(row[1])
         self._addNewCacheItem(key)
         self.cache[key] = item
         #TODOitem.setModified(0)

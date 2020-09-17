@@ -70,22 +70,15 @@ class ClientMngr:
 
     def _initAdminAccount(self):
         # create special key
+        log.message("Loading admin account...")
 
-        if ADMIN_LOGIN in self.accounts:
-            self.accounts[ADMIN_LOGIN].passwdHashed = False # Needs plaintext login from token
-            password = passwordGen()
-            self.accounts[ADMIN_LOGIN].setPassword(password)
-        else:
-            log.message("No administator account found! (looking for '%s')" % ADMIN_LOGIN)
-            log.message("Creating default account")
-            # create account
-            account = AdminAccount()
-            # update
-            password = account.passwd
-            self.accounts.create(account, id = str(account.login))
-        with open(os.path.join(self.configDir, "token"), "w") as tokenFile:
-            tokenFile.write(password)
-
+        log.message("No administator account found! (looking for '%s')" % ADMIN_LOGIN)
+        log.message("Creating default account")
+        # create account
+        account = AdminAccount()
+        # update
+        password = account.passwd
+        log.message("Done.")
     def createAccount(self, sid, login, safePasswd, nick, email):
         log.message('Creating account', login, nick, email)
         session = self.getSession(sid)
@@ -113,8 +106,6 @@ class ClientMngr:
         account = Account(login, nick, email, plainPassword)
         # update
         self.accounts.create(account, id = str(account.login))
-        log.message('Account created, confirmation token:', account.confToken)
-        # TODO send confirmation token to the email address
         return 1, None
 
     def createAIAccount(self, login, nick, aiType):
@@ -135,6 +126,7 @@ class ClientMngr:
         return 1, None
 
     def generateAIList(self):
+        log.message('Generating AI list...')
         aiList = AIList(self.configDir)
         aiList.removeAll()
         for login in list(self.accounts.keys()):

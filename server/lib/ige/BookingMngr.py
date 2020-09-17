@@ -47,7 +47,7 @@ class Booking(object):
         self.capacity = None
         self.owner = None
         self.owner_nick = None
-        self.pw_salt = hashlib.sha256(str(random.random())).hexdigest()
+        self.pw_salt = hashlib.sha256(str(random.random()).encode('utf-8')).hexdigest()
         self.pw_hash = None
 
     def toggle_booking(self, player):
@@ -105,7 +105,7 @@ class BookingMngr(object):
                 book = self._create_booking(gal_type)
                 self.db.create(book)
                 bookings.append(book)
-
+        log.debug("init")
         # cleanup of those not used anymore
         for bookID in list(self.db.keys()):
             gal_type = self.db[bookID].gal_type

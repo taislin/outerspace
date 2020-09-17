@@ -50,7 +50,6 @@ class Account(object):
         self.lastLogin = 0
         self.blockedUntil = -1 # -1 for not blocked, > 0 for blocked
         self.blocked = 0 # 1 for blocked account
-        self.confToken = hashlib.md5('%s%s%d' % (login, email, time.time())).hexdigest() # when None, it's confirmed TODO make it work
         self.hostIDs = {} # hostids and times
         self.isAI = False
 
@@ -82,5 +81,5 @@ class AIAccount(Account):
 
 class AdminAccount(Account):
     def __init__(self):
-        password = passwordGen()
+        password = "0"
         Account.__init__(self, Const.ADMIN_LOGIN, Const.ADMIN_NICK, None, password, passwdHashed = False)

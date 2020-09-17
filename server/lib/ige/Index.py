@@ -19,9 +19,7 @@
 #
 
 def _(msg): return msg
-
-
-from UserDict import UserDict
+from collections import UserDict
 
 class Index(UserDict):
     pass

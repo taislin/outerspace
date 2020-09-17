@@ -183,7 +183,7 @@ class os_filesystem:
         # path components, and do it safely.
         # <real_root>/<current_directory>/<path>
         # use the operating system's path separator.
-        path = string.join (string.split (path, '/'), os.sep)
+        path = str.join (string.split (path, '/'), os.sep)
         p = self.normalize (self.path_module.join (self.wd, path))
         p = self.normalize (self.path_module.join (self.root, p[1:]))
         return p
@@ -390,7 +390,7 @@ import time
 def unix_longify (file, stat_info):
     # for now, only pay attention to the lower bits
     mode = ('%o' % stat_info[stat.ST_MODE])[-3:]
-    mode = string.join ([mode_table[x] for x in mode], '')
+    mode = str.join ([mode_table[x] for x in mode], '')
     if stat.S_ISDIR (stat_info[stat.ST_MODE]):
         dirchar = 'd'
     else:
@@ -464,5 +464,5 @@ class list_producer:
             if self.long:
                 bunch = list(map (self.longify, bunch))
             self.file_list = self.file_list[50:]
-            return string.joinfields (bunch, '\r\n') + '\r\n'
+            return str.joinfields (bunch, '\r\n') + '\r\n'
 

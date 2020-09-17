@@ -21,7 +21,8 @@
 def _(msg): return msg
 
 
-import time, log, ige
+import time, ige
+from . import log
 
 class MsgMngrException(Exception):
     pass

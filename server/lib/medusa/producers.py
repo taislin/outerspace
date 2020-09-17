@@ -60,14 +60,14 @@ class lines_producer:
         if self.lines:
             chunk = self.lines[:50]
             self.lines = self.lines[50:]
-            return string.join (chunk, '\r\n') + '\r\n'
+            return str.join (chunk, '\r\n') + '\r\n'
         else:
             return ''
 
 class buffer_list_producer:
     "producer for a list of buffers"
 
-    # i.e., data == string.join (buffers, '')
+    # i.e., data == str.join (buffers, '')
 
     def __init__ (self, buffers):
 
@@ -119,14 +119,14 @@ class output_producer:
 
     def write (self, data):
         lines = string.splitfields (data, '\n')
-        data = string.join (lines, '\r\n')
+        data = str.join (lines, '\r\n')
         self.data = self.data + data
 
     def writeline (self, line):
         self.data = self.data + line + '\r\n'
 
     def writelines (self, lines):
-        self.data = self.data + string.joinfields (
+        self.data = self.data + str.joinfields (
             lines,
             '\r\n'
             ) + '\r\n'
@@ -243,7 +243,7 @@ class chunked_producer:
             else:
                 self.producer = None
                 if self.footers:
-                    return string.join (
+                    return str.join (
                         ['0'] + self.footers,
                         '\r\n'
                         ) + '\r\n\r\n'

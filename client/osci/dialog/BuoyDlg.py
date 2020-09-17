@@ -54,7 +54,7 @@ class BuoyDlg:
         self.win.show()
 
     def onOK(self, widget, action, data):
-        self.buoyText = string.join(self.win.vText.text, "\n")
+        self.buoyText = str.join(self.win.vText.text, "\n")
         if self.win.vAllied.checked:
             self.buoyType = Const.BUOY_TO_ALLY
         elif self.win.vScanner.checked:

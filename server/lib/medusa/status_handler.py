@@ -61,7 +61,7 @@ class status_extension:
         path, params, query, fragment = request.split_uri()
         self.hit_counter.increment()
         if path == self.statusdir:          # and not a subdirectory
-            up_time = string.join (english_time (int(time.time()) - START_TIME))
+            up_time = str.join (english_time (int(time.time()) - START_TIME))
             request['Content-Type'] = 'text/html'
             request.push (
                 '<html>'
@@ -204,7 +204,7 @@ class lines_producer:
         if self.lines:
             chunk = self.lines[:50]
             self.lines = self.lines[50:]
-            return string.join (chunk, '\r\n') + '\r\n'
+            return str.join (chunk, '\r\n') + '\r\n'
         else:
             return ''
 
@@ -226,9 +226,9 @@ class channel_list_producer (lines_producer):
 # this really needs a full-blown quoter...
 def sanitize (s):
     if '<' in s:
-        s = string.join (string.split (s, '<'), '&lt;')
+        s = str.join (string.split (s, '<'), '&lt;')
     if '>' in s:
-        s = string.join (string.split (s, '>'), '&gt;')
+        s = str.join (string.split (s, '>'), '&gt;')
     return s
 
 def html_repr (object):

@@ -120,7 +120,7 @@ def getShortDescr(techID, myDetail = SHORT):
             else:
                 result.append(_(text) % list(filter(getattr(tech, attr))))
     if result:
-        return string.join(result, ", ")
+        return str.join(result, ", ")
     else:
         return _("N/A")
 

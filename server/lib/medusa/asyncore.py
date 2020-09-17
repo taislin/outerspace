@@ -219,7 +219,7 @@ class dispatcher:
                 status.append ('%s:%d' % self.addr)
             return '<%s %s at %x>' % (
                 self.__class__.__name__,
-                string.join (status, ' '),
+                str.join (status, ' '),
                 id(self)
                 )
         except:
@@ -480,8 +480,8 @@ def compact_traceback ():
     del tb
 
     file, function, line = tbinfo[-1]
-    info = '[' + string.join (
-        [string.join (x, '|') for x in tbinfo],
+    info = '[' + str.join (
+        [str.join (x, '|') for x in tbinfo],
         '] ['
         ) + ']'
     return (file, function, line), t, v, info

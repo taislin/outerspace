@@ -81,7 +81,7 @@ class http_request:
         return key in self.reply_headers
 
     def build_reply_header (self):
-        return string.join (
+        return str.join (
             [self.response(self.reply_code)] + ['%s: %s' % x for x in list(self.reply_headers.items())],
             '\r\n'
             ) + '\r\n\r\n'
@@ -312,17 +312,8 @@ class http_request:
         }
 
     # Default error message
-    DEFAULT_ERROR_MESSAGE = string.join (
-        ['<head>',
-         '<title>Error response</title>',
-         '</head>',
-         '<body>',
-         '<h1>Error response</h1>',
-         '<p>Error code %(code)d.',
-         '<p>Message: %(message)s.',
-         '</body>',
-         ''
-         ],
+    DEFAULT_ERROR_MESSAGE = str.join (
+        '<head><title>Error response</title></head><body><h1>Error response</h1><p>Error code %(code)d.<p>Message: %(message)s.</body>',
         '\r\n'
         )
 
@@ -620,7 +611,7 @@ class http_server (asyncore.dispatcher):
 
     def status (self):
         def nice_bytes (n):
-            return string.join (status_handler.english_bytes (n))
+            return str.join (status_handler.english_bytes (n))
 
         handler_stats = [_f for _f in map (maybe_status, self.handlers) if _f]
 

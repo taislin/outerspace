@@ -22,9 +22,10 @@ def _(msg): return msg
 
 
 import ige
-import os.path, log, os, sys, time, types, binascii, bz2
+import os.path, os, sys, time, types, binascii, bz2
 import pickle as pickle
 import sqlite3
+from . import log
 
 IDX_PREV = 0
 IDX_NEXT = 1

@@ -136,7 +136,7 @@ class NewMessageDlg:
             message = {
                 "forum": self.recipientForum,
                 "topic": self.win.vTopic.text,
-                "text": string.join(self.win.vText.text, "\n"),
+                "text": str.join(self.win.vText.text, "\n"),
             }
             # send message to all recipients
             for objID in self.recipientObjID:

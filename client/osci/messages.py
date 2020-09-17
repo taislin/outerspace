@@ -57,7 +57,7 @@ def objIDList2Names(objIDs):
             owner = ''
         text = _('%s%s') % (getattr(obj, 'name', resr.getUnknownName()), owner)
         names.append(text)
-    return string.join(names, ', ')
+    return str.join(names, ', ')
 
 def minesReport(xxx_todo_changeme):
     (damageCaused, killsCaused, minesTriggered) = xxx_todo_changeme

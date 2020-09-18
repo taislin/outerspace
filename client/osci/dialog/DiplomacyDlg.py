@@ -23,7 +23,7 @@ from osci.StarMapWidget import StarMapWidget
 from osci import gdata, res, client
 import ige.ospace.Const as Const
 from ige.ospace import Rules
-from ColorDefinitionDlg import ColorDefinitionDlg
+from . import ColorDefinitionDlg
 import ige
 
 # pact actions

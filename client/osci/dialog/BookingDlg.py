@@ -25,7 +25,7 @@ import ige
 import ige.ospace.Const as Const
 from osci import client
 from osci import gdata
-from PasswordDlg import PasswordDlg
+from . import PasswordDlg
 
 
 class BookingDlg:

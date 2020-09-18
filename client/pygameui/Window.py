@@ -86,7 +86,7 @@ class Window(MetaWidget.MetaWidget):
     def draw(self, surface):
         if not self.surface or self.surface.get_size() != self.rect.size:
             self.surface = pygame.Surface(self.rect.size, self.app.windowSurfaceFlags)
-        changed = MetaWidget.draw(self, self.surface)
+        changed = MetaWidget.MetaWidget.draw(self, self.surface)
         if self._fullUpdate:
             changed = self.surface.get_rect()
             self._fullUpdate = False

@@ -53,14 +53,14 @@ def bytes2int(bytes):
     8405007
     """
 
-    if not (type(bytes) is list or type(bytes) is StringType):
+    if not (type(bytes) is list or type(bytes) is type(str)):
         raise TypeError("You must pass a string or a list")
 
     # Convert byte stream to integer
     integer = 0
     for byte in bytes:
         integer *= 256
-        if type(byte) is StringType: byte = ord(byte)
+        if type(byte) is type(str): byte = ord(byte)
         integer += byte
 
     return integer

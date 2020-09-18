@@ -26,10 +26,10 @@ from osci import client
 from osci import gdata
 import ige.ospace.Const as Const
 
-from MainGameDlg import MainGameDlg
+from . import MainGameDlg
 from . import ConfirmDlg
-from BookingDlg import BookingDlg
-from PasswordDlg import PasswordDlg
+from . import BookingDlg
+from . import PasswordDlg
 
 class PlayerSelectDlg:
     """ Called for selection of active or picking a new player."""

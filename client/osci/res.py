@@ -58,7 +58,7 @@ def initialize():
 def updateProgress(curr, progress_dlg):
     if not progress_dlg: return
     if curr % 30 == 0:
-        periods = '.' * (curr / 30 % 4)
+        periods = '.' * int(curr / 30 % 4)
         progress_dlg.setProgress(_('Loading resources' + periods), curr)
 
 

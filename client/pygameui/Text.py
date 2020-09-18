@@ -41,12 +41,12 @@ class Selection(object):
     @property
     def first(self):
         """ Returns coordinates of the beginning of the selection """
-        return min(self._start, self._end)
+        return min(int(self._start), int(self._end))
 
     @property
     def last(self):
         """ Returns coordinates of the ending of the selection """
-        return max(self._start, self._end)
+        return max(int(self._start), int(self._end))
 
     def select(self, row, column):
         if self._start is None:
@@ -74,6 +74,7 @@ class Text(Widget.Widget):
         setattr(self,'editable', 1)
         setattr(self,'vertScrollbar', None)
         setattr(self,'selection', Selection())
+        setattr(self,'visible', 1)
         # flags
         self.processKWArguments(kwargs)
         parent.registerWidget(self)
@@ -304,15 +305,15 @@ class Text(Widget.Widget):
         elif evt.key in MAPPING:
             self.wrapDeleteSelection(self._processNumKeyboard, evt)
 
-        return Widget.processKeyDown(self, Const.NoEvent)
+        return Widget.Widget.processKeyDown(self, Const.NoEvent)
 
     def onFocusGained(self):
-        Widget.onFocusGained(self)
+        Widget.Widget.onFocusGained(self)
         self.cursorRow = len(self.text) - 1
         self.cursorColumn = len(self.text[self.cursorRow])
 
     def onFocusLost(self):
-        Widget.onFocusLost(self)
+        Widget.Widget.onFocusLost(self)
         self.processAction(self.action)
 
     # redirect mouse wheel events to the scollbar

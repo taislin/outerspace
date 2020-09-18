@@ -30,7 +30,7 @@ import ige.ospace.Const as Const
 from ige import log
 import resources
 
-from ChangePasswordDlg import ChangePasswordDlg
+from . import ChangePasswordDlg
 
 class OptionsDlg:
     """Displays options dialog.

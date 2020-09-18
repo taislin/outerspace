@@ -36,9 +36,9 @@ from . import GalaxyFinishDlg
 from . import ConfirmDlg
 from . import OptionsDlg
 from . import SearchDlg
-import ProblemsDlg
-import DiplomacyDlg
-import EmpireOverviewDlg
+from . import ProblemsDlg
+from . import DiplomacyDlg
+from . import EmpireOverviewDlg
 import ige.ospace.Const as Const
 from ige import log
 import resources

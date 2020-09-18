@@ -41,7 +41,7 @@ def initFont(name, ttfFile, size, bold = 0, italic = 0, underline = 0):
 def renderText(name, text, antialias, fg, bg = None):
     antialias = 1
     tType = type(text)
-    if tType != StringType and tType != UnicodeType:
+    if tType != type(str) and tType != type(str):
         text = str(text)
     if len(text) == 0:
         # TODO return very small surface

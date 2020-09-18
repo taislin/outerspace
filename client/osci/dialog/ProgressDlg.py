@@ -21,6 +21,18 @@
 import pygameui as ui
 from osci import res, gdata
 
+# Alignment
+ui.ALIGN_NONE = 0x00
+ui.ALIGN_N = 0x01
+ui.ALIGN_S = 0x02
+ui.ALIGN_E = 0x04
+ui.ALIGN_W = 0x08
+ui.ALIGN_NE = ui.ALIGN_N | ui.ALIGN_E
+ui.ALIGN_NW = ui.ALIGN_N | ui.ALIGN_W
+ui.ALIGN_SE = ui.ALIGN_S | ui.ALIGN_E
+ui.ALIGN_SW = ui.ALIGN_S | ui.ALIGN_W
+ui.ALIGN_MASK = 0x0f
+
 class ProgressDlg:
 
     def __init__(self, app):
@@ -50,15 +62,15 @@ class ProgressDlg:
 
     def createUI(self):
         w, h = gdata.scrnSize
-        self.win = ui.Window(self.app,
+        self.win = ui.Window.Window(self.app,
             modal = 1,
             movable = 0,
             title = _('Question'),
             rect = ui.Rect((w - 424) / 2, (h - 124) / 2, 424, 124),
-            layoutManager = ui.SimpleGridLM(),
+            layoutManager = ui.SimpleGridLM.SimpleGridLM(),
         )
         self.win.subscribeAction('*', self)
-        ui.Text(self.win, layout = (5, 1, 15, 1), id = 'vText', background = self.win.app.theme.themeBackground, editable = 0)
-        ui.ProgressBar(self.win, layout = (5, 2, 15, 1), id = 'vProgress')
-        ui.Label(self.win, layout = (0, 0, 5, 4), icons = ((res.loginLogoImg, ui.ALIGN_W),))
-        ui.Title(self.win, layout = (0, 4, 21, 1), id = 'vStatusBar', align = ui.ALIGN_W)
+        ui.Text.Text(self.win, layout = (5, 1, 15, 1), id = 'vText', background = self.win.app.theme.themeBackground, editable = 0)
+        ui.ProgressBar.ProgressBar(self.win, layout = (5, 2, 15, 1), id = 'vProgress')
+        ui.Label.Label(self.win, layout = (0, 0, 5, 4), icons = ((res.loginLogoImg, ui.ALIGN_W),))
+        ui.Title.Title(self.win, layout = (0, 4, 21, 1), id = 'vStatusBar', align = ui.ALIGN_W)

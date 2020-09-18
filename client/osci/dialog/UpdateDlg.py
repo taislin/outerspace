@@ -27,7 +27,7 @@ import pygameui as ui
 import re
 import shutil
 import sys
-import urllib2
+import urllib
 import tarfile
 
 class UpdateDlg:
@@ -74,7 +74,7 @@ class UpdateDlg:
         # get file
         try:
             # open URL
-            opener = urllib2.build_opener(urllib2.ProxyHandler(proxies))
+            opener = urllib.build_opener(urllib.ProxyHandler(proxies))
             # it unfortunately is not completely reliable
             for i in range(1,5):
                 try:
@@ -106,7 +106,7 @@ class UpdateDlg:
             ifh.close()
             ofh.close()
             return filename
-        except urllib2.URLError as e:
+        except urllib.error.URLError as e:
             log.warning("Cannot download file")
             self.reportFailure(_("Cannot finish download: %(s)") % str(e.reason))
             return None

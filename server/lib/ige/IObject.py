@@ -101,9 +101,9 @@ class IObject:
                     value = int(attr.nodeValue)
                 elif attrType == FloatType:
                     value = float(attr.nodeValue)
-                elif attrType == UnicodeType:
+                elif attrType == type(str):
                     value = attr.nodeValue
-                elif attrType == StringType:
+                elif attrType == type(str):
                     value = attr.nodeValue
                 else:
                     raise 'Unsupported attribute type %s' % attrType

@@ -45,7 +45,7 @@ class Item:
         if hasattr(self, key):
             value = getattr(self, key)
             valType = type(value)
-            if valType == StringType or valType == UnicodeType:
+            if valType == type(str) or valType == type(str):
                 return value
             else:
                 return str(value)

@@ -24,8 +24,8 @@ from osci import gdata, client
 import ige.ospace.Const as Const
 from ige.ospace import Rules
 import string, math
-from PlanetsAnalysisDlg import PlanetsAnalysisDlg
-from FleetsAnalysisDlg import FleetsAnalysisDlg
+from . import PlanetsAnalysisDlg
+from . import FleetsAnalysisDlg
 
 class EmpireOverviewDlg:
     """Displays Empire overview dialog.

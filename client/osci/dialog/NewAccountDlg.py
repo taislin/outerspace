@@ -20,7 +20,7 @@
 
 import pygameui as ui
 from osci import client, gdata, res
-from MainGameDlg import MainGameDlg
+from . import MainGameDlg
 from ige import SecurityException
 
 class NewAccountDlg:

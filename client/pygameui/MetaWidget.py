@@ -79,7 +79,7 @@ class MetaWidget(Widget.Widget):
         if name[:2] == '__':
             raise AttributeError(name)
         # access widgets
-        value = setattr(self,'widgetMap',get(name, Const.NoValue))
+        value = self.__dict__['widgetMap'].get(name, Const.NoValue)
         if value != Const.NoValue:
             return value
         else:
@@ -91,9 +91,10 @@ class MetaWidget(Widget.Widget):
             self.layoutManager.layoutWidgets()
 
     def redraw(self, widget, redrawParent = 0):
-        if widget.visible:
-            self.redrawWidgets[widget] = None
-        elif self.redrawWidgets.has_key(widget):
+        if hasattr(widget,"visible"):
+            if (widget.visible):
+                self.redrawWidgets[widget] = None
+        elif widget in self.redrawWidgets:
             del self.redrawWidgets[widget]
         if not self._changeReported:
             self.parent.redraw(self)

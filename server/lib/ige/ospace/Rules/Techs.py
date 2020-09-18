@@ -188,9 +188,9 @@ class Technology:
                 value = int(value)
             elif attrType == FloatType:
                 value = float(value)
-            elif attrType == UnicodeType:
+            elif attrType == type(str):
                 pass
-            elif attrType == StringType:
+            elif attrType == type(str):
                 value = str(value)
             elif attrType == FunctionType:
                 value = getattr(TechHandlers, value)
@@ -198,7 +198,7 @@ class Technology:
                 itemType = type(attrs[key][0])
                 if itemType == IntType:
                     convertFunc = int
-                elif itemType == StringType:
+                elif itemType == type(str):
                     convertFunc = str
                 elif itemType == FloatType:
                     convertFunc = float
@@ -215,7 +215,7 @@ class Technology:
                 keyType = type(dict_key)
                 if keyType == IntType:
                     convertFuncKey = int
-                elif keyType == StringType:
+                elif keyType == type(str):
                     convertFuncKey = str
                 elif keyType == FloatType:
                     convertFuncKey = float
@@ -224,7 +224,7 @@ class Technology:
                 valueType = type(dict_value)
                 if valueType == IntType:
                     convertFuncValue = int
-                elif valueType == StringType:
+                elif valueType == type(str):
                     convertFuncValue = str
                 elif valueType == FloatType:
                     convertFuncValue = float

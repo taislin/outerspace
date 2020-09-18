@@ -211,8 +211,8 @@ class Listbox(MetaWidget.MetaWidget):
         try:
             if t == IntType: value = int(value)
             elif t == FloatType: value = float(value)
-            elif t == StringType: value = str(value)
-            elif t == UnicodeType: pass
+            elif t == type(str): value = str(value)
+            elif t == type(str): pass
             elif t == LongType: value = int(value)
             else:
                 self._setListIndex(widget.data.index, widget.data)

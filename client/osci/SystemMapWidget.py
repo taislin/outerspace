@@ -23,7 +23,7 @@ import pygameui as ui
 from pygameui import Fonts
 import ige.ospace.Const as Const
 import pygame, pygame.draw
-import gdata, res, client
+from . import gdata, res, client
 from ige import log
 
 # number of planet's images
@@ -33,10 +33,10 @@ buoyColors = [(0xff, 0xff, 0x00), (0x00, 0xff, 0xff), (0xff, 0x00, 0xff), (0xb0,
 MAX_BOUY_DISPLAY_LEN = 30
 MAX_BOUY_DISPLAY_ROWS = 3
 
-class SystemMapWidget(Widget.Widget):
+class SystemMapWidget(Widget):
 
     def __init__(self, parent, **kwargs):
-        Widget.Widget.__init__(self, parent)
+        Widget.__init__(self, parent)
         # data
         self.action = None
         self.hoverAction = None
@@ -245,4 +245,4 @@ class SystemMapWidget(Widget.Widget):
         if self.selectedObjID:
             self.processAction(self.action, self.selectedObjID)
         return ui.NoEvent
-Widget.registerWidget(SystemMapWidget, 'systemmapwidget')
+ui.Widget.registerWidget(SystemMapWidget, 'systemmapwidget')

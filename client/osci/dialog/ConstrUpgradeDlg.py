@@ -24,7 +24,7 @@ from osci import gdata, res, client, sequip
 import ige.ospace.Const as Const
 from ige import GameException
 from ige.ospace import Rules
-from ConfirmDlg import ConfirmDlg
+from . import ConfirmDlg
 
 class ConstrUpgradeDlg:
 

@@ -27,9 +27,9 @@ from ige.ospace import Rules
 import ige.ospace.Const as Const
 
 from osci import gdata, client, res
-from TechInfoDlg import TechInfoDlg
-from ConstructionDlg import ConstructionDlg
-from ConfirmDlg import ConfirmDlg
+from . import TechInfoDlg
+from . import ConstructionDlg
+from . import ConfirmDlg
 from . import Utils
 
 

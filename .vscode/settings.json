@@ -1,3 +1,25 @@
 {
-    "python.pythonPath": "C:\\Python38\\python.exe"
+    "python.pythonPath": "C:\\Python38\\python.exe",
+    "startanyshell.shells": [
+        {
+            "description": "Outerspace - Server",
+            "command": "python outerspace.py server"
+        },
+        {
+            "description": "Outerspace - Client (local)",
+            "command": "python outerspace.py --local"
+        },
+        {
+            "description": "Outerspace - Client",
+            "command": "python outerspace.py"
+        },
+        {
+            "description": "Windows Command Prompt",
+            "command": "start \"%description%\" /WAIT %comspec%"
+        },
+        {
+            "description": "Windows Powershell",
+            "command": "start \"%description%\" powershell.exe -noexit"
+        },
+    ]
 }

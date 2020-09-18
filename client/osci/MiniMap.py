@@ -22,7 +22,7 @@ from pygameui.Widget import Widget
 import ige.ospace.Const as Const
 import pygame, pygame.draw
 from ige import log
-import res, client
+from . import res, client
 
 borderColor = (0x00, 0x00, 0x90)
 rectColor = (29, 118, 229)

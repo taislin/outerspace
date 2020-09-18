@@ -25,19 +25,19 @@ import pygameui as ui
 from pygameui import Fonts
 import ige.ospace.Const as Const
 import pygame, pygame.draw, pygame.key, pygame.image
-from dialog.ShowBuoyDlg import ShowBuoyDlg
-from dialog.KeyModHelp import KeyModHelp
-import gdata, client, res
+from .dialog.ShowBuoyDlg import ShowBuoyDlg
+from .dialog.KeyModHelp import KeyModHelp
+from . import gdata, client, res
 from ige import log
 from osci.dialog.SearchDlg import SearchDlg
 from osci.MiniMap import MiniMap
 from osci.StarMap import StarMap
 
 
-class StarMapWidget(Widget.Widget):
+class StarMapWidget(Widget):
 
     def __init__(self, parent, **kwargs):
-        Widget.Widget.__init__(self, parent)
+        Widget.__init__(self, parent)
         self.searchDlg = SearchDlg(self.app)
         self.searchDlg.mapWidget = self
         # data
@@ -100,15 +100,15 @@ class StarMapWidget(Widget.Widget):
 
 
     def updateConfigModes(self):
-        self.control_modes['redirects'] = gdata.config.defaults.showredirects is not 'no'
-        self.control_modes['coords'] = gdata.config.defaults.showcoords is not 'no'
-        self.control_modes['map_grid'] = gdata.config.defaults.showmapgrid is not 'no'
-        self.control_modes['scanners'] = gdata.config.defaults.showmapscanners is not 'no'
-        self.control_modes['fleet_lines'] = gdata.config.defaults.showfleetlines is not 'no'
-        self.control_modes['gate_systems'] = gdata.config.defaults.showgatesystems is not 'no'
-        self.control_modes['alternative_mode'] = gdata.config.defaults.alternateviewmode is not 'no'
-        self.control_modes['control_areas'] = gdata.config.defaults.showplayerzones is not 'no'
-        self.control_modes['minimap'] = gdata.config.defaults.showminimap is not 'yes'
+        self.control_modes['redirects'] = gdata.config.defaults.showredirects != 'no'
+        self.control_modes['coords'] = gdata.config.defaults.showcoords != 'no'
+        self.control_modes['map_grid'] = gdata.config.defaults.showmapgrid != 'no'
+        self.control_modes['scanners'] = gdata.config.defaults.showmapscanners != 'no'
+        self.control_modes['fleet_lines'] = gdata.config.defaults.showfleetlines != 'no'
+        self.control_modes['gate_systems'] = gdata.config.defaults.showgatesystems != 'no'
+        self.control_modes['alternative_mode'] = gdata.config.defaults.alternateviewmode != 'no'
+        self.control_modes['control_areas'] = gdata.config.defaults.showplayerzones != 'no'
+        self.control_modes['minimap'] = gdata.config.defaults.showminimap != 'yes'
 
     def precompute(self):
         self.star_map.rect = self.rect
@@ -718,4 +718,4 @@ class StarMapWidget(Widget.Widget):
         self.repaint_map = 1
         self.processMiniMapRect()
 
-Widget.registerWidget(StarMapWidget, 'starmapwidget')
+ui.Widget.registerWidget(StarMapWidget, 'starmapwidget')

@@ -26,8 +26,8 @@ from ige.ospace import Rules
 import ige.ospace.Const as Const
 
 from osci import gdata, client, res
-from TechInfoDlg import TechInfoDlg
-from ConstructionDlg import ConstructionDlg
+from . import TechInfoDlg
+from . import ConstructionDlg
 from . import Utils
 
 class NewGlobalTaskDlg:

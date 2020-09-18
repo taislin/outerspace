@@ -27,8 +27,8 @@ import ige.ospace.Const as Const
 
 from osci import client, res, gdata
 
-from TechInfoDlg import TechInfoDlg
-from ConfirmDlg import ConfirmDlg
+from . import TechInfoDlg
+from . import ConfirmDlg
 
 class ResearchDlg:
 

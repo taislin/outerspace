@@ -22,11 +22,11 @@
 # the code nicer
 
 import pygameui as ui
-from ChangeQtyDlg import ChangeQtyDlg
-from NewGlobalTaskDlg import NewGlobalTaskDlg
-from ConstructionDlg import ConstructionDlg
-from TechInfoDlg import TechInfoDlg
-from ConfirmDlg import ConfirmDlg
+from . import ChangeQtyDlg
+from . import NewGlobalTaskDlg
+from . import ConstructionDlg
+from . import TechInfoDlg
+from . import ConfirmDlg
 from osci.StarMapWidget import StarMapWidget
 from osci import gdata, res, client, sequip
 import ige.ospace.Const as Const

@@ -21,21 +21,21 @@
 import pygameui as ui
 from osci import gdata, client, res
 from osci.StarMapWidget import StarMapWidget
-from StarSystemDlg import StarSystemDlg
-from FleetDlg import FleetDlg
-from ResearchDlg import ResearchDlg
-from MessagesDlg import MessagesDlg
-from ConstructionDlg import ConstructionDlg
-from PlanetsOverviewDlg import PlanetsOverviewDlg
-from SystemOverviewDlg import SystemOverviewDlg
-from GlobalQueuesDlg import GlobalQueuesDlg
-from FleetsOverviewDlg import FleetsOverviewDlg
-from PlanetsAnalysisDlg import PlanetsAnalysisDlg
-from FleetsAnalysisDlg import FleetsAnalysisDlg
-from GalaxyFinishDlg import GalaxyFinishDlg
-from ConfirmDlg import ConfirmDlg
-from OptionsDlg import OptionsDlg
-from SearchDlg import SearchDlg
+from . import StarSystemDlg
+from . import FleetDlg
+from . import ResearchDlg
+from . import MessagesDlg
+from . import ConstructionDlg
+from . import PlanetsOverviewDlg
+from . import SystemOverviewDlg
+from . import GlobalQueuesDlg
+from . import FleetsOverviewDlg
+from . import PlanetsAnalysisDlg
+from . import FleetsAnalysisDlg
+from . import GalaxyFinishDlg
+from . import ConfirmDlg
+from . import OptionsDlg
+from . import SearchDlg
 import ProblemsDlg
 import DiplomacyDlg
 import EmpireOverviewDlg

@@ -27,7 +27,7 @@ from osci import gdata
 import ige.ospace.Const as Const
 
 from MainGameDlg import MainGameDlg
-from ConfirmDlg import ConfirmDlg
+from . import ConfirmDlg
 from BookingDlg import BookingDlg
 from PasswordDlg import PasswordDlg
 

@@ -23,8 +23,8 @@ from osci.StarMapWidget import StarMapWidget
 from osci import gdata, res, client
 import osci.messages
 import ige.ospace.Const as Const
-from NewMessageDlg import NewMessageDlg
-from ConfirmDlg import ConfirmDlg
+from . import NewMessageDlg
+from . import ConfirmDlg
 import time
 from ige import log
 import re

@@ -29,9 +29,9 @@ import ige.ospace.Const as Const
 from osci import gdata, res, client, sequip
 from osci.StarMapWidget import StarMapWidget
 
-from ConstrSelTechDlg import ConstrSelTechDlg
-from ConstrUpgradeDlg import ConstrUpgradeDlg
-from ConfirmDlg import ConfirmDlg
+from . import ConstrSelTechDlg
+from . import ConstrUpgradeDlg
+from . import ConfirmDlg
 
 class ConstructionDlg:
 

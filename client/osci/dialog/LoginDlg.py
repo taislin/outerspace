@@ -22,7 +22,7 @@ import pygameui as ui
 from osci import client, gdata, res
 from NewAccountDlg import NewAccountDlg
 from PlayerSelectDlg import PlayerSelectDlg
-from ConfirmDlg import ConfirmDlg
+from . import ConfirmDlg
 from OptionsDlg import OptionsDlg
 import binascii
 from ige import log

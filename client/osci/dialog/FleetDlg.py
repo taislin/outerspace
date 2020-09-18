@@ -20,13 +20,13 @@
 
 import pygameui as ui
 from osci import client, res, gdata, sequip
-from FleetCommandDlg import FleetCommandDlg
-from FleetSpecsDlg import FleetSpecsDlg
-from FleetSplitDlg import FleetSplitDlg
-from FleetScoutBloomDlg import FleetScoutBloomDlg
-from ConfirmDlg import ConfirmDlg
-from RenameFleetDlg import RenameFleetDlg
-from LocateDlg import LocateDlg
+from . import FleetCommandDlg
+from . import FleetSpecsDlg
+from . import FleetSplitDlg
+from . import FleetScoutBloomDlg
+from . import ConfirmDlg
+from . import RenameFleetDlg
+from . import LocateDlg
 import ige.ospace.Const as Const
 from ige.ospace import Rules
 import ige

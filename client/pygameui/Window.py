@@ -20,14 +20,14 @@
 import pygame
 
 from . import Const
-from Widget import widgets, registerWidget
-from MetaWidget import MetaWidget
-from Button import Button
+from . import Widget
+from . import MetaWidget
+from . import Button
 
-class Window(MetaWidget):
+class Window(MetaWidget.MetaWidget):
 
     def __init__(self, parent, **kwargs):
-        MetaWidget.__init__(self, parent)
+        MetaWidget.MetaWidget.__init__(self, parent)
         self.surface = None
         self.visible = 0
         # data
@@ -189,4 +189,4 @@ class Window(MetaWidget):
             self.app.setFocus(minWidget)
 
 
-registerWidget(Window, 'window')
+Widget.registerWidget(Window, 'window')

@@ -27,7 +27,6 @@ Member variables naming convention:
 import pygame
 
 from . import Const
-import types
 
 class DataHolder:
     pass
@@ -71,7 +70,7 @@ class Widget:
         # process keyword arguments
         for key in kwargs:
             if hasattr(self, key):
-                setattr(self,key, kwargs[key]
+                setattr(self,key, kwargs[key])
             else:
                 raise AttributeError(key)
 

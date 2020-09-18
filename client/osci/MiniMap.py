@@ -18,7 +18,7 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-from pygameui.Widget import Widget, registerWidget
+from pygameui.Widget import Widget
 import ige.ospace.Const as Const
 import pygame, pygame.draw
 from ige import log

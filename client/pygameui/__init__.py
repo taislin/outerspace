@@ -18,38 +18,38 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-from Const import *
-from Application import Application
+from . import Const
+from . import Application
 
 # Widgets
-from Window import Window
-from Button import Button
-from Label import Label
-from ActiveLabel import ActiveLabel
-from Entry import Entry
-from ArrowButton import ArrowButton
-from ScrollSlider import ScrollSlider
-from Scrollbar import Scrollbar
-from Listbox import Listbox
-from ButtonArray import ButtonArray
-from Title import Title
-from TitleButton import TitleButton
-from ProgressBar import ProgressBar
-from Text import Text
-from Check import Check
-from ColorBox import ColorBox
+from . import Window
+from . import Button
+from . import Label
+from . import ActiveLabel
+from . import Entry
+from . import ArrowButton
+from . import ScrollSlider
+from . import Scrollbar
+from . import Listbox
+from . import ButtonArray
+from . import Title
+from . import TitleButton
+from . import ProgressBar
+from . import Text
+from . import Check
+from . import ColorBox
 
 # Menu
-from Menu import Menu
+from . import Menu
 
 # Layout Managers
-from SimpleGridLM import SimpleGridLM
+from . import SimpleGridLM
 
 # Helpers
-from Item import Item
+from . import Item
 
 # Themes
-import SkinableTheme
+from . import SkinableTheme
 
 # Other usefull goodies
 from pygame.locals import Rect

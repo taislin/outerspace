@@ -20,23 +20,23 @@
 
 import pygame.event
 from . import Const
-from Widget import Widget
+from . import Widget
 
-class MetaWidget(Widget):
+class MetaWidget(Widget.Widget):
 
     def __init__(self, parent, **kwargs):
-        Widget.__init__(self, parent)
-        setattr(self,'metaType'] = Const.TYPE_METAWIDGET
-        setattr(self,'_widgetArea'] = None
-        setattr(self,'_widgetSurface'] = None
-        setattr(self,'redrawMyself'] = 1
-        setattr(self,'redrawWidgets'] = {}
-        setattr(self,'_oldWidgetArea'] = pygame.Rect(0, 0, 0, 0)
-        setattr(self,'widgets'] = []
-        setattr(self,'widgetMap'] = {}
-        setattr(self,'layoutManager'] = None
-        setattr(self,'statusBar'] = None
-        setattr(self,'statusBarText'] = None
+        Widget.Widget.__init__(self, parent)
+        setattr(self,'metaType', Const.TYPE_METAWIDGET)
+        setattr(self,'_widgetArea', None)
+        setattr(self,'_widgetSurface', None)
+        setattr(self,'redrawMyself', 1)
+        setattr(self,'redrawWidgets', {})
+        setattr(self,'_oldWidgetArea', pygame.Rect(0, 0, 0, 0))
+        setattr(self,'widgets', [])
+        setattr(self,'widgetMap', {})
+        setattr(self,'layoutManager', None)
+        setattr(self,'statusBar', None)
+        setattr(self,'statusBarText', None)
         self.processKWArguments(kwargs)
 
     def registerWidget(self, widget):
@@ -79,7 +79,7 @@ class MetaWidget(Widget):
         if name[:2] == '__':
             raise AttributeError(name)
         # access widgets
-        value = setattr(self,'widgetMap'].get(name, Const.NoValue)
+        value = setattr(self,'widgetMap',get(name, Const.NoValue))
         if value != Const.NoValue:
             return value
         else:
@@ -97,9 +97,9 @@ class MetaWidget(Widget):
             del self.redrawWidgets[widget]
         if not self._changeReported:
             self.parent.redraw(self)
-            setattr(self,'_changeReported'] = 1
+            setattr(self,'_changeReported', 1)
         if redrawParent:
-            setattr(self,'redrawMyself'] = 1
+            setattr(self,'redrawMyself', 1)
 
     def drawMetaWidget(self, surface):
         return pygame.Rect(self.rect)
@@ -121,7 +121,7 @@ class MetaWidget(Widget):
                     self.redrawWidgets[widget] = None
                     if widget.metaType == Const.TYPE_METAWIDGET:
                         widget.__dict__['redrawMyself'] = 1
-            setattr(self,'redrawMyself'] = 0
+            setattr(self,'redrawMyself', 0)
             changed = pygame.Rect(self._widgetSurface.get_rect())
         if self._widgetArea and self._widgetArea.size != self._oldWidgetArea.size:
             #@print self.__class__, 'LAYING OUT WIDGETS'
@@ -136,7 +136,7 @@ class MetaWidget(Widget):
                 if changed and rect: changed.union_ip(rect)
                 elif rect : changed = pygame.Rect(rect)
                 widget.__dict__['_changeReported'] = 0
-            setattr(self,'redrawWidgets'] = {}
+            setattr(self,'redrawWidgets', {})
             if changed:
                 surface.blit(self._widgetSurface, changed.move(self._widgetArea.topleft), changed)
                 changed.move_ip(self._widgetArea.topleft)
@@ -234,7 +234,7 @@ class MetaWidget(Widget):
             dict['_changeReported'] = 1
         elif name[0] != '_':
             #@print 'set', self, name , value
-            setattr(self,'redrawMyself'] = 1
+            setattr(self,'redrawMyself', 1)
             if self.parent and not self._changeReported:
                 self.parent.redraw(self)
                 dict['_changeReported'] = 1

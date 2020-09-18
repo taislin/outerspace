@@ -219,7 +219,7 @@ def runClient(options):
             log.message('OSCI', 'Installing null translations')
             tran = gettext.NullTranslations()
 
-    tran.install(unicode = 1)
+    tran.install()
 
 
     #initialize pygame and prepare screen
@@ -277,7 +277,7 @@ def runClient(options):
 
     setSkinTheme(gdata, ui)
 
-    app = ui.Application(update, theme = ui.SkinableTheme)
+    app = ui.Application.Application(update, theme = ui.SkinableTheme)
     app.background = defineBackground()
     app.draw(gdata.screen)
     app.windowSurfaceFlags = pygame.SWSURFACE | pygame.SRCALPHA

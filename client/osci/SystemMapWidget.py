@@ -18,7 +18,7 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-from pygameui.Widget import Widget, registerWidget
+from pygameui.Widget import Widget
 import pygameui as ui
 from pygameui import Fonts
 import ige.ospace.Const as Const
@@ -33,10 +33,10 @@ buoyColors = [(0xff, 0xff, 0x00), (0x00, 0xff, 0xff), (0xff, 0x00, 0xff), (0xb0,
 MAX_BOUY_DISPLAY_LEN = 30
 MAX_BOUY_DISPLAY_ROWS = 3
 
-class SystemMapWidget(Widget):
+class SystemMapWidget(Widget.Widget):
 
     def __init__(self, parent, **kwargs):
-        Widget.__init__(self, parent)
+        Widget.Widget.__init__(self, parent)
         # data
         self.action = None
         self.hoverAction = None
@@ -245,5 +245,4 @@ class SystemMapWidget(Widget):
         if self.selectedObjID:
             self.processAction(self.action, self.selectedObjID)
         return ui.NoEvent
-
-registerWidget(SystemMapWidget, 'systemmapwidget')
+Widget.registerWidget(SystemMapWidget, 'systemmapwidget')

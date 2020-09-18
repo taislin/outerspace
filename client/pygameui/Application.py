@@ -21,8 +21,8 @@
 import pygame
 import pygame, pygame.time, pygame.mouse
 
-import SkinableTheme
-from Tooltip import Tooltip
+from . import SkinableTheme
+from . import Tooltip
 from . import Const
 
 # enable only if you want OpenGL support
@@ -61,7 +61,7 @@ class Application:
         self.mouseRMBDouble = 0
         self.keyEvt = None
         self.keyCount = 0
-        self.tooltip = Tooltip(self)
+        self.tooltip = Tooltip.Tooltip(self)
         self.focusedWidget = None
         self.cursorOn = 0
         self.cursorCount = 0

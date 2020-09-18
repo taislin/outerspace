@@ -19,12 +19,12 @@
 #
 
 from . import Const
-from Widget import Widget, registerWidget
+from . import Widget
 
-class Title(Widget):
+class Title(Widget.Widget):
 
     def __init__(self, parent, **kwargs):
-        Widget.__init__(self, parent)
+        Widget.Widget.__init__(self, parent)
         # data
         self.text = None
         self.icons = []
@@ -35,5 +35,4 @@ class Title(Widget):
     def draw(self, surface):
         self.theme.drawTitle(surface, self)
         return self.rect
-
-registerWidget(Title, 'title')
+Widget.registerWidget(Title, 'title')

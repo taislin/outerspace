@@ -19,29 +19,29 @@
 #
 import pygame
 from . import Const
-from Window import Window
-from SimpleGridLM import SimpleGridLM
-from Title import Title
-from ActiveLabel import ActiveLabel
+from . import Window
+from . import SimpleGridLM
+from . import Title
+from . import ActiveLabel
 from math import ceil
 
-class Menu(Window):
+class Menu(Window.Window):
 
     def __init__(self, parent, **kwargs):
-        Window.__init__(self, parent)
+        Window.Window.__init__(self, parent)
         # data
         setattr(self,"title",None)
         setattr(self,"items",None)
         setattr(self,"looseFocusClose",1)
         setattr(self,"columns",1)
         setattr(self,"decorated",0)
-        setattr(self,"layoutManager",SimpleGridLM())
+        setattr(self,"layoutManager",SimpleGridLM.SimpleGridLM())
         setattr(self,"width",10)
         setattr(self,"_labels",[])
         self.processKWArguments(kwargs)
         # subscribe action
         # add title
-        Title(self, id = "_menuTitle")
+        Title.Title(self, id = "_menuTitle")
 
     def show(self, pos = None):
         self._menuTitle.layout = (0, 0, self.width, 1)
@@ -59,7 +59,7 @@ class Menu(Window):
             elif not item.align:
                 item.align = Const.ALIGN_W
             if len(self._labels) <= index:
-                label = ActiveLabel(self, align = item.align, enabled = item.enabled)
+                label = ActiveLabel.ActiveLabel(self, align = item.align, enabled = item.enabled)
                 label.subscribeAction("*", self.actionHandler)
                 self._labels.append(label)
             label = self._labels[index]

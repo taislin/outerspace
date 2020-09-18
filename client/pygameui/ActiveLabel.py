@@ -19,10 +19,10 @@
 #
 
 from . import Const
-from Widget import registerWidget
-from Button import Button
+from . import Widget
+from . import Button
 
-class ActiveLabel(Button):
+class ActiveLabel(Button.Button):
 
     def draw(self, surface):
         if self.mouseOver:
@@ -31,4 +31,4 @@ class ActiveLabel(Button):
             self.theme.drawLabel(surface, self, 0)
         return self.rect
 
-registerWidget(ActiveLabel, 'activelabel')
+Widget.registerWidget(ActiveLabel, 'activelabel')

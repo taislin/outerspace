@@ -22,8 +22,7 @@ import ige
 import ige.Authentication
 from ige.IMarshal import IMarshal, IPacket
 from ige import ServerStatusException, log
-import httplib, urllib
-import exceptions
+import http, urllib
 import time
 from binascii import hexlify
 import threading
@@ -273,7 +272,7 @@ class IProxy:
             if self.client.httpConn:
                 h = self.client.httpConn
             else:
-                h = httplib.HTTPConnection(self.client.server)
+                h = http.client.HTTPConnection(self.client.server)
                 self.client.httpConn = h
         try:
             if self.client.proxy:

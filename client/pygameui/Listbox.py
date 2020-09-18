@@ -24,16 +24,16 @@ import types
 import pygame
 
 from . import Const
-from Widget import registerWidget
-from MetaWidget import MetaWidget
-from Scrollbar import Scrollbar
-from Entry import Entry
-from Button import Button
+from . import Widget
+from . import MetaWidget
+from . import Scrollbar
+from . import Entry
+from . import Button
 
-class Listbox(MetaWidget):
+class Listbox(MetaWidget.MetaWidget):
 
     def __init__(self, parent, **kwargs):
-        MetaWidget.__init__(self, parent)
+        MetaWidget.MetaWidget.__init__(self, parent)
         # data
         setattr(self,"items",[])
         setattr(self,"labels",[])
@@ -370,4 +370,4 @@ class Listbox(MetaWidget):
     def drawMetaWidget(self, surface):
         return self.theme.drawListbox(surface, self)
 
-registerWidget(Listbox, 'listbox')
+Widget.registerWidget(Listbox, 'listbox')

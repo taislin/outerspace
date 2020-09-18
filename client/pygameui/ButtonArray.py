@@ -20,15 +20,15 @@
 import pygame
 
 from . import Const
-from Widget import registerWidget
-from MetaWidget import MetaWidget
-from Scrollbar import Scrollbar
-from Button import Button
+from . import Widget
+from . import MetaWidget
+from . import Scrollbar
+from . import Button
 
-class ButtonArray(MetaWidget):
+class ButtonArray(MetaWidget.MetaWidget):
 
     def __init__(self, parent, **kwargs):
-        MetaWidget.__init__(self, parent)
+        MetaWidget.MetaWidget.__init__(self, parent)
         # data
         self.items = []
         self.buttons = []
@@ -136,7 +136,7 @@ class ButtonArray(MetaWidget):
                 if item == self.selected:
                     button.pressed = 1
                     # do not trigger auto update
-                    setattr(self,'selectedButton'] = button
+                    setattr(self,'selectedButton',button)
                 else:
                     button.pressed = 0
             else:
@@ -159,5 +159,4 @@ class ButtonArray(MetaWidget):
 
     def drawMetaWidget(self, surface):
         return self.theme.drawListbox(surface, self)
-
-registerWidget(ButtonArray, 'buttonarray')
+Widget.registerWidget(ButtonArray, 'buttonarray')

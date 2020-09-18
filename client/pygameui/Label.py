@@ -19,12 +19,12 @@
 #
 
 from . import Const
-from Widget import Widget, registerWidget
+from . import Widget
 
-class Label(Widget):
+class Label(Widget.Widget):
 
     def __init__(self, parent, **kwargs):
-        Widget.__init__(self, parent)
+        Widget.Widget.__init__(self, parent)
         # data
         self.text = None
         self.icons = []
@@ -36,4 +36,4 @@ class Label(Widget):
         self.theme.drawLabel(surface, self)
         return self.rect
 
-registerWidget(Label, 'label')
+Widget.registerWidget(Label, 'label')

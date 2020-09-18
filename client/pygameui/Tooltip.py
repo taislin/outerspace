@@ -19,12 +19,12 @@
 #
 
 from . import Const
-from Widget import Widget, registerWidget
+from . import Widget
 
-class Tooltip(Widget):
+class Tooltip(Widget.Widget):
 
     def __init__(self, parent, **kwargs):
-        Widget.__init__(self, parent)
+        Widget.Widget.__init__(self, parent)
         # data
         self.text = None
         self.title = None

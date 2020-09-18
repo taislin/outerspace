@@ -19,12 +19,12 @@
 #
 
 from . import Const
-from Widget import Widget, registerWidget
+from . import Widget
 
-class Button(Widget):
+class Button(Widget.Widget):
 
     def __init__(self, parent, **kwargs):
-        Widget.__init__(self, parent)
+        Widget.Widget.__init__(self, parent)
         # data
         setattr(self,'text', None)
         setattr(self,'icons', [])
@@ -38,7 +38,7 @@ class Button(Widget):
         setattr(self,'_processingMB1', 0)
         setattr(self,'_processingMB3', 0)
         self.processKWArguments(kwargs)
-        parent.registerWidget(self)
+        parent.Widget.registerWidget(self)
 
     def draw(self, surface):
         self.theme.drawButton(surface, self)
@@ -105,4 +105,4 @@ class Button(Widget):
         return Const.NoEvent
 
 
-registerWidget(Button, 'button')
+Widget.registerWidget(Button, 'button')

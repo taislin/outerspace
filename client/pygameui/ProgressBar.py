@@ -19,12 +19,12 @@
 #
 
 from . import Const
-from Widget import Widget, registerWidget
+from . import Widget
 
-class ProgressBar(Widget):
+class ProgressBar(Widget.Widget):
 
     def __init__(self, parent, **kwargs):
-        Widget.__init__(self, parent)
+        Widget.Widget.__init__(self, parent)
         # data
         self.min = 0
         self.max = 100
@@ -36,5 +36,4 @@ class ProgressBar(Widget):
     def draw(self, surface):
         self.theme.drawProgressBar(surface, self)
         return self.rect
-
-registerWidget(ProgressBar, 'progressbar')
+Widget.registerWidget(ProgressBar, 'progressbar')

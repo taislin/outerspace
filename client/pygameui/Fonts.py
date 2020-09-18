@@ -20,7 +20,6 @@
 import pygame
 
 from pygame.ftfont import Font
-from types import StringType, UnicodeType
 
 __all__ = ['initFont', 'renderText', 'getTextSize', 'getLineSize']
 

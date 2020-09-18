@@ -19,13 +19,13 @@
 #
 
 from . import Const
-from Widget import registerWidget
-from Button import Button
+from . import Widget
+from . import Button
 
-class TitleButton(Button):
+class TitleButton(Button.Button):
 
     def __init__(self, parent, **kwargs):
-        Button.__init__(self, parent)
+        Button.Button.__init__(self, parent)
         # data
         # flags
         self.processKWArguments(kwargs)
@@ -33,5 +33,4 @@ class TitleButton(Button):
 
     def draw(self, surface):
         self.theme.drawTitleButton(surface, self)
-
-registerWidget(TitleButton, 'titlebutton')
+Widget.registerWidget(TitleButton, 'titlebutton')

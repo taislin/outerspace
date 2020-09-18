@@ -20,7 +20,7 @@
 #
 import bisect
 
-from pygameui.Widget import Widget, registerWidget
+from pygameui.Widget import Widget
 import pygameui as ui
 from pygameui import Fonts
 import ige.ospace.Const as Const
@@ -34,10 +34,10 @@ from osci.MiniMap import MiniMap
 from osci.StarMap import StarMap
 
 
-class StarMapWidget(Widget):
+class StarMapWidget(Widget.Widget):
 
     def __init__(self, parent, **kwargs):
-        Widget.__init__(self, parent)
+        Widget.Widget.__init__(self, parent)
         self.searchDlg = SearchDlg(self.app)
         self.searchDlg.mapWidget = self
         # data
@@ -718,5 +718,4 @@ class StarMapWidget(Widget):
         self.repaint_map = 1
         self.processMiniMapRect()
 
-
-registerWidget(StarMapWidget, 'starmapwidget')
+Widget.registerWidget(StarMapWidget, 'starmapwidget')

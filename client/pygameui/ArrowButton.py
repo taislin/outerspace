@@ -19,13 +19,13 @@
 #
 
 from . import Const
-from Widget import registerWidget
-from Button import Button
+from . import Widget
+from . import Button
 
-class ArrowButton(Button):
+class ArrowButton(Button.Button):
 
     def __init__(self, parent, **kwargs):
-        Button.__init__(self, parent)
+        Button.Button.__init__(self, parent)
         # data
         self.direction = Const.ALIGN_N
         # del
@@ -33,10 +33,10 @@ class ArrowButton(Button):
         del self.icons
         # flags
         self.processKWArguments(kwargs)
-        parent.registerWidget(self)
+        parent.Widget.registerWidget(self)
 
     def draw(self, surface):
         self.theme.drawArrowButton(surface, self)
         return self.rect
 
-registerWidget(ArrowButton, 'arrowbutton')
+Widget.registerWidget(ArrowButton, 'arrowbutton')

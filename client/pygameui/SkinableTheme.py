@@ -21,14 +21,14 @@
 import string
 import pygame
 from . import Const
-import Fonts
+from . import Fonts
 import os, os.path, sys, configparser
 from ige import log
 import time
 import resources
 
 try:
-    import _winreg
+    import winreg
 except ImportError:
     pass
 
@@ -109,7 +109,7 @@ def setSkin(directory = skinDir):
     global skinDir, config, gridParams
     skinDir = directory
     # load skin specification
-    config = configparser.configparser()
+    config = configparser.ConfigParser()
     config.read(os.path.join(skinDir, "config.ini"))
     # grid
     w, h = config.get("general", "grid").split(",")
@@ -150,8 +150,8 @@ def createFont():
         if fontType == "windowsttf":
             if os.name == "nt":
                 # get "Fonts" folder location
-                handle = _winreg.OpenKey(_winreg.HKEY_CURRENT_USER, 'Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders')
-                path, valueType = _winreg.QueryValueEx(handle, 'Fonts')
+                handle = winreg.OpenKey(winreg.HKEY_CURRENT_USER, 'Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders')
+                path, valueType = winreg.QueryValueEx(handle, 'Fonts')
                 handle.Close()
                 filename = os.path.join(path, config.get(section, "file"))
             else:

@@ -21,7 +21,7 @@
 import pygame
 
 from . import Const
-from Widget import Widget, registerWidget
+from . import Widget
 
 # keys mapping
 mapping = {
@@ -32,16 +32,16 @@ mapping = {
     pygame.K_KP_ENTER: pygame.K_RETURN, pygame.K_KP_EQUALS: pygame.K_EQUALS,
 }
 
-class Entry(Widget):
+class Entry(Widget.Widget):
 
     def __init__(self, parent, **kwargs):
-        Widget.__init__(self, parent)
+        Widget.Widget.__init__(self, parent)
         # data
-        setattr(self,'text'] = u''
-        setattr(self,'cursorPos'] = 0
-        setattr(self,'action'] = None
-        setattr(self,'showChar'] = None
-        setattr(self,'reportValueChanged'] = False
+        setattr(self,'text',u'')
+        setattr(self,'cursorPos',0)
+        setattr(self,'action',None)
+        setattr(self,'showChar',None)
+        setattr(self,'reportValueChanged',False)
         # flags
         self.processKWArguments(kwargs)
         parent.registerWidget(self)
@@ -55,7 +55,7 @@ class Entry(Widget):
         self.cursorPos += 1
         self.cursorPos -= 1
         # super
-        Widget.onCursorChanged(self)
+        Widget.Widget.onCursorChanged(self)
 
     def processKeyDown(self, evt):
         try:
@@ -99,14 +99,14 @@ class Entry(Widget):
             self.cursorPos += 1
         if (self.reportValueChanged):
             self.processAction("onValueChanged")
-        return Widget.processKeyDown(self, Const.NoEvent)
+        return Widget.Widget.processKeyDown(self, Const.NoEvent)
 
     def onFocusGained(self):
-        Widget.onFocusGained(self)
+        Widget.Widget.onFocusGained(self)
         self.cursorPos = len(self.text)
 
     def onFocusLost(self):
-        Widget.onFocusLost(self)
+        Widget.Widget.onFocusLost(self)
         self.processAction(self.action)
 
-registerWidget(Entry, 'entry')
+Widget.registerWidget(Entry, 'entry')

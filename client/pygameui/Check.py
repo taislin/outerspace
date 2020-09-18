@@ -19,12 +19,12 @@
 #
 
 from . import Const
-from Widget import Widget, registerWidget
+from . import Widget
 
-class Check(Widget):
+class Check(Widget.Widget):
 
     def __init__(self, parent, **kwargs):
-        Widget.__init__(self, parent)
+        Widget.Widget.__init__(self, parent)
         # data
         setattr(self,'text', None)
         setattr(self,'icons', [])
@@ -80,5 +80,4 @@ class Check(Widget):
             self.processAction(self.rmbAction)
         self._processingMB3 = 0
         return Const.NoEvent
-
-registerWidget(Check, 'check')
+Widget.registerWidget(Check, 'check')

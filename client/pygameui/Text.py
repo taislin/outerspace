@@ -20,8 +20,8 @@
 
 import unittest
 from . import Const
-from WordUtils import splitter
-from Widget import Widget, registerWidget
+from . import WordUtils
+from . import Widget
 import pygame.key
 
 # keys mapping
@@ -60,20 +60,20 @@ class Selection(object):
         return self._start is not None and self._end is not None
 
 
-class Text(Widget):
+class Text(Widget.Widget):
     """Text edit widget."""
 
     def __init__(self, parent, **kwargs):
-        Widget.__init__(self, parent)
+        Widget.Widget.__init__(self, parent)
         # data
-        setattr(self,'text'] = [""]
-        setattr(self,'offsetRow'] = 0
-        setattr(self,'cursorRow'] = 0
-        setattr(self,'cursorColumn'] = 0
-        setattr(self,'action'] = None
-        setattr(self,'editable'] = 1
-        setattr(self,'vertScrollbar'] = None
-        setattr(self,'selection'] = Selection()
+        setattr(self,'text', [""])
+        setattr(self,'offsetRow', 0)
+        setattr(self,'cursorRow', 0)
+        setattr(self,'cursorColumn', 0)
+        setattr(self,'action', None)
+        setattr(self,'editable', 1)
+        setattr(self,'vertScrollbar', None)
+        setattr(self,'selection', Selection())
         # flags
         self.processKWArguments(kwargs)
         parent.registerWidget(self)
@@ -151,7 +151,7 @@ class Text(Widget):
         if evt.mod & pygame.KMOD_CTRL:
             # move one word left
             # take words on line
-            words = splitter(self.text[self.cursorRow][:self.cursorColumn])
+            words = WordUtils.splitter(self.text[self.cursorRow][:self.cursorColumn])
             if len(words) == 0:
                 if self.cursorRow == 0:
                     # we are on first line, so move cursor to begining of line
@@ -174,7 +174,7 @@ class Text(Widget):
         if evt.mod & pygame.KMOD_CTRL:
             # move one word right
             # take words on line
-            words = splitter(self.text[self.cursorRow][self.cursorColumn:])
+            words = WordUtils.splitter(self.text[self.cursorRow][self.cursorColumn:])
             if len(words) == 0:
                 if self.cursorRow == len(self.text) - 1:
                     # we are on last line, so move cursor to end of line
@@ -324,8 +324,7 @@ class Text(Widget):
         if self.vertScrollbar:
             return self.vertScrollbar.processMWDown(evt)
 
-
-registerWidget(Text, 'text')
+Widget.registerWidget(Text, 'text')
 
 
 class TextTestCase(unittest.TestCase):

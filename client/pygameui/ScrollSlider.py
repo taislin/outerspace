@@ -19,12 +19,12 @@
 #
 
 from . import Const
-from Widget import Widget, registerWidget
+from . import Widget
 
-class ScrollSlider(Widget):
+class ScrollSlider(Widget.Widget):
 
     def __init__(self, parent, **kwargs):
-        Widget.__init__(self, parent)
+        Widget.Widget.__init__(self, parent)
         # data
         self.action = None
         self.min = 0.0
@@ -35,7 +35,7 @@ class ScrollSlider(Widget):
         self._handler = None
         # flags
         self.processKWArguments(kwargs)
-        parent.registerWidget(self)
+        parent.Widget.registerWidget(self)
 
     def draw(self, surface):
         self._handler = self.theme.drawScrollSlider(surface, self)
@@ -97,4 +97,4 @@ class ScrollSlider(Widget):
         self.processAction(self.action)
         return Const.NoEvent
 
-registerWidget(ScrollSlider, 'scrollslider')
+Widget.registerWidget(ScrollSlider, 'scrollslider')

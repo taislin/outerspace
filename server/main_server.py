@@ -133,9 +133,6 @@ def runServer(options):
     # open database
     from ige.SQLiteDatabase import Database, DatabaseString
 
-    if not config.vip.password:
-        config.vip.password = ''
-
     log.debug("Creating databases...")
     gameDB = Database(os.path.join(options.configDir,"db_data"), "game_%s" % gameName, cache = 15000)
     clientDB = DatabaseString(os.path.join(options.configDir,"db_data"), "accounts", cache = 100)
@@ -165,7 +162,7 @@ def runServer(options):
     log.debug("Initializing issue manager")
     issueMngr = IssueMngr()
     log.debug("Initializing client manager")
-    clientMngr = ClientMngr(clientDB, config.server.authmethod, options.configDir)
+    clientMngr = ClientMngr(clientDB, "rsa", options.configDir)
     log.debug("Initializing message manager")
     msgMngr = MsgMngr(msgDB)
     log.debug("Initializing game manager")

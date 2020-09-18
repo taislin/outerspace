@@ -70,13 +70,13 @@ class ClientMngr:
 
         if self.accounts.has_key(ADMIN_LOGIN):
             self.accounts[ADMIN_LOGIN].passwdHashed = False # Needs plaintext login from token
-            password = passwordGen()
+            password = Authentication.passwordGen()
             self.accounts[ADMIN_LOGIN].setPassword(password)
         else:
             log.message("No administator account found! (looking for '%s')" % ADMIN_LOGIN)
             log.message("Creating default account")
             # create account
-            account = AdminAccount()
+            account = Authentication.AdminAccount()
             # update
             password = account.passwd
             self.accounts.create(account, id = str(account.login))

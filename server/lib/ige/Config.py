@@ -40,18 +40,6 @@ class Config:
     def __getitem__(self, name):
         return self.__getattr__(name)
 
-    def __getattr__(self, name):
-        if not self._config.has_section(name):
-            self._config.add_section(name)
-
-        return Section(self._config, name)
-
-    def __setattr__(self, name, value):
-        if value == None:
-            self._config.remove_section(name)
-        else:
-            raise AttributeError("Cannot assign value to config section")
-
     def sections(self):
         return self._config.sections()
 

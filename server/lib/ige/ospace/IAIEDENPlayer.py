@@ -20,16 +20,15 @@
 
 import time
 
-import Const
-import Rules
-import Utils
+from . import Const
+from . import Utils
 
 from ige import log
 from ige.IDataHolder import IDataHolder
 from ige.IObject import public
-from IPlayer import IPlayer
+from . import IPlayer
 
-class IAIEDENPlayer(IPlayer):
+class IAIEDENPlayer(IPlayer.IPlayer):
 
     typeID = Const.T_AIEDENPLAYER
 

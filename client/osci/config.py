@@ -20,6 +20,9 @@
 
 import os.path
 import configparser
+import sys
+
+sys.setrecursionlimit(5000)
 
 class Config:
     """Encapsulation of configparser class.
@@ -34,8 +37,8 @@ class Config:
     is returned.
     """
     def __init__(self, filename):
-        setattr(self,"_config",configparser.ConfigParser())
-        setattr(self,"_configFile",filename)
+        self.__dict__["_config"] = configparser.ConfigParser()
+        self.__dict__["_configFile"] = filename
         self._config.read(filename)
 
     def __getattr__(self, name):
@@ -65,8 +68,8 @@ class Section:
     returned.
     """
     def __init__(self, config, name):
-        setattr(self,"_config",config)
-        setattr(self,"section",name)
+        self.__dict__["_config"] = config
+        self.__dict__["section"] = name
 
     def __getattr__(self, name):
         if self._config.has_option(self.section, name):

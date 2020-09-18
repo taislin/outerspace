@@ -22,13 +22,13 @@ from xml.dom.minidom import Node
 
 import ige
 
-import Const
+from . import Const
 
 from ige import log
 from ige.IObject import public
-from ISystem import ISystem
+from . import ISystem
 
-class IWormHole(ISystem):
+class IWormHole(ISystem.ISystem):
 
     typeID = Const.T_WORMHOLE
 

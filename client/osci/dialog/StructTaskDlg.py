@@ -172,7 +172,7 @@ class StructTaskDlg:
         self.win.vTechs.itemsChanged()
 
         # filter
-        for i in xrange(1, 10):
+        for i in range(1, 10):
             widget = getattr(self.win, 'vLevel%d' % i)
             if i in self.showLevels and i <= self.maxTechLevel:
                 widget.visible = 1

@@ -39,7 +39,7 @@ except ImportError:
     print("Outer Space client requires PyGame to work properly.")
     print("PyGame will be installed in 10 seconds")
     print("You can cancel the installation by pressing CTRL+C or by closing this window")
-    for i in xrange(10,0,-1):
+    for i in range(10,0,-1):
         print(i)
         time.sleep(1)
     pip.main(['install','pygame','--user'])

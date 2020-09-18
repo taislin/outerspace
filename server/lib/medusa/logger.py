@@ -151,7 +151,7 @@ class rotating_file_logger (file_logger):
 # TODO: async version of syslog_client: now, log entries use blocking
 # send()
 
-import m_syslog
+from . import m_syslog
 syslog_logger = m_syslog.syslog_client
 
 class syslog_logger (m_syslog.syslog_client):

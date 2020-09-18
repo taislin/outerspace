@@ -26,7 +26,7 @@ import tempfile
 
 import data
 
-import Const
+from . import Const
 
 class GalaxyTemplate(object):
     def __init__(self):
@@ -367,7 +367,7 @@ class GalaxyGenerator:
         galaxyTemplate = self.templates[galaxy.galaxyType]
         _min = galaxyTemplate.minSystemLoneliness
         _max = galaxyTemplate.maxSystemLoneliness
-        for i in xrange(MAX_STEP):
+        for i in range(MAX_STEP):
             newMin, newMax = self._shiftSystems(galaxy, _min, _max, DELTA)
             if newMin >= _min and newMax <= _max:
                 break
@@ -746,7 +746,7 @@ def generateSystem(system, ranges = None):
     # planets
     zone = 0
     for num in planets:
-        for i in xrange(0, num):
+        for i in range(0, num):
             planet = Planet()
             planet.compOf = system
             system.planets.append(planet)
@@ -852,7 +852,7 @@ def generatePlanet(zone, planet):
 
 def dice(num, range, offset):
     result = offset
-    for i in xrange(0, num):
+    for i in range(0, num):
         result += random.randrange(1, range + 1)
     return result
 

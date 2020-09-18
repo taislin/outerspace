@@ -45,7 +45,7 @@ import resources
 import webbrowser, pygame
 import time
 import os.path
-import Utils
+from . import Utils
 
 class MainGameDlg:
 

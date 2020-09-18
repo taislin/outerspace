@@ -26,13 +26,13 @@ import time
 import random, hashlib # TODO: remove after 0.5.74 release
 
 import ige
-import log
-import Const
+from . import log
+from . import Const
 
-from SQLiteDatabase import Database
-from Index import Index
-from IObject import IDataHolder
-from Transaction import Transaction
+from . import SQLiteDatabase
+from . import Index
+from . import IDataHolder
+from . import Transaction
 
 class GameMngr:
 
@@ -116,7 +116,7 @@ class GameMngr:
                 obj = self.db[id]
             except:
                 log.warning("Cannot upgrade object", id, "no such id in db")
-            if not isinstance(obj, IDataHolder):
+            if not isinstance(obj, IObject.IDataHolder):
                 #@log.debug('Upgrade - skiping', id)
                 continue
             #@log.debug('Upgrade - upgrading', id, obj.type)
@@ -167,7 +167,7 @@ class GameMngr:
         session = self.clientMngr.getSession(sid)
         if session.login != Const.ADMIN_LOGIN:
             raise ige.SecurityException('You cannot issue this command.')
-        for turn in xrange(turns):
+        for turn in range(turns):
             log.message("--- TURN PROCESSING STARTED ---")
             # commit player's changes
             #if ige.igeRuntimeMode:

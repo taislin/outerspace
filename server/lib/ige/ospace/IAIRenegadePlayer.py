@@ -19,17 +19,16 @@
 #
 import time
 
-import Const
-import Rules
-import ShipUtils
-import Utils
+from . import Const
+from . import ShipUtils
+from . import Utils
 
 from ige import log
 from ige.IDataHolder import IDataHolder
 from ige.IObject import public
-from IPlayer import IPlayer
+from . import IPlayer
 
-class IAIRenegadePlayer(IPlayer):
+class IAIRenegadePlayer(IPlayer.IPlayer):
 
     typeID = Const.T_AIRENPLAYER
     forums = {"INBOX": 56, "OUTBOX": 56, "EVENTS": 0}

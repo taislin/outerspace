@@ -107,7 +107,7 @@ class AI(object):
         should_repeat = False
         explorer_fleets = self.data.myFleetsWithDesign.get(explorer_design_id, set())
         for fleet_id in copy.copy(explorer_fleets & self.data.idleFleets):
-            max_range = tool.subfleetMaxRange(self.client, self.db, {explorer_design_id:1}, fleet_id)
+            max_range = tool.subfleetMarange(self.client, self.db, {explorer_design_id:1}, fleet_id)
             nearest = tool.findNearest(self.db, self.db[fleet_id], self.data.unknownSystems, max_range)
             if len(nearest) > 0:
                 system_id = nearest[0]
@@ -127,7 +127,7 @@ class AI(object):
         should_repeat = False
         colony_fleets = self.data.myFleetsWithDesign.get(colony_design_id, set())
         for fleet_id in copy.copy(colony_fleets & self.data.idleFleets):
-            max_range = tool.subfleetMaxRange(self.client, self.db, {colony_design_id:1}, fleet_id)
+            max_range = tool.subfleetMarange(self.client, self.db, {colony_design_id:1}, fleet_id)
             nearest = tool.findNearest(self.db, self.db[fleet_id], valid_systems, max_range)
             if len(nearest) > 0:
                 system_id = nearest[0]

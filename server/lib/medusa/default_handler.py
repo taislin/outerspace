@@ -14,11 +14,7 @@ import string
 import time
 
 # medusa modules
-import http_date
-import http_server
-import mime_type_table
-import status_handler
-import producers
+from . import http_date, http_server,mime_type_table, status_handler, producers
 
 unquote = http_server.unquote
 
@@ -35,7 +31,7 @@ unquote = http_server.unquote
 # class <default_with_post_handler>, defined below.
 #
 
-from counter import counter
+from . import counter
 
 class default_handler:
 
@@ -54,11 +50,11 @@ class default_handler:
     def __init__ (self, filesystem):
         self.filesystem = filesystem
         # count total hits
-        self.hit_counter = counter()
+        self.hit_counter = counter.counter()
         # count file deliveries
-        self.file_counter = counter()
+        self.file_counter = counter.counter()
         # count cache hits
-        self.cache_counter = counter()
+        self.cache_counter = counter.counter()
 
     hit_counter = 0
 

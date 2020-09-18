@@ -31,14 +31,12 @@ from ige.Transaction import Transaction
 from ige.IDataHolder import IDataHolder
 from ige import GameException, SecurityException, CreatePlayerException
 
-import Const
-import IPlayer, IUniverse, IGalaxy, ISystem, IWormHole, IPlanet, IFleet
-import INature, IAIPlayer, IAIRenegadePlayer, IAIMutantPlayer, IAIPiratePlayer
-import GalaxyGenerator
-import IAIEDENPlayer, IPiratePlayer
-import Rules, Utils
+from . import Const
+from . import IPlayer, IUniverse, IGalaxy, ISystem, IWormHole, IPlanet, IFleet
+from . import INature, IAIPlayer, IAIRenegadePlayer, IAIMutantPlayer, IAIPiratePlayer
+from . import GalaxyGenerator
+from . import IAIEDENPlayer, IPiratePlayer, Utils
 
-from Rules import Tech
 
 class GameMngr(IGEGameMngr):
 

@@ -76,7 +76,7 @@ class UpdateDlg:
             # open URL
             opener = urllib2.build_opener(urllib2.ProxyHandler(proxies))
             # it unfortunately is not completely reliable
-            for i in xrange(1,5):
+            for i in range(1,5):
                 try:
                     ifh = opener.open(self.url)
                     log.debug("Retrieving URL", ifh.geturl())

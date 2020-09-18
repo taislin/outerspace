@@ -46,11 +46,11 @@ many of the difficult problems for you, making the task of building
 sophisticated high-performance network servers and clients a snap.
 """
 
-import exceptions
 import select
 import socket
 import string
 import sys
+import builtins as exceptions
 
 import os
 if os.name == 'nt':
@@ -302,11 +302,11 @@ class dispatcher:
         self.connected = 0
         try:
             self.socket.connect (address)
-        except socket.error, why:
+        except socket.error(why):
             if why[0] in (EINPROGRESS, EALREADY, EWOULDBLOCK):
                 return
             else:
-                raise socket.error, why
+                raise socket.error(why)
         self.connected = 1
         self.handle_connect()
 
@@ -314,21 +314,21 @@ class dispatcher:
         try:
             conn, addr = self.socket.accept()
             return conn, addr
-        except socket.error, why:
+        except socket.error(why):
             if why[0] == EWOULDBLOCK:
                 pass
             else:
-                raise socket.error, why
+                raise socket.error(why)
 
     def send (self, data):
         try:
             result = self.socket.send (data)
             return result
-        except socket.error, why:
+        except socket.error(why):
             if why[0] == EWOULDBLOCK:
                 return 0
             else:
-                raise socket.error, why
+                raise socket.error(why)
             return 0
 
     def recv (self, buffer_size):
@@ -341,13 +341,13 @@ class dispatcher:
                 return ''
             else:
                 return data
-        except socket.error, why:
+        except socket.error(why):
             # winsock sometimes throws ENOTCONN
             if why[0] in [ECONNRESET, ENOTCONN, ESHUTDOWN]:
                 self.handle_close()
                 return ''
             else:
-                raise socket.error, why
+                raise socket.error(why)
 
     def close (self):
         self.del_channel()
@@ -367,7 +367,7 @@ class dispatcher:
 
     def log_info (self, message, type='info'):
         if __debug__ or type != 'info':
-            print('%s: %s' % (type, message)
+            print('%s: %s' % (type, message))
 
     def handle_read_event (self):
         if self.accepting:

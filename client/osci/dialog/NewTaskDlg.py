@@ -30,7 +30,7 @@ from osci import gdata, client, res
 from TechInfoDlg import TechInfoDlg
 from ConstructionDlg import ConstructionDlg
 from ConfirmDlg import ConfirmDlg
-import Utils
+from . import Utils
 
 
 class NewTaskDlg:

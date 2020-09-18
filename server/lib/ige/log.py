@@ -96,9 +96,6 @@ def debug(*args):
     print(str(__getTime())+' DBG '+str(__getCaller())+conc)
     
     if msgLog:
-        for item in args:
-           conc = conc + str(item) + " "
-        print(str(msgLog)+str(__getTime())+' DBG '+str(__getCaller())+conc)
         msgLog.flush()
 
 def message(*args):
@@ -110,9 +107,6 @@ def message(*args):
     print(str(__getTime())+' MSG '+str(__getCaller())+conc)
     
     if msgLog:
-        for item in args:
-            conc = conc + str(item) + " "
-        print(str(msgLog)+str(__getTime())+' MSG '+str(__getCaller())+conc)
         msgLog.flush()
 
 def warning(*args):

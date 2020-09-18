@@ -19,7 +19,7 @@
 #
 
 import unittest
-import Const
+from . import Const
 from WordUtils import splitter
 from Widget import Widget, registerWidget
 import pygame.key

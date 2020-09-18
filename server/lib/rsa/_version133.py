@@ -266,7 +266,7 @@ def extended_euclid_gcd(a, b):
         return (a, 1, 0)
 
     q = abs(a % b)
-    r = long(a / b)
+    r = int(a / b)
     (d, k, l) = extended_euclid_gcd(b, q)
 
     return (d, l, k - l*r)
@@ -329,7 +329,7 @@ def encrypt_int(message, ekey, n):
     n"""
 
     if type(message) is IntType:
-        return encrypt_int(long(message), ekey, n)
+        return encrypt_int(int(message), ekey, n)
 
     if not type(message) is LongType:
         raise TypeError("You must pass a long or an int")

@@ -23,14 +23,13 @@ import re
 import time
 
 import ige
-import Rules
-import Utils
-import ShipUtils
+from . import Utils
+from .import ShipUtils
 
 from ige import log
 from ige.IObject import IObject, public
 from ige.IDataHolder import IDataHolder
-import Const
+from . import Const
 
 class IPlayer(IObject):
 
@@ -535,9 +534,9 @@ class IPlayer(IObject):
             planet = tran.db[planetID]
             self.cmd(planet).deleteDesign(tran, planet, designID)
         # delete from global queues
-        for queueID in xrange(len(obj.prodQueues)):
+        for queueID in range(len(obj.prodQueues)):
             queue = obj.prodQueues[queueID][:]
-            for taskID in xrange(len(queue)):
+            for taskID in range(len(queue)):
                 if obj.prodQueues[queueID][taskID].techID == designID:
                     self.cmd(obj).abortGlobalConstruction(tran, obj, queueID, taskID)
         # clear upgradeTo

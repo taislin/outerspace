@@ -19,8 +19,7 @@
 #
 import types
 
-import Const
-import log
+from . import Const, log
 
 from ige import GameException, SecurityException
 from ige.IDataHolder import IDataHolder
@@ -94,7 +93,7 @@ class IObject:
         pass
 
     def loadDOMAttrs(self, obj, elem):
-        for index in xrange(0, elem.attributes.length):
+        for index in range(0, elem.attributes.length):
             attr = elem.attributes.item(index)
             if hasattr(obj, attr.nodeName):
                 attrType = type(getattr(obj, attr.nodeName))

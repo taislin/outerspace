@@ -20,7 +20,7 @@
 
 import string
 import pygame
-import Const
+from . import Const
 import Fonts
 import os, os.path, sys, configparser
 from ige import log
@@ -279,21 +279,21 @@ def drawBox(surface, widget, style):
     # center
     surface.set_clip(rect.left + l, rect.top + t, rect.width - l - r, rect.height - t - b)
     w, h = box.center.get_size()
-    for x in xrange(rect.left + l, rect.left + rect.width - r -l, w):
-        for y in xrange(rect.top + t, rect.top + rect.height - t - b, h):
+    for x in range(rect.left + l, rect.left + rect.width - r -l, w):
+        for y in range(rect.top + t, rect.top + rect.height - t - b, h):
             surface.blit(box.center, (x, y))
     # top + bottom
     surface.set_clip(rect.left + l, rect.top, rect.width - l - r, rect.height)
     w = box.top.get_width()
     y1 = rect.top
     y2 = rect.bottom - b
-    for x in xrange(rect.left + l, rect.left + rect.width - r - l, w):
+    for x in range(rect.left + l, rect.left + rect.width - r - l, w):
         surface.blit(box.top, (x, y1))
         surface.blit(box.bottom, [x, y2])
     # left + right
     surface.set_clip(rect.left, rect.top + t, rect.width, rect.height - t - b)
     h = box.left.get_height()
-    for y in xrange(rect.top + t, rect.top + rect.height - t - b + h, h):
+    for y in range(rect.top + t, rect.top + rect.height - t - b + h, h):
         surface.blit(box.left, (rect.left, y))
         surface.blit(box.right, (rect.right - r, y))
     # restore
@@ -483,7 +483,7 @@ def drawTitleButton(surface, widget):
     surface.fill(themeTitleLine1, rect)
     x1 = rect.left
     x2 = rect.right
-    for y in xrange(rect.top, rect.bottom, 2):
+    for y in range(rect.top, rect.bottom, 2):
         pygame.draw.line(surface, themeTitleLine2, (x1, y), (x2, y), 1)
     # icon
     if widget.icons:
@@ -523,7 +523,7 @@ def drawTitle(surface, widget):
     surface.fill(themeTitleLine1, rect)
     x1 = rect.left
     x2 = rect.right
-    for y in xrange(rect.top, rect.bottom, 2):
+    for y in range(rect.top, rect.bottom, 2):
         pygame.draw.line(surface, themeTitleLine2, (x1, y), (x2, y), 1)
     # icon
     if widget.icons:
@@ -641,7 +641,7 @@ def drawDecoratedWindow(surface, window):
         if window.focused:
             x1 = r.left
             x2 = r.right
-            for y in xrange(r.top, r.bottom, 2):
+            for y in range(r.top, r.bottom, 2):
                 pygame.draw.line(surface, themeTitleLine2, (x1, y), (x2, y), 1)
         r.move_ip(3, (r.height - text.get_height()) / 2)
         surface.blit(text, r)

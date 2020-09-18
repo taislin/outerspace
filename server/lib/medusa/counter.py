@@ -23,7 +23,7 @@ class counter:
         try:
             self.value = self.value + delta
         except OverflowError:
-            self.value = long(self.value) + delta
+            self.value = int(self.value) + delta
         return result
 
     def decrement (self, delta=1):
@@ -31,11 +31,11 @@ class counter:
         try:
             self.value = self.value - delta
         except OverflowError:
-            self.value = long(self.value) - delta
+            self.value = int(self.value) - delta
         return result
 
     def as_long (self):
-        return long(self.value)
+        return int(self.value)
 
     def __nonzero__ (self):
         return self.value != 0
@@ -44,4 +44,4 @@ class counter:
         return '<counter value=%s at %x>' % (self.value, id(self))
 
     def __str__ (self):
-        return str(long(self.value))
+        return str(int(self.value))

@@ -5,8 +5,8 @@
 
 # Based on "xmlrpcserver.py" by Fredrik Lundh (fredrik@pythonware.com)
 
-import http_server
-import xmlrpclib
+from . import http_server
+import xmlrpc
 
 import re
 import string
@@ -33,7 +33,7 @@ class xmlrpc_handler:
             request.error (400)
 
     def continue_request (self, data, request):
-        params, method = xmlrpclib.loads (data)
+        params, method = xmlrpc.client.loads (data)
         try:
             # generate response
             try:
@@ -42,11 +42,11 @@ class xmlrpc_handler:
                 response = (response,)
             except:
                 # report exception back to server
-                response = xmlrpclib.dumps (
-                    xmlrpclib.Fault (1, "%s:%s" % (sys.exc_type, sys.exc_value))
+                response = xmlrpc.client.dumps (
+                    xmlrpc.client.Fault (1, "%s:%s" % (sys.exc_type, sys.exc_value))
                     )
             else:
-                response = xmlrpclib.dumps (response, methodresponse=1)
+                response = xmlrpc.client.dumps (response, methodresponse=1)
         except:
             import traceback
             traceback.print_exc()

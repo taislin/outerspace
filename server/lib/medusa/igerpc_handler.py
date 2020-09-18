@@ -1,6 +1,5 @@
-from . import http_server, producers, asyncore
-import status_handler
-from counter import counter
+from . import http_server, producers, asyncore, status_handler
+from . import counter
 from ige.IMarshal import IMarshal, IPacket
 
 import string
@@ -14,9 +13,9 @@ class igerpc_handler:
 
     def __init__(self):
         self.marshal = IMarshal()
-        self.commandCounter = counter()
-        self.completedCounter = counter()
-        self.exceptionsCounter = counter()
+        self.commandCounter = counter.counter()
+        self.completedCounter = counter.counter()
+        self.exceptionsCounter = counter.counter()
 
     def __repr__ (self):
         return '<%s at %x>' % (

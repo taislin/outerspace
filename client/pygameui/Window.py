@@ -19,7 +19,7 @@
 #
 import pygame
 
-import Const
+from . import Const
 from Widget import widgets, registerWidget
 from MetaWidget import MetaWidget
 from Button import Button

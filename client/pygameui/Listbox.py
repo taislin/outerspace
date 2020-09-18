@@ -23,7 +23,7 @@ import types
 
 import pygame
 
-import Const
+from . import Const
 from Widget import registerWidget
 from MetaWidget import MetaWidget
 from Scrollbar import Scrollbar
@@ -69,7 +69,7 @@ class Listbox(MetaWidget):
             label = Button(self, action = 'onSortByColumn')
             label.subscribeAction('*', self)
             self._buttons.append(label)
-            for i in xrange(0, rows):
+            for i in range(0, rows):
                 label = Button(self, action = 'onItemSelect', rmbAction = "onRmbItemSelect", hoverAction = "onItemHighlight", style = "listitem", toggle = 1)
                 label.subscribeAction('*', self)
                 self._labels.append(label)
@@ -104,7 +104,7 @@ class Listbox(MetaWidget):
                 x += width * gx
                 remains -= width
             startRow = 1
-        for row in xrange(startRow, rows):
+        for row in range(startRow, rows):
             rowLabels = []
             y = row * gy
             x = 0
@@ -213,7 +213,7 @@ class Listbox(MetaWidget):
             elif t == FloatType: value = float(value)
             elif t == StringType: value = str(value)
             elif t == UnicodeType: pass
-            elif t == LongType: value = long(value)
+            elif t == LongType: value = int(value)
             else:
                 self._setListIndex(widget.data.index, widget.data)
                 return

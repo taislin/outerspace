@@ -26,7 +26,7 @@ Member variables naming convention:
 
 import pygame
 
-import Const
+from . import Const
 import types
 
 class DataHolder:

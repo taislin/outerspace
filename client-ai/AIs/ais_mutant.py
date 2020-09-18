@@ -246,7 +246,7 @@ class Mutant(AI):
                 fleet = self.db[fleet_id]
                 subfleet = tool.getSubfleet(fleet, {1:0, 4:0}, False)
                 if len(subfleet):
-                    fleet_range = tool.subfleetMaxRange(self.client, self.db, {1:0, 4:0}, fleet_id)
+                    fleet_range = tool.subfleetMarange(self.client, self.db, {1:0, 4:0}, fleet_id)
                     relevant_sys_id = tool.findNearest(self.db, system, self.data.myRelevantSystems, fleet_range)
                     if relevant_sys_id:
                         relevant_sys_id = relevant_sys_id[0]
@@ -299,7 +299,7 @@ class Mutant(AI):
             sheet = tool.getFleetSheet(fleet)
             sowers = sheet[4]
             swarmers = min(sheet[1], math.ceil(sowers * 1.5))
-            max_range = 0.8 * tool.subfleetMaxRange(self.client, self.db, {1:swarmers, 4:sowers}, fleet_id)
+            max_range = 0.8 * tool.subfleetMarange(self.client, self.db, {1:swarmers, 4:sowers}, fleet_id)
             # four nearest systems are considered, with probability to be chosen based on order
             nearest = tool.findNearest(self.db, fleet, self.data.enemySystems, max_range, 4)
             if len(nearest):

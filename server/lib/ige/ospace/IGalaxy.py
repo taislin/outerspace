@@ -26,22 +26,16 @@ import random
 from xml.dom.minidom import Node, parse
 
 import ige
-from IAIPlayer import IAIPlayer
-from IAIEDENPlayer import IAIEDENPlayer
-from IAIMutantPlayer import IAIMutantPlayer
-from IAIPiratePlayer import IAIPiratePlayer
-from IAIRenegadePlayer import IAIRenegadePlayer
-import Const
-import Rules
-import Scanner
-import Utils
+from . import IAIPlayer, IAIEDENPlayer, IAIMutantPlayer, IAIPiratePlayer, IAIRenegadePlayer
+from . import Const
+from . import Scanner
+from . import Utils
 
 from ige import log
 from ige.IObject import IObject
 from ige.IDataHolder import IDataHolder
 from ige.IObject import public
-from ISystem import ISystem
-from Rules import Tech
+from . import ISystem
 
 
 class IGalaxy(IObject):

@@ -19,14 +19,14 @@
 #
 import time
 
-import Const
+from . import Const
 
 from ige import log
 from ige.IDataHolder import IDataHolder
 from ige.IObject import public
-from IPlayer import IPlayer
+from . import IPlayer
 
-class INature(IPlayer):
+class INature(IPlayer.IPlayer):
 
     typeID = Const.T_NATURE
 

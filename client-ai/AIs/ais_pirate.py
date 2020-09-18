@@ -254,7 +254,7 @@ class Pirate(AI):
         return system_info
 
     def _retreat_fleet(self, fleet):
-        max_range = tool.subfleetMaxRange(self.client, self.db, None, fleet.oid)
+        max_range = tool.subfleetMarange(self.client, self.db, None, fleet.oid)
         nearest_sys_ids = tool.findNearest(self.db, fleet, self.data.mySystems)
         if len(nearest_sys_ids):
             nearest_sys_id = nearest_sys_ids[0]
@@ -275,14 +275,14 @@ class Pirate(AI):
         ships[3] = min(sheet[1], sheet[2], sheet[3])
         ships[1] = ships[2] = ships[3]
         ships[4] = 1
-        max_range = tool.subfleetMaxRange(self.client, self.db, ships, fleet.oid)
+        max_range = tool.subfleetMarange(self.client, self.db, ships, fleet.oid)
         nearest_sys_ids = tool.findNearest(self.db, fleet, self.data.enemySystems & self.data.relevantSystems, max_range * 0.45)
         if len(nearest_sys_ids):
             nearestSys = nearest_sys_ids[0]
             tool.orderPartFleet(self.client, self.db, ships, False, fleet.oid, Const.FLACTION_MOVE, nearestSys, None)
 
     def _followup_attack(self, fleet):
-        max_range = tool.subfleetMaxRange(self.client, self.db, None, fleet.oid)
+        max_range = tool.subfleetMarange(self.client, self.db, None, fleet.oid)
         nearest_sys_ids = tool.findNearest(self.db, fleet, self.data.enemySystems & self.data.relevantSystems, max_range)
         if len(nearest_sys_ids):
             nearest_sys_id = nearest_sys_ids[0]

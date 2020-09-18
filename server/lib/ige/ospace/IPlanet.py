@@ -25,10 +25,9 @@ import random
 from xml.dom.minidom import Node
 
 import ige
-import Const
-import Rules
-import Utils
-import ShipUtils
+from . import Const
+from . import Utils
+from . import ShipUtils
 
 from ige import log
 from ige.IObject import IObject, public
@@ -1004,7 +1003,7 @@ class IPlanet(IObject):
                     count = system.combatCounter + desCount[structTechID] + wpnCount[weaponID] - 2
                     # add to attacks
                     #@log.debug('IPlanet', obj.oid, structTechID, "Count", count, 'Shots', weapon.name, ShipUtils.getRounds(weapon.weaponROF, count))
-                    for round in xrange(0, ShipUtils.getRounds(weapon.weaponROF, count)):
+                    for round in range(0, ShipUtils.getRounds(weapon.weaponROF, count)):
                         shots[weapon.weaponClass].append((attack, weaponID))
         # hit limit
         obj.maxHits = len(obj.slots)

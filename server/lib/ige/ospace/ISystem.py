@@ -23,9 +23,8 @@ import copy
 from xml.dom.minidom import Node
 
 import ige
-import Const
-import Rules
-import Utils
+from . import Const
+from . import Utils
 
 from ige import log
 from ige.IObject import IObject, public
@@ -535,7 +534,7 @@ class ISystem(IObject):
                         # process from weaponClass up
                         # never shoot on smaller ships than weaponClass
                         applied = 0
-                        for tmpWpnClass in xrange(weaponClass, 4):
+                        for tmpWpnClass in range(weaponClass, 4):
                             #@log.debug('ISystem', 'Trying target class', tmpWpnClass, totalClass[tmpWpnClass])
                             # select target
                             if totalClass[tmpWpnClass]:

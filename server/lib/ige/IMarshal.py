@@ -19,7 +19,7 @@
 #
 import types
 
-from IDataHolder import IDataHolder
+from . import IDataHolder
 import zlib, string
 
 __all__ = ('EncodeException', 'DecodeException', 'IPacket', 'IMarshal')
@@ -117,34 +117,34 @@ def saveStats(directory):
     fstats = open(os.path.join(directory, 'marshal.stats'), 'w')
     fscheme = open(os.path.join(directory, 'marshal.cscheme'), 'w')
     fpysrc = open(os.path.join(directory, 'marshal.cscheme.py'), 'w')
-    print >> fpysrc, 'compress = {'
-    print >> fstats, '# Summary'
-    print >> fstats, '# Total strings:', stats.total
-    print >> fstats, '# Compressed strings:', stats.hits
-    print >> fstats, '# Uncompressed strings:', stats.total - stats.hits
-    print >> fstats, '# Ratio:', stats.hits / stats.total * 100L, '%'
-    print >> fstats, '# Uncompressed size:', stats.totalBytes
-    print >> fstats, '# Compressed size:', stats.totalBytes - stats.savedBytes
-    print >> fstats, '# Saved bytes:', stats.savedBytes
-    print >> fstats, '# Ratio:', stats.savedBytes / stats.totalBytes * 100L, '%'
-    print >> fstats, '# Encoded pckt bytes total:', stats.encBytes
-    print >> fstats, '# Encoded pckt bytes total (no compression, est.):', stats.encBytes + stats.savedBytes
-    print >> fstats, '# Ratio:', stats.encBytes / (stats.encBytes + stats.savedBytes) * 100L, '%'
-    print >> fstats, '# Encoded pckt bytes total (zipped):', stats.zipBytes
-    print >> fstats, '# Ratio (to compressed):', stats.zipBytes / stats.encBytes * 100L, '%'
-    print >> fstats, '# Ratio (to uncompressed):', stats.zipBytes / (stats.encBytes + stats.savedBytes)* 100L , '%'
-    print >> fstats, '# total bytes,number of items,string'
+    print('compress = {', file=fpysrc)
+    print('# Summary', file=fstats)
+    print('# Total strings:', stats.total, file=fstats)
+    print('# Compressed strings:', stats.hits, file=fstats)
+    print('# Uncompressed strings:', stats.total - stats.hits, file=fstats)
+    print('# Ratio:', stats.hits / stats.total * 100, '%', file=fstats)
+    print('# Uncompressed size:', stats.totalBytes, file=fstats)
+    print('# Compressed size:', stats.totalBytes - stats.savedBytes, file=fstats)
+    print('# Saved bytes:', stats.savedBytes, file=fstats)
+    print('# Ratio:', stats.savedBytes / stats.totalBytes * 100, '%', file=fstats)
+    print('# Encoded pckt bytes total:', stats.encBytes, file=fstats)
+    print('# Encoded pckt bytes total (no compression, est.):', stats.encBytes + stats.savedBytes, file=fstats)
+    print('# Ratio:', stats.encBytes / (stats.encBytes + stats.savedBytes) * 100, '%', file=fstats)
+    print('# Encoded pckt bytes total (zipped):', stats.zipBytes, file=fstats)
+    print('# Ratio (to compressed):', stats.zipBytes / stats.encBytes * 100, '%', file=fstats)
+    print('# Ratio (to uncompressed):', stats.zipBytes / (stats.encBytes + stats.savedBytes)* 100 , '%', file=fstats)
+    print('# total bytes,number of items,string', file=fstats)
     index = 0
     for key in keys:
         count, name = key
-        print >> fstats, '%d,%d,%s' % (count, stats.data[name], name)
+        print(fstats, '%d,%d,%s' % (count, stats.data[name], name))
         code = makeCode(index)
         # include in scheme when there is save in bytes
         if len(code) < len(name):
-            print >> fscheme, code, name
-            print >> fpysrc, "    '%s' : '%s'," % (name, code)
+            print(fscheme, code, name)
+            print("    '%s' : '%s'," % (name, code), file=fpysrc)
         index += 1
-    print >>fpysrc, '}'
+    print('}', file=fpysrc)
     fstats.close()
     fscheme.close()
     fpysrc.close()

@@ -21,16 +21,15 @@ import math
 import random
 import sys
 
-import Const
-import Rules
-import Utils
+from . import Const
+from . import Utils
 
 from ige import log
 from ige.IDataHolder import IDataHolder
 from ige.IObject import public
-from IPlayer import IPlayer
+from . import IPlayer
 
-class IPiratePlayer(IPlayer):
+class IPiratePlayer(IPlayer.IPlayer):
 
     typeID = Const.T_PIRPLAYER
     resignTo = Const.T_AIPIRPLAYER

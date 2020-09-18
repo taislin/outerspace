@@ -277,7 +277,7 @@ class Rebel(AI):
         for fleet in outdated_fleets:
             if fleet.orbiting in service_centers: continue
             subfleet_sheet = {}.fromkeys(obsolete_designs, 0)
-            max_range = tool.subfleetMaxRange(self.client, self.db, subfleet_sheet, fleet.oid)
+            max_range = tool.subfleetMarange(self.client, self.db, subfleet_sheet, fleet.oid)
             nearest = tool.findNearest(self.db, fleet, service_centers, max_range)
             if not nearest: continue
             nearest_service = nearest[0]

@@ -38,7 +38,7 @@ import ige.ospace.Const as Const
 from ige.ospace import Rules
 from ige import log
 import math
-import Utils
+from . import Utils
 
 INFO_NONE = 0
 INFO_TASK = 1
@@ -1145,7 +1145,7 @@ class StarSystemDlg:
 
     def onGlobalQueuesMenu(self, widget, action, data):
         items = []
-        for queue in xrange(5):
+        for queue in range(5):
             items.append(ui.Item(res.globalQueueName(queue),tQue = queue))
         self.queueWin.vGlobalQueues.items = items
         self.queueWin.vGlobalQueues.itemsChanged()

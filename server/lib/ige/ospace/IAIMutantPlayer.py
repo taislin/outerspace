@@ -19,17 +19,15 @@
 #
 import time
 
-import Rules
-import ShipUtils
-import Utils
+from . import ShipUtils, Utils
 
-import Const
+from . import Const
 from ige import log
-from IPlayer import IPlayer
+from . import IPlayer
 from ige.IObject import public
 from ige.IDataHolder import IDataHolder
 
-class IAIMutantPlayer(IPlayer):
+class IAIMutantPlayer(IPlayer.IPlayer):
 
     typeID = Const.T_AIMUTPLAYER
     forums = {"INBOX": 56, "OUTBOX": 56, "EVENTS": 0}

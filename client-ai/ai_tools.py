@@ -401,7 +401,7 @@ def orderPartFleet(client, db, ships, needsExact, fleetID, order, targetID, orde
     else:
         None, db[fleetID], client.getPlayer().fleets
 
-def subfleetMaxRange(client, db, ships, fleetID, canDamage=False):
+def subfleetMarange(client, db, ships, fleetID, canDamage=False):
     """ Counts range of subfleet in parsecs
 
     ships - is dictionary with keys being design IDs, value is

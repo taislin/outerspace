@@ -18,7 +18,7 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-from configparser import configparser
+from configparser import ConfigParser
 
 class Config:
     """Encapsulation of configparser class.
@@ -33,7 +33,7 @@ class Config:
     is returned.
     """
     def __init__(self, _file, defaults = dict()):
-        setattr(self,"_config",configparser(defaults))
+        setattr(self,"_config",ConfigParser(defaults))
         setattr(self,"_file",_file)
         self._config.read(_file)
 

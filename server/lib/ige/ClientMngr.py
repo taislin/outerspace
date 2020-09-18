@@ -22,14 +22,14 @@ import os
 import hashlib
 import random
 import time
-import log
+from . import log
 import ige
 from ige import SecurityException
 from ige.Const import ADMIN_LOGIN
-import Authentication
-from account import Account, AIAccount, AdminAccount, passwordGen
+from . import Authentication
+from . import account
 from ai_parser import AIList
-from IDataHolder import IDataHolder
+from . import IDataHolder
 
 class ClientMngr:
 
@@ -107,7 +107,7 @@ class ClientMngr:
             elif account.email == email:
                 raise SecurityException('E-mail already used.')
         # create account
-        account = Account(login, nick, email, plainPassword)
+        account = account.Account(login, nick, email, plainPassword)
         # update
         self.accounts.create(account, id = str(account.login))
         log.message('Account created, confirmation token:', account.confToken)
@@ -124,7 +124,7 @@ class ClientMngr:
         login = login.strip()
         nick = nick.strip()
         # create account
-        account = AIAccount(login, nick, aiType)
+        account = account.AIAccount(login, nick, aiType)
         # update
         self.accounts.create(account, id = str(account.login))
         log.message('AI account created')

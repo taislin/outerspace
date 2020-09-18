@@ -264,7 +264,7 @@ class StarMapWidget(Widget):
         sx = int((x - self.star_map.currX) * self.star_map.scale) + centerX + self.rect.left
         sy = maxY - (int((y - self.star_map.currY) * self.star_map.scale) + centerY) + self.rect.top
 
-        for i in xrange(1, turns / 6):
+        for i in range(1, turns / 6):
             rng = int(i * speed * self.star_map.scale)
             if rng > 1:
                 pygame.draw.circle(surface, (0x70, 0x70, 0x80), (sx, sy), rng, 1)

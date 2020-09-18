@@ -23,7 +23,7 @@ import pygame, pygame.time, pygame.mouse
 
 import SkinableTheme
 from Tooltip import Tooltip
-import Const
+from . import Const
 
 # enable only if you want OpenGL support
 #try:

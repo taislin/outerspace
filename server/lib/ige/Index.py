@@ -17,8 +17,7 @@
 #  along with Outer Space; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
+import collections
 
-from UserDict import UserDict
-
-class Index(UserDict):
+class Index(collections.UserDict):
     pass

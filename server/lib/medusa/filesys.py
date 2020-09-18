@@ -188,7 +188,7 @@ class os_filesystem:
         p = self.normalize (self.path_module.join (self.root, p[1:]))
         return p
 
-    def longify (self, (path, stat_info)):
+    def longify (self, path, stat_info):
         return unix_longify (path, stat_info)
 
     def __repr__ (self):
@@ -318,7 +318,7 @@ if os.name == 'posix':
 # [yes, I think something like this "\\.\c\windows"]
 
 class msdos_filesystem (os_filesystem):
-    def longify (self, (path, stat_info)):
+    def longify (self, path, stat_info):
         return msdos_longify (path, stat_info)
 
 # A merged filesystem will let you plug other filesystems together.
@@ -393,7 +393,7 @@ def unix_longify (file, stat_info):
         dirchar = 'd'
     else:
         dirchar = '-'
-    date = ls_date (long(time.time()), stat_info[stat.ST_MTIME])
+    date = ls_date (int(time.time()), stat_info[stat.ST_MTIME])
     return '%s%s %3d %-8d %-8d %8d %s %s' % (
         dirchar,
         mode,

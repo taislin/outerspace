@@ -20,7 +20,7 @@
 
 import pygame
 
-import Const
+from . import Const
 from Widget import Widget, registerWidget
 
 # keys mapping

@@ -22,10 +22,9 @@ import math
 import random
 import re
 
-import Const
-import Rules
-import ShipUtils
-import Utils
+from . import Const
+from . import ShipUtils
+from . import Utils
 
 from ige import GameException, log
 from ige.IObject import IObject, public
@@ -903,7 +902,7 @@ class IFleet(IObject):
                     continue
                 # scan all ships for design
                 designExists = 0
-                for index in xrange(0, len(obj.ships)):
+                for index in range(0, len(obj.ships)):
                     if obj.ships[index][Const.SHIP_IDX_DESIGNID] == designID:
                         # find planet with free upgrade points
                         needsUPts = Rules.shipUpgradePts[upgradeToSpec.combatClass]
@@ -1188,7 +1187,7 @@ class IFleet(IObject):
                 count = obj.combatCounter + desCount[designID] + wpnCount[weaponID] - 3
                 # add to attacks
                 #@log.debug('IFleet', obj.oid, designID, "Count", count, 'Shots', weapon.name, ShipUtils.getRounds(weapon.weaponROF, count))
-                for round in xrange(0, ShipUtils.getRounds(weapon.weaponROF * rofMod, count)):
+                for round in range(0, ShipUtils.getRounds(weapon.weaponROF * rofMod, count)):
                     shots[weapon.weaponClass].append((attack, weaponID))
         log.debug(obj.oid, "Combat limit settings", obj.maxHits)
         return shots, targets, firing

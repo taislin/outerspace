@@ -25,7 +25,7 @@ import time
 
 import data
 import ige
-import log
+from . import log
 
 from ige.ClientMngr import Session
 from ige.ospace import Const

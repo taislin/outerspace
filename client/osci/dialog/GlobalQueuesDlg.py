@@ -83,7 +83,7 @@ class GlobalQueuesDlg:
         self.player = client.getPlayer()
         self.vPQueues = [self.win.vPQueue0, self.win.vPQueue1, self.win.vPQueue2, self.win.vPQueue3, self.win.vPQueue4]
         #
-        for queueNo in xrange(self.queueNo):
+        for queueNo in range(self.queueNo):
             self.showProdQueue(queueNo)
 
     def showProdQueue(self, id):

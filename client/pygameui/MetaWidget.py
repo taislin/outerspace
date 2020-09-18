@@ -19,7 +19,7 @@
 #
 
 import pygame.event
-import Const
+from . import Const
 from Widget import Widget
 
 class MetaWidget(Widget):

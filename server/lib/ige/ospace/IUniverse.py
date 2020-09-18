@@ -27,9 +27,7 @@ import time
 import ige
 import ige.version
 
-import Const
-import GalaxyGenerator
-import Rules
+from . import Const, GalaxyGenerator
 
 from ige import log
 from ige.IObject import IObject, public

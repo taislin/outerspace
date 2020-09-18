@@ -98,7 +98,7 @@ def debug(*args):
     if msgLog:
         for item in args:
            conc = conc + str(item) + " "
-        print(msgLog+str(__getTime())+' DBG '+str(__getCaller())+conc)
+        print(str(msgLog)+str(__getTime())+' DBG '+str(__getCaller())+conc)
         msgLog.flush()
 
 def message(*args):
@@ -112,7 +112,7 @@ def message(*args):
     if msgLog:
         for item in args:
             conc = conc + str(item) + " "
-        print(msgLog+str(__getTime())+' MSG '+str(__getCaller())+conc)
+        print(str(msgLog)+str(__getTime())+' MSG '+str(__getCaller())+conc)
         msgLog.flush()
 
 def warning(*args):
@@ -137,7 +137,7 @@ def warning(*args):
             print >> errorLog, 79 * '-'
         errorLog.flush()
     if msgLog:
-        print(msgLog+str(__getTime())+' WAR '+str(__getCaller()))
+        print(str(msgLog)+str(__getTime())+' WAR '+str(__getCaller()))
         for item in args:
             print >> msgLog, str(item),
         print >> msgLog
@@ -167,7 +167,7 @@ def error(*args):
             print >> errorLog, 79 * '-'
         errorLog.flush()
     if msgLog:
-        print(msgLog+str(__getTime())+' ERR '+str(__getCaller()))
+        print(str(msgLog)+str(__getTime())+' ERR '+str(__getCaller()))
         for item in args:
             print >> msgLog, str(item),
         print >> msgLog
@@ -201,7 +201,7 @@ def exception(*args):
             print >> errorLog, 79 * '-'
         errorLog.flush()
     if msgLog:
-        print(msgLog+str(__getTime())+' EXC '+str(__getCaller()))
+        print(str(msgLog)+str(__getTime())+' EXC '+str(__getCaller()))
         for item in args:
             print >> msgLog, str(item),
         print >> msgLog

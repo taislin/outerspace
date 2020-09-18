@@ -120,7 +120,7 @@ class StarMap(object):
                     anyX = obj.x
                 if hasattr(obj, "y"):
                     anyY = obj.y
-            except AttributeError, e:
+            except AttributeError as e:
                 log.warning('StarMap', 'Cannot render objID = %d' % objID)
                 continue
             if obj.type == Const.T_SYSTEM:

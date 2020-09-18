@@ -935,7 +935,7 @@ class StarSystemDlg:
             self.showPlanet()
             self.win.vPSlots.selectItem(self.win.vPSlots.items[self.plInfoData])
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(e.args[0])
             return
 
@@ -955,7 +955,7 @@ class StarSystemDlg:
             self.showPlanet()
             self.win.vPSlots.selectItem(self.win.vPSlots.items[self.plInfoData])
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(e.args[0])
             return
 
@@ -969,7 +969,7 @@ class StarSystemDlg:
             self.showPlanet()
             self.win.vPSlots.selectItem(self.win.vPSlots.items[self.plInfoData])
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(e.args[0])
             return
 
@@ -986,7 +986,7 @@ class StarSystemDlg:
             self.plInfoData = self.plInfoDataSelected = None
             self.win.vPSlots.selectItem(None)
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(e.args[0])
             return
         self.showPlanet()
@@ -1012,7 +1012,7 @@ class StarSystemDlg:
             self.showPlanet()
             self.win.vPQueue.selectItem(self.win.vPQueue.items[self.plInfoData])
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(e.args[0])
             return
 
@@ -1026,7 +1026,7 @@ class StarSystemDlg:
             self.showPlanet()
             self.win.vPQueue.selectItem(self.win.vPQueue.items[self.plInfoData])
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(e.args[0])
             return
 
@@ -1048,7 +1048,7 @@ class StarSystemDlg:
                 planet.prodQueue, player.stratRes = client.cmdProxy.changeConstruction(self.planetID, self.plInfoData, self.changeQtyDlg.quantity)
                 self.showPlanet()
                 self.win.setStatus(_('Command has been executed.'))
-            except ige.GameException, e:
+            except ige.GameException as e:
                 self.win.setStatus(e.args[0])
                 return
 
@@ -1063,7 +1063,7 @@ class StarSystemDlg:
             self.win.vPQueue.selectItem(None)
             self.showPlanet()
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(e.args[0])
             return
 
@@ -1120,7 +1120,7 @@ class StarSystemDlg:
             self.win.vSystemMap.computeBuoy()
             self.showSystem()
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(e.args[0])
             return
 
@@ -1133,7 +1133,7 @@ class StarSystemDlg:
             self.win.vSystemMap.computeBuoy()
             self.showSystem()
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(e.args[0])
             return
 
@@ -1165,7 +1165,7 @@ class StarSystemDlg:
             self.queueWin.hide()
             self.win.setStatus(_('Command has been executed.'))
             self.update()
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(e.args[0])
             return
 

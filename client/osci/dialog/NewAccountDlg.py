@@ -56,7 +56,7 @@ class NewAccountDlg:
         self.win.hide()
         try:
             result = client.createAccount(login, password, nick, email)
-        except SecurityException, e:
+        except SecurityException as e:
             # failed
             self.win.vMessage.text = _(e.args[0])
             self.win.show()

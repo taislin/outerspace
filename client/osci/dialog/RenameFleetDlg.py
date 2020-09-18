@@ -78,7 +78,7 @@ class RenameFleetDlg:
             self.hide()
             for dialog in gdata.updateDlgs:
                 dialog.update()
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(_(e.args[0]))
 
     def onDelete(self, widget, action, data):
@@ -93,7 +93,7 @@ class RenameFleetDlg:
             self.hide()
             for dialog in gdata.updateDlgs:
                 dialog.update()
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(_(e.args[0]))
 
     def onCancel(self, widget, action, data):

@@ -160,7 +160,7 @@ class NewMessageDlg:
                 }
                 client.cmdProxy.sendMsg(client.getPlayerID(), message)
             self.win.setStatus(_("Command has been executed."))
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(e.args[0])
             return
         client.getMessages()

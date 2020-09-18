@@ -251,7 +251,7 @@ class ResearchDlg:
             player = client.getPlayer()
             player.rsrchQueue = client.cmdProxy.startResearch(player.oid, techID)
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(e.args[0])
             return
         self.update()
@@ -267,7 +267,7 @@ class ResearchDlg:
             player = client.getPlayer()
             player.rsrchQueue = client.cmdProxy.startResearch(player.oid, techID)
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(e.args[0])
             return
         self.update()
@@ -326,7 +326,7 @@ class ResearchDlg:
             player = client.getPlayer()
             player.obsoleteTechs = client.cmdProxy.addObsoleteTechs(player.oid, techID)
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(e.args[0])
             return
         self.update()
@@ -342,7 +342,7 @@ class ResearchDlg:
             player = client.getPlayer()
             player.obsoleteTechs = client.cmdProxy.delObsoleteTechs(player.oid, techID)
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(e.args[0])
             return
         self.update()

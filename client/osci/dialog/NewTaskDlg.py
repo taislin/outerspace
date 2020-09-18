@@ -322,7 +322,7 @@ class NewTaskDlg:
                     self.techID, self.quantity, self.targetID, self.techID < 1000,
                     self.win.vReportFin.checked, self.structToDemolish)
                 self.win.setStatus(_('Command has been executed.'))
-            except GameException, e:
+            except GameException as e:
                 self.win.setStatus(e.args[0])
                 return
         self.hide()

@@ -513,7 +513,7 @@ def main():
             eater.set_filename(filename)
             try:
                 tokenize.tokenize(fp.readline, eater)
-            except tokenize.TokenError, e:
+            except tokenize.TokenError as e:
                 print >> sys.stderr, '%s: %s, line %d, column %d' % (
                     e[0], filename, e[1][0], e[1][1])
         finally:

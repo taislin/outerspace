@@ -206,7 +206,7 @@ class NewGlobalTaskDlg:
 
             player.prodQueues[self.queue], player.stratRes = client.cmdProxy.startGlobalConstruction(self.playerID, self.techID, self.quantity, self.techID < 1000, self.win.vReportFin.checked, self.queue)
             self.win.setStatus(_('Command has been executed.'))
-        except GameException, e:
+        except GameException as e:
             self.win.setStatus(e.args[0])
             return
         self.hide()

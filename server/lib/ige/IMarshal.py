@@ -97,9 +97,9 @@ try:
     fh = open('var/marshal.stats.data', 'rb')
     stats = pickle.load(fh)
     fh.close()
-except IOError, e:
+except IOError as e:
     stats = Stats()
-except EOFError, e:
+except EOFError as e:
     stats = Stats()
 
 def saveStats(directory):

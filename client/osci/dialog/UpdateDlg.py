@@ -106,7 +106,7 @@ class UpdateDlg:
             ifh.close()
             ofh.close()
             return filename
-        except urllib2.URLError, e:
+        except urllib2.URLError as e:
             log.warning("Cannot download file")
             self.reportFailure(_("Cannot finish download: %(s)") % str(e.reason))
             return None

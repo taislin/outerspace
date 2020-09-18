@@ -234,7 +234,7 @@ def getMsgText(msgID, data):
                 newData[str(index)] = item
                 index += 1
         text = msg % newData
-    except Exception, e:
+    except Exception as e:
         # wrong arguments -> default message
         log.warning("Error while formating message")
         return _('ERROR\nWrong format for msg %d: %s\nException: %s: %s\nFormat: %s') % (msgID, repr(data), str(e.__class__), str(e), msg)

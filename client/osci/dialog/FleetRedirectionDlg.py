@@ -90,7 +90,7 @@ class FleetRedirectionDlg:
             gdata.mainGameDlg.update()
             self.caller.update()
             self.hide()
-        except GameException, e:
+        except GameException as e:
             self.win.setStatus(e.args[0])
 
     def onRedirectOFF(self, widget, action, data):
@@ -103,7 +103,7 @@ class FleetRedirectionDlg:
             gdata.mainGameDlg.update()
             self.caller.update()
             self.hide()
-        except GameException, e:
+        except GameException as e:
             self.win.setStatus(e.args[0])
 
     def createUI(self):

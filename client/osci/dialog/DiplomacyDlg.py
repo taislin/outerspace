@@ -291,7 +291,7 @@ class DiplomacyDlg:
             player.diplomacyRels = client.cmdProxy.changePactCond(player.oid,
                 citem.tContactID, pitem.tPactID, pactState, conditions)
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(e.args[0])
             return
         self.update()
@@ -304,7 +304,7 @@ class DiplomacyDlg:
             player.voteFor = client.cmdProxy.setVoteFor(player.oid,
                 citem.tContactID)
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(e.args[0])
             return
         self.update()
@@ -315,7 +315,7 @@ class DiplomacyDlg:
             player = client.getPlayer()
             player.voteFor = client.cmdProxy.setVoteFor(player.oid, Const.OID_NONE)
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(e.args[0])
             return
         self.update()

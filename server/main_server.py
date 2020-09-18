@@ -63,12 +63,6 @@ def runServer(options):
     #~ h.setFormatter(logging.Formatter('%(created)d %(levelname)-5s %(name)-8s %(message)s'))
     #~ log.addHandler(h)
 
-
-    # record my pid
-    pidFd = os.open(os.path.join(options.configDir,"server.pid"), os.O_CREAT | os.O_EXCL | os.O_WRONLY)
-    os.write(pidFd, str(os.getpid()))
-    # TODO: check if server.pid points to the running process
-
     game = None
     msgMngr = None
     clientMngr = None
@@ -113,12 +107,6 @@ def runServer(options):
         os.remove(os.path.join(options.configDir,"server.pid"))
 
     cleanup = _cleanup
-
-    atexit.register(cleanup, pidFd)
-
-    #~fh = open(pidFilename, 'w')
-    #~print >> fh, os.getpid()
-    #~fh.close()
 
     # startup game
     log.debug('Importing IGE modules...')

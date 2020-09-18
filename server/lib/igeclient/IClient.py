@@ -224,12 +224,12 @@ class IProxy:
                 result = self.processCall(args)
                 ok = 1
                 break
-            except ServerStatusException, e:
+            except ServerStatusException as e:
                 log.warning("Cannot complete request - retrying...")
                 retries -= 1
                 time.sleep(1)
             # this was commented out
-            except Exception, e:
+            except Exception as e:
                 log.warning("Cannot complete request")
                 if self.client.msgHandler:
                     self.client.msgHandler(MSG_CMD_END, None)
@@ -330,7 +330,7 @@ class IProxy:
                 else:
                     rspData = reader.result
                 # end of thread dispatcher
-        except Exception, e:
+        except Exception as e:
             log.warning('Cannot send request to the server')
             self.client.logged = 0
             self.client.connected = 0
@@ -366,5 +366,5 @@ class Reader(threading.Thread):
     def run(self):
         try:
             self.result = self.callable()
-        except Exception, e:
+        except Exception as e:
             self.exception = e

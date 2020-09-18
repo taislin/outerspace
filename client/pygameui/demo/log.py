@@ -91,7 +91,7 @@ def debug(*args):
         print(str(item))
     
     if msgLog:
-        print(msgLog+str(__getTime())+' DBG '+str(__getCaller()))
+        print(str(msgLog)+str(__getTime())+' DBG '+str(__getCaller()))
         for item in args:
             print >> msgLog, str(item),
         print >> msgLog
@@ -105,7 +105,7 @@ def message(*args):
         print(str(item))
     
     if msgLog:
-        print(msgLog+str(__getTime())+' MSG '+str(__getCaller()))
+        print(str(msgLog)+str(__getTime())+' MSG '+str(__getCaller()))
         for item in args:
             print >> msgLog, str(item),
         print >> msgLog

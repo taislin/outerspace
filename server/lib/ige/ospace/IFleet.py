@@ -770,7 +770,7 @@ class IFleet(IObject):
                             deployHandler.deployHandlerFunction(tran, obj, planet, deployHandler)
                             Utils.sendMessage(tran, obj, Const.MSG_DEPLOY_HANDLER, planet.oid, deployHandlerID)
                             removeShip = 1
-                        except GameException, e:
+                        except GameException as e:
                             log.warning('IFleet -','Deploy handler error - internal error')
                             Utils.sendMessage(tran, obj, Const.MSG_CANNOTBUILD_SHLOST, planet.oid, None)
                     else:
@@ -790,7 +790,7 @@ class IFleet(IObject):
                                 planet.slots.insert(0, Utils.newStructure(tran, structTechID, obj.owner, hpRatio = Rules.structFromShipHpRatio))
                                 removeShip = 1
                                 Utils.sendMessage(tran, obj, Const.MSG_COMPLETED_STRUCTURE, planet.oid, structTech.id)
-                            except GameException, e:
+                            except GameException as e:
                                 # cannot build (planet already occupied?)
                                 log.warning('IFleet -', 'Build on planet - cannot complete')
                                 Utils.sendMessage(tran, obj, Const.MSG_CANNOTBUILD_SHLOST, planet.oid, None)

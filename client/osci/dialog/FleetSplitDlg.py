@@ -346,7 +346,7 @@ class FleetSplitDlg:
             fleet = client.get(self.fleetDlg.fleetID, noUpdate = 1)
             newFleet, origFleet, fleets = client.cmdProxy.splitFleet(self.fleetDlg.fleetID,
                 self.newShips, self.newEn)
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(e.args[0])
             return
         # update related objects

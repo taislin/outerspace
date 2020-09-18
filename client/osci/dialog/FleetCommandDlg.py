@@ -265,7 +265,7 @@ class FleetCommandDlg:
             self.hide()
             self.fleetDlg.update()
             gdata.mainGameDlg.update()
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(_(e.args[0]))
 
     def createUI(self):

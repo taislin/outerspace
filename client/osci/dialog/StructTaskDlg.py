@@ -266,7 +266,7 @@ class StructTaskDlg:
                         data.techID, self.quantity, self.planetID, data.techID < 1000,
                         self.win.vReportFin.checked, self.structToDemolish)
                 self.win.setStatus(_('Command has been executed.'))
-            except GameException, e:
+            except GameException as e:
                 self.win.setStatus(e.args[0])
                 return
 

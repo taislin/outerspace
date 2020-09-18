@@ -128,7 +128,7 @@ class GameMngr:
             if self.cmdPool.has_key(obj.type):
                 try:
                     self.cmdPool[obj.type].upgrade(tran, obj)
-                except Exception, e:
+                except Exception as e:
                     log.warning("Cannot upgrade object", id)
             references = self.cmdPool[obj.type].getReferences(tran, obj)
             if references:

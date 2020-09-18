@@ -150,7 +150,7 @@ class GlobalQueuesDlg:
             self.win.setStatus(_('Executing MOVE TASK command...'))
             self.player.prodQueues[self.activeQueue] = client.cmdProxy.moveGlobalConstrItem(self.playerID, self.activeQueue, self.activeIndex, rel)
             self.win.setStatus(_('Command has been executed.'))
-        except GameException, e:
+        except GameException as e:
             self.win.setStatus(e.args[0])
             return
 
@@ -164,7 +164,7 @@ class GlobalQueuesDlg:
             self.win.setStatus(_('Executing MOVE TASK command...'))
             self.player.prodQueues[self.activeQueue] = client.cmdProxy.moveGlobalConstrItem(self.playerID, self.activeQueue, self.activeIndex, widget.data)
             self.win.setStatus(_('Command has been executed.'))
-        except GameException, e:
+        except GameException as e:
             self.win.setStatus(e.args[0])
             return
         self.activeIndex += widget.data
@@ -182,7 +182,7 @@ class GlobalQueuesDlg:
                 self.win.setStatus(_('Executing CHANGE TASK command...'))
                 self.player.prodQueues[self.activeQueue], self.player.stratRes = client.cmdProxy.changeGlobalConstruction(self.playerID, self.activeQueue, self.activeIndex, self.changeQtyDlg.quantity)
                 self.win.setStatus(_('Command has been executed.'))
-            except GameException, e:
+            except GameException as e:
                 self.win.setStatus(e.args[0])
                 return
         self.win.vTaskQuantity.text = self.player.prodQueues[self.activeQueue][self.activeIndex].quantity
@@ -210,7 +210,7 @@ class GlobalQueuesDlg:
                 self.win.setStatus(_('Executing ABORT CONSTRUCTION command...'))
                 self.player.prodQueues[self.activeQueue], self.player.stratRes = client.cmdProxy.abortGlobalConstruction(self.playerID, self.activeQueue, self.activeIndex)
                 self.win.setStatus(_('Command has been executed.'))
-            except GameException, e:
+            except GameException as e:
                 self.win.setStatus(e.args[0])
                 return
             if len(self.player.prodQueues[self.activeQueue]) == self.activeIndex:

@@ -232,7 +232,7 @@ class FleetDlg:
                 self.update()
                 gdata.mainGameDlg.update()
             return 0
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(_(e.args[0]))
             return 1
 
@@ -262,7 +262,7 @@ class FleetDlg:
             self.update()
             gdata.mainGameDlg.update()
             return 0
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(_(e.args[0]))
             return 1
 
@@ -279,7 +279,7 @@ class FleetDlg:
             self.win.setStatus(_('Command has been executed.'))
             self.onSelectCommand(widget, action, None)
             gdata.mainGameDlg.update()
-        except ige.GameException, e:
+        except ige.GameException as e:
             self.win.setStatus(_(e.args[0]))
             return 1
 

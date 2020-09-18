@@ -21,9 +21,8 @@
 import traceback
 import time
 import os
-import log
-import ige
-import ige.version
+from . import log
+
 from medusa import igerpc_handler, http_server, asyncore, logger, status_handler
 from medusa import filesys, default_handler, counter, producers, xmlrpc_handler
 
@@ -64,21 +63,21 @@ class igerpc(igerpc_handler.igerpc_handler):
             packet.method = None
             packet.params = None
             return packet
-        except ige.NoAccountException, e:
+        except ige.NoAccountException as e:
             raise e
-        except ige.GameException, e:
+        except ige.GameException as e:
             raise e
-        except ige.SecurityException, e:
+        except ige.SecurityException as e:
             raise e
-        except ige.CreatePlayerException, e:
+        except ige.CreatePlayerException as e:
             raise e
-        except ige.ServerStatusException, e:
+        except ige.ServerStatusException as e:
             raise e
-        except ige.NoSuchObjectException, e:
+        except ige.NoSuchObjectException as e:
             raise e
-        except asyncore.ExitNow, e:
+        except asyncore.ExitNow as e:
             raise e
-        except Exception, e:
+        except Exception as e:
             log.warning('Cannot complete RPC call')
             self.seriousExcCounter.increment()
             raise e
@@ -111,17 +110,17 @@ class xmlrpc(xmlrpc_handler.xmlrpc_handler):
         try:
             instanceName, methodName = method.split('.')
             return getattr(objMap[instanceName], 'rpc_%s' % methodName)(*params)
-            #except ige.NoAccountException, e:
+            #except ige.NoAccountException as e:
             #    raise e
-            #except ige.GameException, e:
+            #except ige.GameException as e:
             #    raise e
-            #except ige.SecurityException, e:
+            #except ige.SecurityException as e:
             #    raise e
-            #except ige.ServerStatusException, e:
+            #except ige.ServerStatusException as e:
             #    raise e
-        except asyncore.ExitNow, e:
+        except asyncore.ExitNow as e:
             raise e
-        except Exception, e:
+        except Exception as e:
             log.warning('Cannot complete RPC call')
             self.seriousExcCounter.increment()
             raise e

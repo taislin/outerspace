@@ -35,8 +35,8 @@ class Selection(object):
     """ Object to hold and pre-process information about selected area of the text.
     """
     def __init__(self):
-        self._start = None
-        self._end = None
+        self._start = -10000
+        self._end = -10000
 
     @property
     def first(self):

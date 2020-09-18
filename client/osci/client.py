@@ -24,9 +24,9 @@ from igeclient import IClient, IClientDB
 from ige.ospace import Rules
 import ige.ospace.Const as Const
 from ige.IDataHolder import IDataHolder
-import ige, gdata, osci, math, time
+import ige, osci, math, time
 from ige import log
-
+from . import gdata
 # module globals
 cmdProxy = None
 db = None

@@ -19,8 +19,8 @@
 #
 
 import gdata
-from dialog import ProgressDlg
-from dialog import PlayerSelectDlg
+from .dialog import ProgressDlg
+from .dialog import PlayerSelectDlg
 import pygame
 from ige import log
 

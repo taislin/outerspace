@@ -940,7 +940,7 @@ def drawText(surface, widget):
         for char in para:
             fore = foreground
             back = None
-            if widget.selection and widget.selection.first <= (row, column) < widget.selection.last:
+            if widget.selection and widget.selection.first <= row < widget.selection.last and widget.selection.first <= column < widget.selection.last:
                 # switch colors for foreground/background
                 fore = background
                 back = foreground

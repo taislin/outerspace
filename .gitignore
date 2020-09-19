@@ -34,4 +34,8 @@ pip-log.txt
 .mr.developer.cfg
 tools/*.png
 
+outerspace.build/
+outerspace.dist/
 
+python27.dll
+outerspace.exe

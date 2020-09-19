@@ -44,7 +44,7 @@ class Booking(object):
         self.capacity = None
         self.owner = None
         self.owner_nick = None
-        self.pw_salt = hashlib.sha256(str(random.random())).hexdigest()
+        self.pw_salt = hashlib.sha256(str(random.random()).encode('utf-8')).hexdigest()
         self.pw_hash = None
 
     def toggle_booking(self, player):

@@ -29,7 +29,7 @@ def runServer(options):
     baseDir = os.path.abspath(os.path.dirname(__file__))
 
     sys.path.insert(0, os.path.join(baseDir, "lib"))
-    sys.path.insert(0, os.path.join(baseDir, "..", "client-ai"))
+    sys.path.insert(0, os.path.join(baseDir, "..", "client_ai"))
     sys.path.insert(0, os.path.join(baseDir, "data"))
 
     import os, atexit

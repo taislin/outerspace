@@ -30,6 +30,7 @@ from . import Authentication
 from . import account
 from ai_parser import AIList
 from . import IDataHolder
+import hashlib
 
 class ClientMngr:
 
@@ -70,7 +71,7 @@ class ClientMngr:
 
         if self.accounts.has_key(ADMIN_LOGIN):
             self.accounts[ADMIN_LOGIN].passwdHashed = False # Needs plaintext login from token
-            password = Authentication.passwordGen()
+            password = hashlib.sha1(os.urandom(160)).hexdigest()
             self.accounts[ADMIN_LOGIN].setPassword(password)
         else:
             log.message("No administator account found! (looking for '%s')" % ADMIN_LOGIN)
@@ -160,7 +161,7 @@ class ClientMngr:
         # create sort of cookie
         while 1:
             sid = hashlib.sha256(str(random.random())).hexdigest()
-            if not self.sessions.has_key(sid):
+            if not sid in self.sessions:
                 break
         challenge = Authentication.getWelcomeString(self.authMethod)
         session = Session(sid)

@@ -20,9 +20,10 @@
 
 import ige
 import ige.Authentication
-from ige.IMarshal import IMarshal, IPacket
+from ige.IMarshal import IMarshal
 from ige import ServerStatusException, log
 import http, urllib
+import http.client
 import time
 from binascii import hexlify
 import threading
@@ -31,6 +32,24 @@ from ige.Const import OID_ADMIN
 
 MSG_CMD_BEGIN = -1000
 MSG_CMD_END = -1001
+
+class IPacket:
+
+    def __init__(self):
+        self.sid = None
+        self.method = None
+        self.params = None
+        self.result = None
+        self.messages = None
+        self.exception = None
+        self.clientAddr = None
+
+    def __repr__(self):
+        result = '<%s.%s %d ' % (self.__class__.__module__, self.__class__.__name__, id(self))
+        for key, value in self.__dict__.items():
+            result += '%s=%s, ' % (key, repr(value))
+        result += '>'
+        return result
 
 class IClientException(Exception):
     pass
@@ -257,17 +276,16 @@ class IProxy:
         log.debug('calling', packet.method, packet.params)
         # encode
         # V11
-        # data = self.marshal.encode(packet).encode('utf-8')
         data = self.marshal.encode(packet)
         self.client.statsBytesOut += len(data)
-        #@log.debug('->', data)
+        log.debug('->', data)
         # make call
         # init connection
         if self.client.proxy:
             # use urllib
             if not self.client.httpConn:
                 log.debug('Using proxy', self.client.proxy)
-                self.client.httpConn = urllib.FancyURLopener({'http': self.client.proxy})
+                self.client.httpConn = urllib.request.urlopen({'http': self.client.proxy})
         else:
             if self.client.httpConn:
                 h = self.client.httpConn

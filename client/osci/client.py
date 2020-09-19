@@ -26,7 +26,7 @@ import ige.ospace.Const as Const
 from ige.IDataHolder import IDataHolder
 import ige, osci, math, time
 from ige import log
-from . import gdata
+from .gdata import GData
 # module globals
 cmdProxy = None
 db = None
@@ -57,8 +57,8 @@ def initCmdProxy(keepAliveTime):
     if not cmdProxy:
         callbackObj.onInitConnection()
         proxy = None
-        if gdata.config.proxy.http != None:
-            proxy = gdata.config.proxy.http
+        if GData.config.proxy.http != None:
+            proxy = GData.config.proxy.http
         cmdProxy = IClient.IClient(server, proxy, msgHandler, idleHandler, 'OSClient/%s' % ige.version.versionString, keepAliveTime)
         callbackObj.onConnInitialized()
         cmdProxy.connect()
@@ -67,8 +67,8 @@ def initCmdProxy(keepAliveTime):
 
 def login(gameid, login, password):
     global account
-    if gdata.config.client.keepAlive != None:
-        cmdProxy.keepAliveTime = int(gdata.config.client.keepAlive)
+    if GData.config.client.keepAlive != None:
+        cmdProxy.keepAliveTime = int(GData.config.client.keepAlive)
     if cmdProxy.login(gameid, login, password):
         account = cmdProxy.getAccountData()
         return 1
@@ -79,12 +79,12 @@ def createAccount(login, password, nick, email):
     if not cmdProxy:
         callbackObj.onInitConnection()
         proxy = None
-        if gdata.config.proxy.http != None:
-            proxy = gdata.config.proxy.http
+        if GData.config.proxy.http != None:
+            proxy = GData.config.proxy.http
         cmdProxy = IClient.IClient(server, proxy, msgHandler, idleHandler, 'OSClient/%d.%d.%d%s' % osci.version)
         cmdProxy.connect(login)
-        if gdata.config.client.keepAlive != None:
-            cmdProxy.keepAliveTime = int(gdata.config.client.keepAlive)
+        if GData.config.client.keepAlive != None:
+            cmdProxy.keepAliveTime = int(GData.config.client.keepAlive)
         callbackObj.onConnInitialized()
     return cmdProxy.createAccount(login, password, nick, email)
 
@@ -105,7 +105,7 @@ def saveDB():
     ## Message handler
 
 def msgHandler(mid, data):
-    if ignoreMsgs.has_key(mid):
+    if mid in ignoreMsgs:
         log.debug('OSClient', 'ignoring message', mid, data)
         return
     if mid == Const.SMESSAGE_NEWTURN:

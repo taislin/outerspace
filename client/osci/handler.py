@@ -18,7 +18,7 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-import gdata
+from .gdata import GData
 from .dialog import ProgressDlg
 from .dialog import PlayerSelectDlg
 import pygame
@@ -34,24 +34,24 @@ def onConnInitialized():
     pass
 
 def onCmdBegin():
-    if gdata.mainGameDlg:
-        gdata.mainGameDlg.onCmdInProgress(1)
+    if GData.mainGameDlg:
+        GData.mainGameDlg.onCmdInProgress(1)
     else:
-        gdata.cmdInProgress = 1
-    gdata.app.update()
+        GData.cmdInProgress = 1
+    GData.app.update()
 
 def onCmdEnd():
-    if gdata.mainGameDlg:
-        gdata.mainGameDlg.onCmdInProgress(0)
+    if GData.mainGameDlg:
+        GData.mainGameDlg.onCmdInProgress(0)
     else:
-        gdata.cmdInProgress = 0
-    gdata.app.update()
+        GData.cmdInProgress = 0
+    GData.app.update()
 
 def onUpdateStarting():
     global progressDlg
     log.debug("onUpdateStarting")
     if not progressDlg:
-        progressDlg = ProgressDlg(gdata.app)
+        progressDlg = dialog.ProgressDlg(GData.app)
     progressDlg.display(_('Updating OSCI database...'), 0, 1)
 
 def onUpdateProgress(curr, max, text = None):
@@ -66,11 +66,11 @@ def onUpdateFinished():
         progressDlg.hide()
     except:
         log.warning("Cannot delete progressDlg window")
-    for dialog in gdata.updateDlgs:
+    for dialog in GData.updateDlgs:
         dialog.update()
 
 def onNewMessages(number):
-    gdata.mainGameDlg.messagesDlg.update()
+    GData.mainGameDlg.messagesDlg.update()
 
 def onWaitingForResponse():
     #pygame.event.pump()

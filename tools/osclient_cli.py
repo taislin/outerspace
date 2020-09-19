@@ -163,7 +163,7 @@ elif options.deleteGalaxy:
 elif options.chronicler:
     sys.path.insert(0, os.path.join(baseDir, '..', 'client'))
     sys.path.insert(0, os.path.join(baseDir, '..', 'client', 'osci'))
-    sys.path.insert(0, os.path.join(baseDir, '..', 'client-ai'))
+    sys.path.insert(0, os.path.join(baseDir, '..', 'client_ai'))
     import ige.ospace.Rules as Rules
     Rules.init(options.configDir)
 

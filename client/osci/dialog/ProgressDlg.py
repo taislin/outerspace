@@ -19,7 +19,8 @@
 #
 
 import pygameui as ui
-from osci import res, gdata
+from osci import res
+from osci.gdata import GData
 
 # Alignment
 ui.ALIGN_NONE = 0x00
@@ -61,7 +62,7 @@ class ProgressDlg:
 
 
     def createUI(self):
-        w, h = gdata.scrnSize
+        w, h = GData.scrnSize
         self.win = ui.Window.Window(self.app,
             modal = 1,
             movable = 0,

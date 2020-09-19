@@ -52,7 +52,7 @@ import pygame.image, pygame.ftfont, pygame.time, pygame.version
 import pygame.transform
 
 from osci.config import Config
-import osci.gdata as gdata
+from osci.gdata import GData
 import ige.version
 from ige import log
 import osci
@@ -62,7 +62,7 @@ import osci.res
 
 
 def defineBackground():
-    surface = pygame.Surface.copy(gdata.screen)
+    surface = pygame.Surface.copy(GData.screen)
     image = random.choice([
         resources.get('bck1_1024x768.jpg'),
         resources.get('bck2_1024x768.jpg'),
@@ -105,74 +105,74 @@ def defineBackground():
 
 # update function
 def update():
-    rects = gdata.app.draw(gdata.screen)
-    if gdata.cmdInProgress:
+    rects = GData.app.draw(GData.screen)
+    if GData.cmdInProgress:
         img = osci.res.cmdInProgressImg
-        wx, wy = gdata.screen.get_size()
+        wx, wy = GData.screen.get_size()
         x, y = img.get_size()
-        gdata.screen.blit(img, (wx - x, 0))
+        GData.screen.blit(img, (wx - x, 0))
         rects.append(pygame.Rect(wx - x, 0, img.get_width(), img.get_height()))
     pygame.display.update(rects)
     pygame.event.pump()
 
 def setDefaults(gdata, options):
-    if gdata.config.client.language == None:
-        gdata.config.client.language = 'en'
-    if gdata.config.defaults.minfleetsymbolsize == None:
-        gdata.config.defaults.minfleetsymbolsize = 4
-    if gdata.config.defaults.minplanetsymbolsize == None:
-        gdata.config.defaults.minplanetsymbolsize = 5
-    if gdata.config.defaults.maxfleetsymbolsize == None:
-        gdata.config.defaults.maxfleetsymbolsize = 0
-    if gdata.config.defaults.maxplanetsymbolsize == None:
-        gdata.config.defaults.maxplanetsymbolsize = 0
-    if gdata.config.game.screenshot_dir is None:
-        gdata.config.game.screenshot_dir = os.path.join(options.configDir, 'screenshots')
+    if GData.config.client.language == None:
+        GData.config.client.language = 'en'
+    if GData.config.defaults.minfleetsymbolsize == None:
+        GData.config.defaults.minfleetsymbolsize = 4
+    if GData.config.defaults.minplanetsymbolsize == None:
+        GData.config.defaults.minplanetsymbolsize = 5
+    if GData.config.defaults.maxfleetsymbolsize == None:
+        GData.config.defaults.maxfleetsymbolsize = 0
+    if GData.config.defaults.maxplanetsymbolsize == None:
+        GData.config.defaults.maxplanetsymbolsize = 0
+    if GData.config.game.screenshot_dir is None:
+        GData.config.game.screenshot_dir = os.path.join(options.configDir, 'screenshots')
         try:
-            os.makedirs(gdata.config.game.screenshot_dir)
+            os.makedirs(GData.config.game.screenshot_dir)
         except OSError:
             pass
     # read Highlights
-    if gdata.config.defaults.colors != None:
-            for coldef in gdata.config.defaults.colors.split(' '):
+    if GData.config.defaults.colors != None:
+            for coldef in GData.config.defaults.colors.split(' '):
                 m = re.match('(\d+):(0[xX].*?),(0[xX].*?),(0[xX].*)',coldef)
                 if m != None :
                     id = int(m.group(1))
                     red = min(int(m.group(2),16),255)
                     green = min(int(m.group(3),16),255)
                     blue = min(int(m.group(4),16),255)
-                    gdata.playersHighlightColors[id] = (red,green,blue)
+                    GData.playersHighlightColors[id] = (red,green,blue)
                 else:
                     log.warning('OSCI','Unrecognized highlight definition :',coldef)
     # read Object Keys
-    if gdata.config.defaults.objectkeys != None:
-            for objectkey in gdata.config.defaults.objectkeys.split(' '):
+    if GData.config.defaults.objectkeys != None:
+            for objectkey in GData.config.defaults.objectkeys.split(' '):
                 m = re.match('(\d+):(\d+)',objectkey)
                 if m != None :
                     key = int(m.group(1))
                     objid = int(m.group(2))
-                    gdata.objectFocus[key] = objid
+                    GData.objectFocus[key] = objid
                 else:
                     log.warning('OSCI','Unrecognized object key definition :',objectkey)
 
 def setSkinTheme(gdata, ui):
     theme = "green"
-    if gdata.config.client.theme != None:
-            theme = gdata.config.client.theme
-    ui.SkinableTheme.enableMusic(gdata.config.defaults.music == "yes")
-    ui.SkinableTheme.enableSound(gdata.config.defaults.sound == "yes")
+    if GData.config.client.theme != None:
+            theme = GData.config.client.theme
+    ui.SkinableTheme.enableMusic(GData.config.defaults.music == "yes")
+    ui.SkinableTheme.enableSound(GData.config.defaults.sound == "yes")
     ui.SkinableTheme.setSkin(os.path.join(resources.get("themes"), theme))
-    ui.SkinableTheme.loadMusic(gdata.config.defaults.mymusic)
-    if gdata.config.defaults.musicvolume:
-            ui.SkinableTheme.setMusicVolume(float(gdata.config.defaults.musicvolume)/ 100.0)
-    if gdata.config.defaults.soundvolume:
-            ui.SkinableTheme.setVolume(float(gdata.config.defaults.soundvolume) / 100.0)
+    ui.SkinableTheme.loadMusic(GData.config.defaults.mymusic)
+    if GData.config.defaults.musicvolume:
+            ui.SkinableTheme.setMusicVolume(float(GData.config.defaults.musicvolume)/ 100.0)
+    if GData.config.defaults.soundvolume:
+            ui.SkinableTheme.setVolume(float(GData.config.defaults.soundvolume) / 100.0)
 
-    gdata.sevColors[gdata.CRI] = (ui.SkinableTheme.themeCritical)
-    gdata.sevColors[gdata.MAJ] = (ui.SkinableTheme.themeMajor)
-    gdata.sevColors[gdata.MIN] = (ui.SkinableTheme.themeMinor)
-    gdata.sevColors[gdata.NONE] = (ui.SkinableTheme.themeNone)
-    gdata.sevColors[gdata.DISABLED] = (ui.SkinableTheme.themeDisabled)
+    GData.sevColors[GData.CRI] = (ui.SkinableTheme.themeCritical)
+    GData.sevColors[GData.MAJ] = (ui.SkinableTheme.themeMajor)
+    GData.sevColors[GData.MIN] = (ui.SkinableTheme.themeMinor)
+    GData.sevColors[GData.NONE] = (ui.SkinableTheme.themeNone)
+    GData.sevColors[GData.DISABLED] = (ui.SkinableTheme.themeDisabled)
 
 def runClient(options):
 
@@ -200,12 +200,12 @@ def runClient(options):
     else:
         reload(gdata)
 
-    gdata.config = Config(os.path.join(options.configDir, options.configFilename))
-    gdata.config.game.server = options.server
+    GData.config = Config(os.path.join(options.configDir, options.configFilename))
+    GData.config.game.server = options.server
 
     setDefaults(gdata, options)
 
-    language = gdata.config.client.language
+    language = GData.config.client.language
     import gettext
     log.debug('OSCI', 'Installing translation for:', language)
     if language == 'en':
@@ -223,7 +223,7 @@ def runClient(options):
 
 
     #initialize pygame and prepare screen
-    if (gdata.config.defaults.sound == "yes") or (gdata.config.defaults.music == "yes"):
+    if (GData.config.defaults.sound == "yes") or (GData.config.defaults.music == "yes"):
             pygame.mixer.pre_init(44100, -16, 2, 4096)
 
     os.environ['SDL_VIDEO_ALLOW_SCREENSAVER'] = '1'
@@ -233,31 +233,31 @@ def runClient(options):
     flags = pygame.SWSURFACE
 
     DEFAULT_SCRN_SIZE = (800, 600)
-    gdata.scrnSize = DEFAULT_SCRN_SIZE
-    if gdata.config.display.resolution == "FULLSCREEN":
-            gdata.scrnSize = (0, 0)
+    GData.scrnSize = DEFAULT_SCRN_SIZE
+    if GData.config.display.resolution == "FULLSCREEN":
+            GData.scrnSize = (0, 0)
             flags |= pygame.FULLSCREEN
-    elif gdata.config.display.resolution is not None:
-            width, height = gdata.config.display.resolution.split('x')
-            gdata.scrnSize = (int(width), int(height))
+    elif GData.config.display.resolution is not None:
+            width, height = GData.config.display.resolution.split('x')
+            GData.scrnSize = (int(width), int(height))
 
-    if gdata.config.display.depth == None:
+    if GData.config.display.depth == None:
             # guess best depth
-            bestdepth = pygame.display.mode_ok(gdata.scrnSize, flags)
+            bestdepth = pygame.display.mode_ok(GData.scrnSize, flags)
     else:
-            bestdepth = int(gdata.config.display.depth)
+            bestdepth = int(GData.config.display.depth)
 
     # initialize screen
     try:
-        screen = pygame.display.set_mode(gdata.scrnSize, flags, bestdepth)
-        # gdata.scrnSize is used everywhere to setup windows
-        gdata.scrnSize = screen.get_size()
+        screen = pygame.display.set_mode(GData.scrnSize, flags, bestdepth)
+        # GData.scrnSize is used everywhere to setup windows
+        GData.scrnSize = screen.get_size()
     except pygame.error:
         # for example if fullscreen is selected with resolution bigger than display
         # TODO: as of now, fullscreen has automatic resolution
-        gdata.scrnSize = DEFAULT_SCRN_SIZE
-        screen = pygame.display.set_mode(gdata.scrnSize, flags, bestdepth)
-    gdata.screen = screen
+        GData.scrnSize = DEFAULT_SCRN_SIZE
+        screen = pygame.display.set_mode(GData.scrnSize, flags, bestdepth)
+    GData.screen = screen
     log.debug('OSCI', 'Driver:', pygame.display.get_driver())
     log.debug('OSCI', 'Using depth:', bestdepth)
     log.debug('OSCI', 'Display info:', pygame.display.Info())
@@ -279,9 +279,9 @@ def runClient(options):
 
     app = ui.Application.Application(update, theme = ui.SkinableTheme)
     app.background = defineBackground()
-    app.draw(gdata.screen)
+    app.draw(GData.screen)
     app.windowSurfaceFlags = pygame.SWSURFACE | pygame.SRCALPHA
-    gdata.app = app
+    GData.app = app
 
     pygame.event.clear()
 
@@ -292,7 +292,7 @@ def runClient(options):
 
     # load resources
     import osci.dialog
-    dlg = osci.dialog.ProgressDlg.ProgressDlg(gdata.app)
+    dlg = osci.dialog.ProgressDlg.ProgressDlg(GData.app)
     osci.res.loadResources(dlg)
     dlg.hide()
     osci.res.prepareUIIcons(ui.SkinableTheme.themeIcons)
@@ -305,24 +305,24 @@ def runClient(options):
         else:
             reload(osci.client)
             reload(osci.handler)
-        osci.client.initialize(gdata.config.game.server, osci.handler, options)
+        osci.client.initialize(GData.config.game.server, osci.handler, options)
 
         # create initial dialogs
         if first:
             import osci.dialog
         else:
             reload(osci.dialog)
-        gdata.savePassword = gdata.config.game.lastpasswordcrypted != None
+        GData.savePassword = GData.config.game.lastpasswordcrypted != None
 
         if options.login and options.password:
-            gdata.config.game.lastlogin = options.login
-            gdata.config.game.lastpassword = options.password
-            gdata.config.game.lastpasswordcrypted = binascii.b2a_base64(options.password).strip()
-            gdata.config.game.autologin = 'yes'
-            gdata.savePassword = 'no'
+            GData.config.game.lastlogin = options.login
+            GData.config.game.lastpassword = options.password
+            GData.config.game.lastpasswordcrypted = binascii.b2a_base64(options.password).strip()
+            GData.config.game.autologin = 'yes'
+            GData.savePassword = 'no'
 
-        loginDlg = osci.dialog.LoginDlg(gdata.app)
-        updateDlg = osci.dialog.UpdateDlg(gdata.app)
+        loginDlg = osci.dialog.LoginDlg(GData.app)
+        updateDlg = osci.dialog.UpdateDlg(GData.app)
 
         # event loop
         update()
@@ -364,9 +364,9 @@ def runClient(options):
                             break
                     if evt.type == pygame.KEYUP and evt.key == pygame.K_F9:
                         forceKeepAlive = True
-                    evt = gdata.app.processEvent(evt)
+                    evt = GData.app.processEvent(evt)
 
-                if gdata.app.needsUpdate() or needsRefresh:
+                if GData.app.needsUpdate() or needsRefresh:
                     needsRefresh = False
                     update()
                 # keep alive connection
@@ -385,7 +385,7 @@ def runClient(options):
 
             except IClientException:
                 osci.client.reinitialize()
-                gdata.app.setStatus(e.args[0])
+                GData.app.setStatus(e.args[0])
                 loginDlg.display(message = e.args[0])
             except Exception:
                 log.warning('OSCI', 'Exception in event loop')
@@ -409,7 +409,7 @@ def runClient(options):
                     print >>fh, "--- EXCEPTION DATA ---"
                     # dump exception
                     traceback.print_exc(file = fh)
-                    excDlg = osci.dialog.ExceptionDlg(gdata.app)
+                    excDlg = osci.dialog.ExceptionDlg(GData.app)
                     excDlg.display(faultID, fh.getvalue())
                     del excDlg # reference to the dialog holds app's intance
                     fh.close()
@@ -421,23 +421,23 @@ def runClient(options):
         log.debug("Saving configuration.")
         # Save highlights
         hl = ""
-        for playerID in gdata.playersHighlightColors.keys():
-            color = gdata.playersHighlightColors[playerID]
+        for playerID in GData.playersHighlightColors.keys():
+            color = GData.playersHighlightColors[playerID]
             r = hex(color[0])
             g = hex(color[1])
             b = hex(color[2])
             hl = "%s %s:%s,%s,%s" % (hl,playerID,r,g,b)
-        gdata.config.defaults.colors = hl
+        GData.config.defaults.colors = hl
         # Save objects
         of = ""
-        for keyNum in gdata.objectFocus.keys():
-            objid = gdata.objectFocus[keyNum]
+        for keyNum in GData.objectFocus.keys():
+            objid = GData.objectFocus[keyNum]
             of = "%s %s:%s" % (of,keyNum,objid)
-        gdata.config.defaults.objectkeys = of
+        GData.config.defaults.objectkeys = of
         #
-        if gdata.savePassword == False:
-            gdata.config.game.lastpasswordcrypted = None
-        gdata.config.save()
+        if GData.savePassword == False:
+            GData.config.game.lastpasswordcrypted = None
+        GData.config.save()
 
         # logout
         osci.client.logout()

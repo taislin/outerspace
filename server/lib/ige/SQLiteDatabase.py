@@ -1,28 +1,9 @@
-#
-#  Copyright 2001 - 2016 Ludek Smid [http://www.ospace.net/]
-#
-#  This file is part of Outer Space.
-#
-#  Outer Space is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  Outer Space is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with Outer Space; if not, write to the Free Software
-#  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-#
+
 
 import ige
-import os.path, os, sys, time, types, binascii, bz2
-import pickle as pickle
+import os.path, log, os, sys, time, types, binascii, bz2
+import cPickle as pickle
 import sqlite3
-from . import log
 
 IDX_PREV = 0
 IDX_NEXT = 1
@@ -158,7 +139,7 @@ class Database:
         row = self.cursor.fetchone()
         if row is None:
             raise ige.NoSuchObjectException(key)
-        item = pickle.loads(row[1])
+        item = pickle.loads(str(row[1]))
         self._addNewCacheItem(key)
         self.cache[key] = item
         #TODOitem.setModified(0)
@@ -166,7 +147,7 @@ class Database:
 
     def __setitem__(self, key, value):
         key = self.keyMethod(key)
-        if type(value) == InstanceType:
+        if type(value) == types.InstanceType:
             value.oid = key
         # set value
         self._updateCacheItem(key)

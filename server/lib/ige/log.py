@@ -1,22 +1,4 @@
-#
-#  Copyright 2001 - 2016 Ludek Smid [http://www.ospace.net/]
-#
-#  This file is part of Outer Space.
-#
-#  Outer Space is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  Outer Space is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with Outer Space; if not, write to the Free Software
-#  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-#
+
 
 import time
 import string
@@ -62,17 +44,17 @@ def setLevel(aLevel):
     level = aLevel
 
 def __getTime():
-    diff = int(time.time() - __startTime)
-    secs = diff % 60
-    mins = diff % 3600 / 60
-    hours = diff / 3600
+    diff = int(time.time() - __startTime);
+    secs = diff % 60;
+    mins = diff % 3600 / 60;
+    hours = diff / 3600;
     return time.strftime('%Y-%m-%d %H:%M:%S')
     #@return time.strftime('%H:%M:%S')
     #@return '%02d:%02d:%02d [%s]' % (hours, mins, secs, time.strftime('%Y%m%d%H%M%S'))
     #@return '%02d:%02d:%02d' % (hours, mins, secs)
 
 def __getCaller():
-    return "-- "
+    return "--"
     f = inspect.stack()[2]
     # be smart and try to get oid of object
     frame = f[0]
@@ -90,38 +72,45 @@ def __getCaller():
 def debug(*args):
     if level < LEVEL_DEBUG:
         return
-    conc = ""
+    print __getTime(), 'DBG', __getCaller(),
     for item in args:
-        conc = conc + str(item) + " "
-    print(str(__getTime())+' DBG '+str(__getCaller())+conc)
-    
+        print str(item),
+    print
     if msgLog:
+        print >> msgLog, __getTime(), 'DBG', __getCaller(),
+        for item in args:
+            print >> msgLog, str(item),
+        print >> msgLog
         msgLog.flush()
 
 def message(*args):
     if level < LEVEL_MESSAGE:
         return
-    conc = ""
+    print __getTime(), 'MSG', __getCaller(),
     for item in args:
-        conc = conc + str(item) + " "
-    print(str(__getTime())+' MSG '+str(__getCaller())+conc)
-    
+        print str(item),
+    print
     if msgLog:
+        print >> msgLog, __getTime(), 'MSG', __getCaller(),
+        for item in args:
+            print >> msgLog, str(item),
+        print >> msgLog
         msgLog.flush()
 
 def warning(*args):
     if level < LEVEL_WARNING:
         return
     # TODO lock!
-    print(str(__getTime())+' WAR '+str(__getCaller()))
+    print __getTime(), 'WAR', __getCaller(),
     for item in args:
-        print(str(item))
+        print str(item),
+    print
     if sys.exc_info() != (None, None, None):
-        print(79 * '-')
+        print 79 * '-'
         traceback.print_exc(file=sys.stdout)
-        print(79 * '-')
+        print 79 * '-'
     if errorLog:
-        print(errorLog+str(__getTime())+' WAR '+str(__getCaller()))
+        print >> errorLog, __getTime(), 'WAR', __getCaller(),
         for item in args:
             print >> errorLog, str(item),
         print >> errorLog
@@ -131,7 +120,7 @@ def warning(*args):
             print >> errorLog, 79 * '-'
         errorLog.flush()
     if msgLog:
-        print(str(msgLog)+str(__getTime())+' WAR '+str(__getCaller()))
+        print >> msgLog, __getTime(), 'WAR', __getCaller(),
         for item in args:
             print >> msgLog, str(item),
         print >> msgLog
@@ -142,16 +131,16 @@ def warning(*args):
         msgLog.flush()
 
 def error(*args):
-    print(str(__getTime())+' ERR '+str(__getCaller()))
+    print __getTime(), 'ERR', __getCaller(),
     for item in args:
-        print(str(item))
-    
+        print str(item),
+    print
     if sys.exc_info() != (None, None, None):
-        print(79 * '-')
+        print 79 * '-'
         traceback.print_exc(file=sys.stdout)
-        print(79 * '-')
+        print 79 * '-'
     if errorLog:
-        print(errorLog+str(__getTime())+' ERR '+str(__getCaller()))
+        print >> errorLog, __getTime(), 'ERR', __getCaller(),
         for item in args:
             print >> errorLog, str(item),
         print >> errorLog
@@ -161,7 +150,7 @@ def error(*args):
             print >> errorLog, 79 * '-'
         errorLog.flush()
     if msgLog:
-        print(str(msgLog)+str(__getTime())+' ERR '+str(__getCaller()))
+        print >> msgLog, __getTime(), 'ERR', __getCaller(),
         for item in args:
             print >> msgLog, str(item),
         print >> msgLog
@@ -176,16 +165,16 @@ def exception(*args):
     if level < LEVEL_WARNING:
         return
     # TODO lock!
-    print(str(__getTime())+' EXC '+str(__getCaller()))
+    print __getTime(), 'EXC', __getCaller(),
     for item in args:
-        print(str(item))
-    
+        print str(item),
+    print
     if sys.exc_info() != (None, None, None):
-        print(79 * '-')
+        print 79 * '-'
         traceback.print_exc(file=sys.stdout)
-        print(79 * '-')
+        print 79 * '-'
     if errorLog:
-        print(errorLog+str(__getTime())+' EXC '+str(__getCaller()))
+        print >> errorLog, __getTime(), 'EXC', __getCaller(),
         for item in args:
             print >> errorLog, str(item),
         print >> errorLog
@@ -195,7 +184,7 @@ def exception(*args):
             print >> errorLog, 79 * '-'
         errorLog.flush()
     if msgLog:
-        print(str(msgLog)+str(__getTime())+' EXC '+str(__getCaller()))
+        print >> msgLog, __getTime(), 'EXC', __getCaller(),
         for item in args:
             print >> msgLog, str(item),
         print >> msgLog

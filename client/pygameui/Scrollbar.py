@@ -18,22 +18,22 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 import pygame
-from . import Const
-from . import Widget
-from . import MetaWidget
+import Const
+from Widget import registerWidget
+from MetaWidget import MetaWidget
 
-from . import ArrowButton
-from . import ScrollSlider
+from ArrowButton import ArrowButton
+from ScrollSlider import ScrollSlider
 
-class Scrollbar(MetaWidget.MetaWidget):
+class Scrollbar(MetaWidget):
 
     def __init__(self, parent, **kwargs):
-        MetaWidget.MetaWidget.__init__(self, parent)
+        MetaWidget.__init__(self, parent)
         # data
         self.action = None
         # flags
         self.processKWArguments(kwargs)
-        parent.Widget.registerWidget(self)
+        parent.registerWidget(self)
         # create widgets
         self.button1 = ArrowButton(self, action = 'onButton1')
         self.button1.subscribeAction('*', self)
@@ -59,7 +59,7 @@ class Scrollbar(MetaWidget.MetaWidget):
             self.button2.rect = pygame.Rect(0, r.height - gy, gx, gy)
             self.button2.direction = Const.ALIGN_S
             self.slider.rect = pygame.Rect(0, gy, gx, r.height - 2 * gy)
-        MetaWidget.MetaWidget.layoutWidgets(self)
+        MetaWidget.layoutWidgets(self)
 
     def drawMetaWidget(self, surface):
         return self.theme.drawScrollbar(surface, self)
@@ -91,4 +91,4 @@ class Scrollbar(MetaWidget.MetaWidget):
     def processMWDown(self, evt):
         return self.slider.processMWDown(evt)
 
-Widget.registerWidget(Scrollbar, 'scrollbar')
+registerWidget(Scrollbar, 'scrollbar')

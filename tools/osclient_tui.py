@@ -1,23 +1,5 @@
+#!/usr/bin/env python2
 
-#
-#  Copyright 2001 - 2016 Ludek Smid [http://www.ospace.net/]
-#
-#  This file is part of Outer Space.
-#
-#  Outer Space is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  Outer Space is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with Outer Space; if not, write to the Free Software
-#  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-#
 
 # tweak PYTHONPATH
 import sys, string, re
@@ -120,16 +102,16 @@ def cleanupBadFleets():
                     delete.append((fleetID,systemID,fleet.owner,1))
     for row in delete:
         if row[3]:
-            print("Deleting",row[0],"- owner not in fleet's galaxy")
+            print "Deleting",row[0],"- owner not in fleet's galaxy"
         else:
-            print("Deleting",row[0],"- owner not in a galaxy")
+            print "Deleting",row[0],"- owner not in a galaxy"
         s.disbandFleet(row[0])
         return
 
 
 def msgHandler(id, data):
     if id >= 0:
-        print('Message', id, data
+        print 'Message', id, data
 
 def getPlayer(name):
     u = s.getInfo(1)
@@ -150,18 +132,18 @@ def showPlayers():
         else:
             aiPlayers.append((playerID, player.name))
 
-    
-    
-    print("List of current players:"
+    print
+    print
+    print "List of current players:"
     for pl in players:
-        print("%5d: %s" % pl)
+        print "%5d: %s" % pl
 
-    print("List of current AI players:"
+    print "List of current AI players:"
     for pl in aiPlayers:
-        print("%5d: %s" % pl)
+        print "%5d: %s" % pl
 
-    
-    print("Press Enter to continue")
+    print
+    print "Press Enter to continue"
     raw_input()
 
 def showGalaxies():
@@ -171,13 +153,13 @@ def showGalaxies():
         galaxy = s.getInfo(galaxyID)
         galaxies.append((galaxyID, galaxy.name))
 
-    
-    
-    print("List of current galaxies:")
+    print
+    print
+    print "List of current galaxies:"
     for gal in galaxies:
-        print("%5d: %s" % gal)
+        print "%5d: %s" % gal
 
-    
+    print
 
 def setCurrentObject():
     objId = raw_input("oid: ")
@@ -185,7 +167,7 @@ def setCurrentObject():
     try:
         newObjID = int(objId)
     except:
-        print("Invalid object")
+        print "Invalid object"
 
     return newObjID
 
@@ -195,7 +177,7 @@ def initDevelTesting(objID):
 
     race = string.upper(raw_input("race: "))
     if not (race=='b' or race=='B' or race=='c' or race=='C' or race =='h' or race =='H'):
-        print("Invalid race")
+        print "Invalid race"
         return objID
 
     for level in range(2,levels+1):
@@ -214,11 +196,11 @@ def giveTechs(objID):
     try:
         level = int(lvl)
     except:
-        print("Invalid level")
+        print "Invalid level"
         return objId
 
     if level > 6 and not level == 99:
-        print("Invalid level")
+        print "Invalid level"
         return objId
     giveTechsNum(objID,level)
 
@@ -229,12 +211,12 @@ def giveTechsNum(objID,level):
         plTechs[techId] = 5
 
     if len(player.race) > 0:
-        print("setting race dependent techs")
+        print "setting race dependent techs"
         for techId in levelTechsRaces[level][player.race]:
             plTechs[techId] = 5
 
     s.set(objID, "techs", plTechs)
-    print("Techs at level %d added to player %d." % (level, objID))
+    print "Techs at level %d added to player %d." % (level, objID)
     return objID
 
 def giveTech(objID):
@@ -242,7 +224,7 @@ def giveTech(objID):
     try:
         techId = int(tid)
     except:
-        print("Invalid techId")
+        print "Invalid techId"
         return objID
 
     player = s.getInfo(objID)
@@ -250,11 +232,11 @@ def giveTech(objID):
     try:
         plTechs[techId] = 5
     except:
-        print("Invalid techId")
+        print "Invalid techId"
         return objID
 
     s.set(objID, "techs", plTechs)
-    print("Tech %d added to player %d." % (techId, objID)
+    print "Tech %d added to player %d." % (techId, objID)
     return objID
 
 def advanceLevel(objID):
@@ -262,15 +244,15 @@ def advanceLevel(objID):
     try:
         level = int(lvl)
     except:
-        print("Invalid level")
+        print "Invalid level"
         return objID
 
     if level > 6 or level < 2:
-        print("Invalid level")
+        print "Invalid level"
         return objID
     race = string.upper(raw_input("race: "))
     if not (race=='b' or race=='B' or race=='c' or race=='C' or race =='h' or race =='H'):
-        print("Invalid race")
+        print "Invalid race"
         return objID
     advanceLevelRace(objID,level)
 
@@ -282,7 +264,7 @@ def advanceLevelRace(objID,level,race):
     s.set(objID, "techs", plTechs)
     s.set(objID, "techLevel", level)
     s.set(objID, "race", race)
-    print("Tech %d added, techLevel advance to %d to player %d." % (advTechLevel[level][race], level, objID))
+    print "Tech %d added, techLevel advance to %d to player %d." % (advTechLevel[level][race], level, objID)
     return objID
 
 def promoteToImperator(objID):
@@ -290,12 +272,12 @@ def promoteToImperator(objID):
     try:
         galaxyID = int(galID)
     except:
-        print("Invalid galaxy id"
+        print "Invalid galaxy id"
         return objID
 
     s.set(objID, "imperator", 3)
     s.set(galaxyID, "imperator", objID)
-    print("Galaxy %d has now imperator %d." % (galaxyID, objID))
+    print "Galaxy %d has now imperator %d." % (galaxyID, objID)
     return objID
 
 def giveFame(objID):
@@ -303,15 +285,15 @@ def giveFame(objID):
     try:
         numberFame = int(numFame)
     except:
-        print("Not a number"
+        print "Not a number"
         return objID
     player = s.getInfo(objID)
     if not hasattr(player,'pirateFame'):
-        print("Object is not a pirate")
+        print "Object is not a pirate"
         return objID
     newFame = player.pirateFame + numberFame
     s.set(objID, "pirateFame", newFame)
-    print("Player %d now has %d fame" % (objID, newFame))
+    print "Player %d now has %d fame" % (objID, newFame)
 
 def giveStratRes(objID):
     resID = raw_input("strategy resource ('a' for all resources): ")
@@ -319,14 +301,14 @@ def giveStratRes(objID):
         try:
             stratResID = int(resID)
         except:
-            print("Invalid strategy resource")
+            print "Invalid strategy resource"
             return objID
 
     qty = raw_input("qty: ")
     try:
         quantity = int(qty)
     except:
-        print("Invalid quantity")
+        print "Invalid quantity"
         return objID
 
     if (resID == 'a'):
@@ -345,11 +327,11 @@ def giveStratResNum(objID,stratResID,quantity):
     stratRes = player.stratRes
     stratRes[stratResID] = plQty + quantity
     s.set(objID, "stratRes", stratRes)
-    print("Player %d now has %d pieces of %d." % (objID, stratRes[stratResID], stratResID))
+    print "Player %d now has %d pieces of %d." % (objID, stratRes[stratResID], stratResID)
 
 def createGalaxy():
     universe = 1
-    print("Creating new galaxy...please specify these parameters. Normal galaxy positions are multiples of 100.")
+    print "Creating new galaxy...please specify these parameters. Normal galaxy positions are multiples of 100."
     name = raw_input("Galaxy Name: ")
     gal_type = raw_input("Galaxy Type: ")
     s.createNewSubscribedGalaxy(universe, name, gal_type, [])
@@ -361,44 +343,44 @@ def startGalaxy():
     try:
         newObjID = int(objId)
     except:
-        print("Invalid object")
+        print "Invalid object"
     un = s.getInfo(1)
     galaxyObj = 0
-    print(newObjID)
+    print newObjID
     for galaxyID in un.galaxies:
-        print(galaxyID)
+        print galaxyID
         if galaxyID==newObjID:
             galaxyObj = newObjID
     if galaxyObj == 0:
-        print("Not a galaxy")
+        print "Not a galaxy"
     else:
         s.enableTime(galaxyObj,1)
-        print("Galaxy will start on next turn process")
+        print "Galaxy will start on next turn process"
 
 def deleteGalaxy():
     showGalaxies()
-    print("Choose a galaxy to delete.")
+    print "Choose a galaxy to delete."
     objId = raw_input("oid: ")
     newObjID = 0
     try:
         newObjID = int(objId)
     except:
-        print("Invalid object")
+        print "Invalid object"
     un = s.getInfo(1)
     galaxyObj = 0
-    print(newObjID)
+    print newObjID
     for galaxyID in un.galaxies:
         if galaxyID==newObjID:
             galaxyObjID = newObjID
     if galaxyObjID == 0:
-        print("Not a galaxy")
+        print "Not a galaxy"
     else:
         galaxy = s.getInfo(galaxyObjID)
-        print("Please confirm that you want to delete", galaxy.name)
+        print "Please confirm that you want to delete", galaxy.name
         ok = raw_input("Y/N: ");
         if string.upper(ok) == "Y":
             s.delete(galaxyObjID)
-            print("Galaxy deleted")
+            print "Galaxy deleted"
 
 def showObj(objID):
     try:
@@ -407,42 +389,37 @@ def showObj(objID):
         #insanely complex regex to chunk {data} and [data] parts during split by ,'s
         objarr = re.findall("[^,\{\]]*(?:\{[^\}]*[\}\{]),?|[^,\{\]]*(?:\[[^\]]*[\]\[]),?|[^,\}\]]+,?",objstr)
         for line in objarr:
-            print(line)
+            print line
     except:
-        print("Cannot get object",objID)
+        print "Cannot get object",objID
 
 def showMenu(objID):
-    
-
-    print("----- OSpace admin console menu -----")
-    print("Current object: %s" % objID)
-    
-
-    print("1. Set current object      10. Create Galaxy")
-    print("2. Show Players            11. Start Galaxy Time (does not need Obj set)")
-    print("3. Show Galaxies           12. Delete Galaxy (does not need Obj set)")
-    print("4. Advance to level        13. Init Developer race (all techs, 50 each strat res)")
-    print("5. Make imperator          14. Give Fame to a Pirate Player")
-    print("6. Give particular tech    ")
-    print("7. Give techs          ")
-    print("8. Give Strat Res          ")
-    print("9. Finish prod queue       ")
-    
-
-    print("T. Process turn        R. Process X turns")
-    print("C. Interactive console     I. Object Info")
-    
-
-    print("Ctrl+Z to End")
-    
-
+    print
+    print "----- OSpace admin console menu -----"
+    print "Current object: %s" % objID
+    print
+    print "1. Set current object      10. Create Galaxy"
+    print "2. Show Players            11. Start Galaxy Time (does not need Obj set)"
+    print "3. Show Galaxies           12. Delete Galaxy (does not need Obj set)"
+    print "4. Advance to level        13. Init Developer race (all techs, 50 each strat res)"
+    print "5. Make imperator          14. Give Fame to a Pirate Player"
+    print "6. Give particular tech    "
+    print "7. Give techs          "
+    print "8. Give Strat Res          "
+    print "9. Finish prod queue       "
+    print
+    print "T. Process turn        R. Process X turns"
+    print "C. Interactive console     I. Object Info"
+    print
+    print "Ctrl+Z to End"
+    print
 
 def processTurns():
     numT = raw_input("Number of turns: ")
     try:
         num = int(numT)
     except:
-        print("invalid number of turns")
+        print "invalid number of turns"
     s.processTurns(num)
 
 def finishProdQueue(objId):

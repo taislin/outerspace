@@ -18,13 +18,13 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-from . import Const
-from . import Widget
+import Const
+from Widget import Widget, registerWidget
 
-class ScrollSlider(Widget.Widget):
+class ScrollSlider(Widget):
 
     def __init__(self, parent, **kwargs):
-        Widget.Widget.__init__(self, parent)
+        Widget.__init__(self, parent)
         # data
         self.action = None
         self.min = 0.0
@@ -35,7 +35,7 @@ class ScrollSlider(Widget.Widget):
         self._handler = None
         # flags
         self.processKWArguments(kwargs)
-        parent.Widget.registerWidget(self)
+        parent.registerWidget(self)
 
     def draw(self, surface):
         self._handler = self.theme.drawScrollSlider(surface, self)
@@ -97,4 +97,4 @@ class ScrollSlider(Widget.Widget):
         self.processAction(self.action)
         return Const.NoEvent
 
-Widget.registerWidget(ScrollSlider, 'scrollslider')
+registerWidget(ScrollSlider, 'scrollslider')

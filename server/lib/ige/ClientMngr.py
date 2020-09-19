@@ -1,36 +1,17 @@
-#
-#  Copyright 2001 - 2016 Ludek Smid [http://www.ospace.net/]
-#
-#  This file is part of Outer Space.
-#
-#  Outer Space is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  Outer Space is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with Outer Space; if not, write to the Free Software
-#  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-#
+
 
 import os
 import hashlib
 import random
 import time
-from . import log
+import log
 import ige
 from ige import SecurityException
 from ige.Const import ADMIN_LOGIN
-from . import Authentication
-from . import account
+import Authentication
+from account import Account, AIAccount, AdminAccount, passwordGen
 from ai_parser import AIList
-from . import IDataHolder
-import hashlib
+from IDataHolder import IDataHolder
 
 class ClientMngr:
 
@@ -71,13 +52,13 @@ class ClientMngr:
 
         if self.accounts.has_key(ADMIN_LOGIN):
             self.accounts[ADMIN_LOGIN].passwdHashed = False # Needs plaintext login from token
-            password = hashlib.sha1(os.urandom(160)).hexdigest()
+            password = passwordGen()
             self.accounts[ADMIN_LOGIN].setPassword(password)
         else:
             log.message("No administator account found! (looking for '%s')" % ADMIN_LOGIN)
             log.message("Creating default account")
             # create account
-            account = Authentication.AdminAccount()
+            account = AdminAccount()
             # update
             password = account.passwd
             self.accounts.create(account, id = str(account.login))
@@ -108,7 +89,7 @@ class ClientMngr:
             elif account.email == email:
                 raise SecurityException('E-mail already used.')
         # create account
-        account = account.Account(login, nick, email, plainPassword)
+        account = Account(login, nick, email, plainPassword)
         # update
         self.accounts.create(account, id = str(account.login))
         log.message('Account created, confirmation token:', account.confToken)
@@ -125,7 +106,7 @@ class ClientMngr:
         login = login.strip()
         nick = nick.strip()
         # create account
-        account = account.AIAccount(login, nick, aiType)
+        account = AIAccount(login, nick, aiType)
         # update
         self.accounts.create(account, id = str(account.login))
         log.message('AI account created')
@@ -161,7 +142,7 @@ class ClientMngr:
         # create sort of cookie
         while 1:
             sid = hashlib.sha256(str(random.random())).hexdigest()
-            if not sid in self.sessions:
+            if not self.sessions.has_key(sid):
                 break
         challenge = Authentication.getWelcomeString(self.authMethod)
         session = Session(sid)

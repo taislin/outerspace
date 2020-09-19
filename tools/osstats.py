@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python2
 
 import os
 import sys
@@ -53,4 +53,4 @@ for oid in gameDB.keys():
 print "%15s %10s %10s %10s %10s" % ("TYPE", "COUNT", "TOTAL", "AVG", "MAX")
 print 59 * "-"
 for key in count:
-    print("%15s %10d %10d %10d %10d" % (key, count[key], total[key], total[key] / count[key], maxval[key]))
+    print "%15s %10d %10d %10d %10d" % (key, count[key], total[key], total[key] / count[key], maxval[key])

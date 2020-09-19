@@ -18,30 +18,30 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 import pygame
-from . import Const
-from . import Window
-from . import SimpleGridLM
-from . import Title
-from . import ActiveLabel
+import Const
+from Window import Window
+from SimpleGridLM import SimpleGridLM
+from Title import Title
+from ActiveLabel import ActiveLabel
 from math import ceil
 
-class Menu(Window.Window):
+class Menu(Window):
 
     def __init__(self, parent, **kwargs):
-        Window.Window.__init__(self, parent)
+        Window.__init__(self, parent)
         # data
-        setattr(self,"title",None)
-        setattr(self,"items",None)
-        setattr(self,"looseFocusClose",1)
-        setattr(self,"columns",1)
-        setattr(self,"decorated",0)
-        setattr(self,"layoutManager",SimpleGridLM.SimpleGridLM())
-        setattr(self,"width",10)
-        setattr(self,"_labels",[])
+        self.__dict__["title"] = None
+        self.__dict__["items"] = None
+        self.__dict__["looseFocusClose"] = 1
+        self.__dict__["columns"] = 1
+        self.__dict__["decorated"] = 0
+        self.__dict__["layoutManager"] = SimpleGridLM()
+        self.__dict__["width"] = 10
+        self.__dict__["_labels"] = []
         self.processKWArguments(kwargs)
         # subscribe action
         # add title
-        Title.Title(self, id = "_menuTitle")
+        Title(self, id = "_menuTitle")
 
     def show(self, pos = None):
         self._menuTitle.layout = (0, 0, self.width, 1)
@@ -59,7 +59,7 @@ class Menu(Window.Window):
             elif not item.align:
                 item.align = Const.ALIGN_W
             if len(self._labels) <= index:
-                label = ActiveLabel.ActiveLabel(self, align = item.align, enabled = item.enabled)
+                label = ActiveLabel(self, align = item.align, enabled = item.enabled)
                 label.subscribeAction("*", self.actionHandler)
                 self._labels.append(label)
             label = self._labels[index]

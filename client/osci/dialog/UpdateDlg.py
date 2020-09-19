@@ -1,22 +1,4 @@
-#
-#  Copyright 2001 - 2016 Ludek Smid [http://www.ospace.net/]
-#
-#  This file is part of Outer Space.
-#
-#  Outer Space is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  Outer Space is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with Outer Space; if not, write to the Free Software
-#  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-#
+
 
 from ige import log
 from ige.version import version as clientVersion
@@ -27,7 +9,7 @@ import pygameui as ui
 import re
 import shutil
 import sys
-import urllib
+import urllib2
 import tarfile
 
 class UpdateDlg:
@@ -74,9 +56,9 @@ class UpdateDlg:
         # get file
         try:
             # open URL
-            opener = urllib.build_opener(urllib.ProxyHandler(proxies))
+            opener = urllib2.build_opener(urllib2.ProxyHandler(proxies))
             # it unfortunately is not completely reliable
-            for i in range(1,5):
+            for i in xrange(1,5):
                 try:
                     ifh = opener.open(self.url)
                     log.debug("Retrieving URL", ifh.geturl())
@@ -106,7 +88,7 @@ class UpdateDlg:
             ifh.close()
             ofh.close()
             return filename
-        except urllib.error.URLError as e:
+        except urllib2.URLError, e:
             log.warning("Cannot download file")
             self.reportFailure(_("Cannot finish download: %(s)") % str(e.reason))
             return None

@@ -1,22 +1,4 @@
-#
-#  Copyright 2001 - 2016 Ludek Smid [http://www.ospace.net/]
-#
-#  This file is part of Outer Space.
-#
-#  Outer Space is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  Outer Space is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with Outer Space; if not, write to the Free Software
-#  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-#
+
 import math
 
 import pygameui as ui
@@ -26,8 +8,8 @@ from ige.ospace import Rules
 import ige.ospace.Const as Const
 
 from osci import gdata, client, res
-from . import TechInfoDlg
-from . import ConfirmDlg
+from TechInfoDlg import TechInfoDlg
+from ConfirmDlg import ConfirmDlg
 
 class StructTaskDlg:
 
@@ -172,7 +154,7 @@ class StructTaskDlg:
         self.win.vTechs.itemsChanged()
 
         # filter
-        for i in range(1, 10):
+        for i in xrange(1, 10):
             widget = getattr(self.win, 'vLevel%d' % i)
             if i in self.showLevels and i <= self.maxTechLevel:
                 widget.visible = 1
@@ -266,7 +248,7 @@ class StructTaskDlg:
                         data.techID, self.quantity, self.planetID, data.techID < 1000,
                         self.win.vReportFin.checked, self.structToDemolish)
                 self.win.setStatus(_('Command has been executed.'))
-            except GameException as e:
+            except GameException, e:
                 self.win.setStatus(e.args[0])
                 return
 

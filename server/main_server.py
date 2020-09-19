@@ -29,7 +29,7 @@ def runServer(options):
     baseDir = os.path.abspath(os.path.dirname(__file__))
 
     sys.path.insert(0, os.path.join(baseDir, "lib"))
-    sys.path.insert(0, os.path.join(baseDir, "..", "client_ai"))
+    sys.path.insert(0, os.path.join(baseDir, "..", "client-ai"))
     sys.path.insert(0, os.path.join(baseDir, "data"))
 
     import os, atexit
@@ -62,6 +62,14 @@ def runServer(options):
     #~ h.setLevel(logging.DEBUG)
     #~ h.setFormatter(logging.Formatter('%(created)d %(levelname)-5s %(name)-8s %(message)s'))
     #~ log.addHandler(h)
+
+
+    # record my pid
+    if os.path.isfile(os.path.join(options.configDir,"server.pid")):
+        os.remove(os.path.join(options.configDir,"server.pid"))
+    pidFd = os.open(os.path.join(options.configDir,"server.pid"), os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+    os.write(pidFd, str(os.getpid()))
+    # TODO: check if server.pid points to the running process
 
     game = None
     msgMngr = None
@@ -108,6 +116,12 @@ def runServer(options):
 
     cleanup = _cleanup
 
+    atexit.register(cleanup, pidFd)
+
+    #~fh = open(pidFilename, 'w')
+    #~print >> fh, os.getpid()
+    #~fh.close()
+
     # startup game
     log.debug('Importing IGE modules...')
 
@@ -132,6 +146,9 @@ def runServer(options):
 
     # open database
     from ige.SQLiteDatabase import Database, DatabaseString
+
+    if not config.vip.password:
+        config.vip.password = ''
 
     log.debug("Creating databases...")
     gameDB = Database(os.path.join(options.configDir,"db_data"), "game_%s" % gameName, cache = 15000)
@@ -162,7 +179,7 @@ def runServer(options):
     log.debug("Initializing issue manager")
     issueMngr = IssueMngr()
     log.debug("Initializing client manager")
-    clientMngr = ClientMngr(clientDB, "rsa", options.configDir)
+    clientMngr = ClientMngr(clientDB, config.server.authmethod, options.configDir)
     log.debug("Initializing message manager")
     msgMngr = MsgMngr(msgDB)
     log.debug("Initializing game manager")

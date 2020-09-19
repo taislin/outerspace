@@ -1,44 +1,26 @@
-#
-#  Copyright 2001 - 2016 Ludek Smid [http://www.ospace.net/]
-#
-#  This file is part of Outer Space.
-#
-#  Outer Space is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  Outer Space is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with Outer Space; if not, write to the Free Software
-#  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-#
+
 
 import pygameui as ui
 from osci import client, res, gdata
 from osci.SystemMapWidget import SystemMapWidget
-from . import NewTaskDlg
-from . import StructTaskDlg
-from . import RenameSysDlg
-from . import TechInfoDlg
-from . import ConfirmDlg
-from . import BuoyDlg
-from . import ConstructionDlg
-from . import FleetRedirectionDlg
-from . import FleetMassRedirectionDlg
-from . import MinefieldDlg
-from . import ChangeQtyDlg
-from . import LocateDlg
+from NewTaskDlg import NewTaskDlg
+from StructTaskDlg import StructTaskDlg
+from RenameSysDlg import RenameSysDlg
+from TechInfoDlg import TechInfoDlg
+from ConfirmDlg import ConfirmDlg
+from BuoyDlg import BuoyDlg
+from ConstructionDlg import ConstructionDlg
+from FleetRedirectionDlg import FleetRedirectionDlg
+from FleetMassRedirectionDlg import FleetMassRedirectionDlg
+from MinefieldDlg import MinefieldDlg
+from ChangeQtyDlg import ChangeQtyDlg
+from LocateDlg import LocateDlg
 import ige
 import ige.ospace.Const as Const
 from ige.ospace import Rules
 from ige import log
 import math
-from . import Utils
+import Utils
 
 INFO_NONE = 0
 INFO_TASK = 1
@@ -935,7 +917,7 @@ class StarSystemDlg:
             self.showPlanet()
             self.win.vPSlots.selectItem(self.win.vPSlots.items[self.plInfoData])
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(e.args[0])
             return
 
@@ -955,7 +937,7 @@ class StarSystemDlg:
             self.showPlanet()
             self.win.vPSlots.selectItem(self.win.vPSlots.items[self.plInfoData])
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(e.args[0])
             return
 
@@ -969,7 +951,7 @@ class StarSystemDlg:
             self.showPlanet()
             self.win.vPSlots.selectItem(self.win.vPSlots.items[self.plInfoData])
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(e.args[0])
             return
 
@@ -986,7 +968,7 @@ class StarSystemDlg:
             self.plInfoData = self.plInfoDataSelected = None
             self.win.vPSlots.selectItem(None)
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(e.args[0])
             return
         self.showPlanet()
@@ -1012,7 +994,7 @@ class StarSystemDlg:
             self.showPlanet()
             self.win.vPQueue.selectItem(self.win.vPQueue.items[self.plInfoData])
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(e.args[0])
             return
 
@@ -1026,7 +1008,7 @@ class StarSystemDlg:
             self.showPlanet()
             self.win.vPQueue.selectItem(self.win.vPQueue.items[self.plInfoData])
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(e.args[0])
             return
 
@@ -1048,7 +1030,7 @@ class StarSystemDlg:
                 planet.prodQueue, player.stratRes = client.cmdProxy.changeConstruction(self.planetID, self.plInfoData, self.changeQtyDlg.quantity)
                 self.showPlanet()
                 self.win.setStatus(_('Command has been executed.'))
-            except ige.GameException as e:
+            except ige.GameException, e:
                 self.win.setStatus(e.args[0])
                 return
 
@@ -1063,7 +1045,7 @@ class StarSystemDlg:
             self.win.vPQueue.selectItem(None)
             self.showPlanet()
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(e.args[0])
             return
 
@@ -1120,7 +1102,7 @@ class StarSystemDlg:
             self.win.vSystemMap.computeBuoy()
             self.showSystem()
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(e.args[0])
             return
 
@@ -1133,7 +1115,7 @@ class StarSystemDlg:
             self.win.vSystemMap.computeBuoy()
             self.showSystem()
             self.win.setStatus(_('Command has been executed.'))
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(e.args[0])
             return
 
@@ -1145,7 +1127,7 @@ class StarSystemDlg:
 
     def onGlobalQueuesMenu(self, widget, action, data):
         items = []
-        for queue in range(5):
+        for queue in xrange(5):
             items.append(ui.Item(res.globalQueueName(queue),tQue = queue))
         self.queueWin.vGlobalQueues.items = items
         self.queueWin.vGlobalQueues.itemsChanged()
@@ -1165,7 +1147,7 @@ class StarSystemDlg:
             self.queueWin.hide()
             self.win.setStatus(_('Command has been executed.'))
             self.update()
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(e.args[0])
             return
 

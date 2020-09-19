@@ -1,30 +1,13 @@
-#
-#  Copyright 2001 - 2016 Ludek Smid [http://www.ospace.net/]
-#
-#  This file is part of Outer Space.
-#
-#  Outer Space is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  Outer Space is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with Outer Space; if not, write to the Free Software
-#  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-#
+
 import copy
 import math
 import random
 import re
 
-from . import Const
-from . import ShipUtils
-from . import Utils
+import Const
+import Rules
+import ShipUtils
+import Utils
 
 from ige import GameException, log
 from ige.IObject import IObject, public
@@ -769,7 +752,7 @@ class IFleet(IObject):
                             deployHandler.deployHandlerFunction(tran, obj, planet, deployHandler)
                             Utils.sendMessage(tran, obj, Const.MSG_DEPLOY_HANDLER, planet.oid, deployHandlerID)
                             removeShip = 1
-                        except GameException as e:
+                        except GameException, e:
                             log.warning('IFleet -','Deploy handler error - internal error')
                             Utils.sendMessage(tran, obj, Const.MSG_CANNOTBUILD_SHLOST, planet.oid, None)
                     else:
@@ -789,7 +772,7 @@ class IFleet(IObject):
                                 planet.slots.insert(0, Utils.newStructure(tran, structTechID, obj.owner, hpRatio = Rules.structFromShipHpRatio))
                                 removeShip = 1
                                 Utils.sendMessage(tran, obj, Const.MSG_COMPLETED_STRUCTURE, planet.oid, structTech.id)
-                            except GameException as e:
+                            except GameException, e:
                                 # cannot build (planet already occupied?)
                                 log.warning('IFleet -', 'Build on planet - cannot complete')
                                 Utils.sendMessage(tran, obj, Const.MSG_CANNOTBUILD_SHLOST, planet.oid, None)
@@ -902,7 +885,7 @@ class IFleet(IObject):
                     continue
                 # scan all ships for design
                 designExists = 0
-                for index in range(0, len(obj.ships)):
+                for index in xrange(0, len(obj.ships)):
                     if obj.ships[index][Const.SHIP_IDX_DESIGNID] == designID:
                         # find planet with free upgrade points
                         needsUPts = Rules.shipUpgradePts[upgradeToSpec.combatClass]
@@ -1187,7 +1170,7 @@ class IFleet(IObject):
                 count = obj.combatCounter + desCount[designID] + wpnCount[weaponID] - 3
                 # add to attacks
                 #@log.debug('IFleet', obj.oid, designID, "Count", count, 'Shots', weapon.name, ShipUtils.getRounds(weapon.weaponROF, count))
-                for round in range(0, ShipUtils.getRounds(weapon.weaponROF * rofMod, count)):
+                for round in xrange(0, ShipUtils.getRounds(weapon.weaponROF * rofMod, count)):
                     shots[weapon.weaponClass].append((attack, weaponID))
         log.debug(obj.oid, "Combat limit settings", obj.maxHits)
         return shots, targets, firing

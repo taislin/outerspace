@@ -19,16 +19,16 @@
 #
 import pygame
 
-from . import Const
-from . import Widget
-from . import MetaWidget
-from . import Scrollbar
-from . import Button
+import Const
+from Widget import registerWidget
+from MetaWidget import MetaWidget
+from Scrollbar import Scrollbar
+from Button import Button
 
-class ButtonArray(MetaWidget.MetaWidget):
+class ButtonArray(MetaWidget):
 
     def __init__(self, parent, **kwargs):
-        MetaWidget.MetaWidget.__init__(self, parent)
+        MetaWidget.__init__(self, parent)
         # data
         self.items = []
         self.buttons = []
@@ -61,8 +61,8 @@ class ButtonArray(MetaWidget.MetaWidget):
             self.columns = (r.width - gx) / gx / bwidth
         else:
             self.columns = r.width / gx / bwidth
-        for row in range(0, self.rows):
-            for column in range(0, self.columns):
+        for row in xrange(0, self.rows):
+            for column in xrange(0, self.columns):
                 x = column * gx * bwidth
                 y = row * gy * bheight
                 button = Button(self, action = 'onButtonPressed', rmbAction = 'onRButtonPressed', hoverAction = 'onButtonHighlighted', toggle = 1)
@@ -136,7 +136,7 @@ class ButtonArray(MetaWidget.MetaWidget):
                 if item == self.selected:
                     button.pressed = 1
                     # do not trigger auto update
-                    setattr(self,'selectedButton',button)
+                    self.__dict__['selectedButton'] = button
                 else:
                     button.pressed = 0
             else:
@@ -159,4 +159,5 @@ class ButtonArray(MetaWidget.MetaWidget):
 
     def drawMetaWidget(self, surface):
         return self.theme.drawListbox(surface, self)
-Widget.registerWidget(ButtonArray, 'buttonarray')
+
+registerWidget(ButtonArray, 'buttonarray')

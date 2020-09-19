@@ -18,14 +18,14 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-from . import Const
-from . import Widget
-from . import Button
+import Const
+from Widget import registerWidget
+from Button import Button
 
-class TitleButton(Button.Button):
+class TitleButton(Button):
 
     def __init__(self, parent, **kwargs):
-        Button.Button.__init__(self, parent)
+        Button.__init__(self, parent)
         # data
         # flags
         self.processKWArguments(kwargs)
@@ -33,4 +33,5 @@ class TitleButton(Button.Button):
 
     def draw(self, surface):
         self.theme.drawTitleButton(surface, self)
-Widget.registerWidget(TitleButton, 'titlebutton')
+
+registerWidget(TitleButton, 'titlebutton')

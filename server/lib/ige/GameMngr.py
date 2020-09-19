@@ -1,22 +1,4 @@
-#
-#  Copyright 2001 - 2016 Ludek Smid [http://www.ospace.net/]
-#
-#  This file is part of Outer Space.
-#
-#  Outer Space is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  Outer Space is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with Outer Space; if not, write to the Free Software
-#  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-#
+
 
 # Game manager
 # Multiple instances can be created (one for each game)
@@ -26,13 +8,13 @@ import time
 import random, hashlib # TODO: remove after 0.5.74 release
 
 import ige
-from . import log
-from . import Const
+import log
+import Const
 
-from . import SQLiteDatabase
-from . import Index
-from . import IDataHolder
-from . import Transaction
+from SQLiteDatabase import Database
+from Index import Index
+from IObject import IDataHolder
+from Transaction import Transaction
 
 class GameMngr:
 
@@ -116,11 +98,11 @@ class GameMngr:
                 obj = self.db[id]
             except:
                 log.warning("Cannot upgrade object", id, "no such id in db")
-            if not isinstance(obj, IObject.IDataHolder):
+            if not isinstance(obj, IDataHolder):
                 #@log.debug('Upgrade - skiping', id)
                 continue
             #@log.debug('Upgrade - upgrading', id, obj.type)
-            types[obj.type] = get(obj.type, 0) + 1
+            types[obj.type] = types.get(obj.type, 0) + 1
             size = self.db.getItemLength(id)
             typesMin[obj.type] = min(typesMin.get(obj.type, 1000000), size)
             typesMax[obj.type] = max(typesMax.get(obj.type, 0), size)
@@ -128,7 +110,7 @@ class GameMngr:
             if self.cmdPool.has_key(obj.type):
                 try:
                     self.cmdPool[obj.type].upgrade(tran, obj)
-                except Exception as e:
+                except Exception, e:
                     log.warning("Cannot upgrade object", id)
             references = self.cmdPool[obj.type].getReferences(tran, obj)
             if references:
@@ -167,7 +149,7 @@ class GameMngr:
         session = self.clientMngr.getSession(sid)
         if session.login != Const.ADMIN_LOGIN:
             raise ige.SecurityException('You cannot issue this command.')
-        for turn in range(turns):
+        for turn in xrange(turns):
             log.message("--- TURN PROCESSING STARTED ---")
             # commit player's changes
             #if ige.igeRuntimeMode:

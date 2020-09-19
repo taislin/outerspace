@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python2
 
 #
 #  Copyright 2001 - 2016 Ludek Smid [http://www.ospace.net/]
@@ -31,7 +31,7 @@ relative_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.insert(0, os.path.join(relative_path, "client"))
 sys.path.insert(0, os.path.join(relative_path, "server"))
 sys.path.insert(0, os.path.join(relative_path, "server", "data"))
-sys.path.insert(0, os.path.join(relative_path, "client_ai"))
+sys.path.insert(0, os.path.join(relative_path, "client-ai"))
 sys.path.insert(0, os.path.join(relative_path, "server","lib"))
 
 
@@ -181,20 +181,20 @@ if options.local:
     options.server = 'localhost:9080'
 
 if subcommand == 'server':
-    from server.main_server import runServer
+    from main_server import runServer
     task = runServer
 
 elif subcommand == 'ai':
-    from client_ai.main_ai import runAIClient
+    from main_ai import runAIClient
     task = runAIClient
 
 elif subcommand == 'ai-pool':
-    from client_ai.main_ai_pool import runAIPool
+    from main_ai_pool import runAIPool
     task = runAIPool
 
 # basically default (as we force it in case of nonexistent subcommand
 elif subcommand == 'client':
-    from client.main_client import runClient
+    from main_client import runClient
     task = runClient
 
 if __name__ == '__main__':

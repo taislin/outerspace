@@ -18,6 +18,8 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
+from types import StringType, UnicodeType
+
 class Item:
 
     def __init__(self, text, **kwargs):
@@ -45,7 +47,7 @@ class Item:
         if hasattr(self, key):
             value = getattr(self, key)
             valType = type(value)
-            if valType == type(str) or valType == type(str):
+            if valType == StringType or valType == UnicodeType:
                 return value
             else:
                 return str(value)

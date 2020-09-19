@@ -18,13 +18,13 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-from . import Const
-from . import Widget
+import Const
+from Widget import Widget, registerWidget
 
-class Tooltip(Widget.Widget):
+class Tooltip(Widget):
 
     def __init__(self, parent, **kwargs):
-        Widget.Widget.__init__(self, parent)
+        Widget.__init__(self, parent)
         # data
         self.text = None
         self.title = None

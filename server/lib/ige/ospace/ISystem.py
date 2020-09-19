@@ -1,30 +1,13 @@
-#
-#  Copyright 2001 - 2016 Ludek Smid [http://www.ospace.net/]
-#
-#  This file is part of Outer Space.
-#
-#  Outer Space is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  Outer Space is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with Outer Space; if not, write to the Free Software
-#  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-#
+
 import random
 import copy
 
 from xml.dom.minidom import Node
 
 import ige
-from . import Const
-from . import Utils
+import Const
+import Rules
+import Utils
 
 from ige import log
 from ige.IObject import IObject, public
@@ -534,7 +517,7 @@ class ISystem(IObject):
                         # process from weaponClass up
                         # never shoot on smaller ships than weaponClass
                         applied = 0
-                        for tmpWpnClass in range(weaponClass, 4):
+                        for tmpWpnClass in xrange(weaponClass, 4):
                             #@log.debug('ISystem', 'Trying target class', tmpWpnClass, totalClass[tmpWpnClass])
                             # select target
                             if totalClass[tmpWpnClass]:

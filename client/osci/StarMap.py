@@ -1,30 +1,11 @@
 # -*- coding: utf-8 -*-
-#
-#  Copyright 2001 - 2016 Ludek Smid [http://www.ospace.net/]
-#
-#  This file is part of Outer Space.
-#
-#  Outer Space is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  Outer Space is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with Outer Space; if not, write to the Free Software
-#  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-#
+
 
 from pygameui import Fonts
 import ige.ospace.Const as Const
 from ige.ospace import Rules, Utils
 import pygame, pygame.draw, pygame.key, pygame.image
-from . import gdata, client, res
-import math
+import gdata, client, res, math, string
 from ige import log
 
 buoyColors = [(0xff, 0xff, 0x00), (0x00, 0xff, 0xff), (0xff, 0x00, 0xff), (0xb0, 0xb0, 0xff)]
@@ -121,7 +102,7 @@ class StarMap(object):
                     anyX = obj.x
                 if hasattr(obj, "y"):
                     anyY = obj.y
-            except AttributeError as e:
+            except AttributeError, e:
                 log.warning('StarMap', 'Cannot render objID = %d' % objID)
                 continue
             if obj.type == Const.T_SYSTEM:
@@ -970,7 +951,7 @@ class StarMap(object):
                 player.stats.storPop, player.govPwr
                 maxMorale = int(Rules.maxMorale)
                 minAchievedMorale = int(max(Rules.minMoraleTrgt - 1, 107.5 - 37.5 * player.stats.storPop / player.govPwr))
-                for step in range(maxMorale, minAchievedMorale - 1 , -10):
+                for step in xrange(maxMorale, minAchievedMorale - 1 , -10):
                     moraleColor = res.getMoraleColors(step)
                     centralX = int((centralPlanet.x - currX) * scale) + centerX
                     centralY = maxY - (int((centralPlanet.y - currY) * scale) + centerY)

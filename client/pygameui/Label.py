@@ -18,13 +18,13 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-from . import Const
-from . import Widget
+import Const
+from Widget import Widget, registerWidget
 
-class Label(Widget.Widget):
+class Label(Widget):
 
     def __init__(self, parent, **kwargs):
-        Widget.Widget.__init__(self, parent)
+        Widget.__init__(self, parent)
         # data
         self.text = None
         self.icons = []
@@ -36,4 +36,4 @@ class Label(Widget.Widget):
         self.theme.drawLabel(surface, self)
         return self.rect
 
-Widget.registerWidget(Label, 'label')
+registerWidget(Label, 'label')

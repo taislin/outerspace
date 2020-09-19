@@ -18,13 +18,13 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-from . import Const
-from . import Widget
+import Const
+from Widget import Widget, registerWidget
 
-class Title(Widget.Widget):
+class Title(Widget):
 
     def __init__(self, parent, **kwargs):
-        Widget.Widget.__init__(self, parent)
+        Widget.__init__(self, parent)
         # data
         self.text = None
         self.icons = []
@@ -35,4 +35,5 @@ class Title(Widget.Widget):
     def draw(self, surface):
         self.theme.drawTitle(surface, self)
         return self.rect
-Widget.registerWidget(Title, 'title')
+
+registerWidget(Title, 'title')

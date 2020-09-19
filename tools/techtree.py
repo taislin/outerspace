@@ -1,4 +1,4 @@
-
+#!/usr/bin/env python2
 #
 #  Copyright 2001 - 2018 Ludek Smid [http://www.ospace.net/]
 #

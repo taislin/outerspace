@@ -20,6 +20,7 @@
 import pygame
 
 from pygame.ftfont import Font
+from types import StringType, UnicodeType
 
 __all__ = ['initFont', 'renderText', 'getTextSize', 'getLineSize']
 
@@ -41,7 +42,7 @@ def initFont(name, ttfFile, size, bold = 0, italic = 0, underline = 0):
 def renderText(name, text, antialias, fg, bg = None):
     antialias = 1
     tType = type(text)
-    if tType != type(str) and tType != type(str):
+    if tType != StringType and tType != UnicodeType:
         text = str(text)
     if len(text) == 0:
         # TODO return very small surface
@@ -60,7 +61,7 @@ def renderText(name, text, antialias, fg, bg = None):
         hits += 1
     # clean up cache if size is > 2000
     if misses > 2000:
-        print('FONT CACHE STATS:', misses, hits, hits / float(misses + hits))
+        print 'FONT CACHE STATS:', misses, hits, hits / float(misses + hits)
         misses = 0
         fontCache.clear()
     return surface

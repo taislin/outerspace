@@ -19,9 +19,9 @@
 #
 
 import unittest
-from . import Const
-from . import WordUtils
-from . import Widget
+import Const
+from WordUtils import splitter
+from Widget import Widget, registerWidget
 import pygame.key
 
 # keys mapping
@@ -35,18 +35,18 @@ class Selection(object):
     """ Object to hold and pre-process information about selected area of the text.
     """
     def __init__(self):
-        self._start = -10000
-        self._end = -10000
+        self._start = None
+        self._end = None
 
     @property
     def first(self):
         """ Returns coordinates of the beginning of the selection """
-        return min(int(self._start), int(self._end))
+        return min(self._start, self._end)
 
     @property
     def last(self):
         """ Returns coordinates of the ending of the selection """
-        return max(int(self._start), int(self._end))
+        return max(self._start, self._end)
 
     def select(self, row, column):
         if self._start is None:
@@ -60,21 +60,20 @@ class Selection(object):
         return self._start is not None and self._end is not None
 
 
-class Text(Widget.Widget):
+class Text(Widget):
     """Text edit widget."""
 
     def __init__(self, parent, **kwargs):
-        Widget.Widget.__init__(self, parent)
+        Widget.__init__(self, parent)
         # data
-        setattr(self,'text', [""])
-        setattr(self,'offsetRow', 0)
-        setattr(self,'cursorRow', 0)
-        setattr(self,'cursorColumn', 0)
-        setattr(self,'action', None)
-        setattr(self,'editable', 1)
-        setattr(self,'vertScrollbar', None)
-        setattr(self,'selection', Selection())
-        setattr(self,'visible', 1)
+        self.__dict__['text'] = [""]
+        self.__dict__['offsetRow'] = 0
+        self.__dict__['cursorRow'] = 0
+        self.__dict__['cursorColumn'] = 0
+        self.__dict__['action'] = None
+        self.__dict__['editable'] = 1
+        self.__dict__['vertScrollbar'] = None
+        self.__dict__['selection'] = Selection()
         # flags
         self.processKWArguments(kwargs)
         parent.registerWidget(self)
@@ -152,7 +151,7 @@ class Text(Widget.Widget):
         if evt.mod & pygame.KMOD_CTRL:
             # move one word left
             # take words on line
-            words = WordUtils.splitter(self.text[self.cursorRow][:self.cursorColumn])
+            words = splitter(self.text[self.cursorRow][:self.cursorColumn])
             if len(words) == 0:
                 if self.cursorRow == 0:
                     # we are on first line, so move cursor to begining of line
@@ -175,7 +174,7 @@ class Text(Widget.Widget):
         if evt.mod & pygame.KMOD_CTRL:
             # move one word right
             # take words on line
-            words = WordUtils.splitter(self.text[self.cursorRow][self.cursorColumn:])
+            words = splitter(self.text[self.cursorRow][self.cursorColumn:])
             if len(words) == 0:
                 if self.cursorRow == len(self.text) - 1:
                     # we are on last line, so move cursor to end of line
@@ -305,15 +304,15 @@ class Text(Widget.Widget):
         elif evt.key in MAPPING:
             self.wrapDeleteSelection(self._processNumKeyboard, evt)
 
-        return Widget.Widget.processKeyDown(self, Const.NoEvent)
+        return Widget.processKeyDown(self, Const.NoEvent)
 
     def onFocusGained(self):
-        Widget.Widget.onFocusGained(self)
+        Widget.onFocusGained(self)
         self.cursorRow = len(self.text) - 1
         self.cursorColumn = len(self.text[self.cursorRow])
 
     def onFocusLost(self):
-        Widget.Widget.onFocusLost(self)
+        Widget.onFocusLost(self)
         self.processAction(self.action)
 
     # redirect mouse wheel events to the scollbar
@@ -325,7 +324,8 @@ class Text(Widget.Widget):
         if self.vertScrollbar:
             return self.vertScrollbar.processMWDown(evt)
 
-Widget.registerWidget(Text, 'text')
+
+registerWidget(Text, 'text')
 
 
 class TextTestCase(unittest.TestCase):

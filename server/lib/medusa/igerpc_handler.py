@@ -1,5 +1,6 @@
-from . import http_server, producers, asyncore, status_handler
-from . import counter
+import http_server, producers, asyncore
+import status_handler
+from counter import counter
 from ige.IMarshal import IMarshal, IPacket
 
 import string
@@ -13,9 +14,9 @@ class igerpc_handler:
 
     def __init__(self):
         self.marshal = IMarshal()
-        self.commandCounter = counter.counter()
-        self.completedCounter = counter.counter()
-        self.exceptionsCounter = counter.counter()
+        self.commandCounter = counter()
+        self.completedCounter = counter()
+        self.exceptionsCounter = counter()
 
     def __repr__ (self):
         return '<%s at %x>' % (
@@ -51,9 +52,9 @@ class igerpc_handler:
                 response.exception = None
                 del response.clientAddr
                 self.completedCounter.increment()
-            except asyncore.ExitNow as e:
+            except asyncore.ExitNow, e:
                 raise e
-            except Exception as e:
+            except Exception, e:
                 # report exception back to client
                 response = packet
                 response.method = None
@@ -62,9 +63,9 @@ class igerpc_handler:
                 response.messages = None
                 response.exception = ('%s.%s' % (e.__class__.__module__, e.__class__.__name__), e.args)
                 self.exceptionsCounter.increment()
-        except asyncore.ExitNow as e:
+        except asyncore.ExitNow, e:
             raise e
-        except Exception as e:
+        except Exception, e:
             # internal error, report as HTTP server error
             request.error (500)
         else:
@@ -124,9 +125,9 @@ if __name__ == '__main__':
     class rpc_demo (igerpc_handler):
 
         def call (self, packet):
-            print('IGERPC call')
+            print 'IGERPC call'
             for attr in dir(packet):
-                print(attr, '=', getattr(packet, attr))
+                print attr, '=', getattr(packet, attr)
             packet.result = 'Hello!'
             packet.messages = ()
             return packet

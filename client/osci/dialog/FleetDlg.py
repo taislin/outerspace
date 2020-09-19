@@ -1,32 +1,14 @@
-#
-#  Copyright 2001 - 2016 Ludek Smid [http://www.ospace.net/]
-#
-#  This file is part of Outer Space.
-#
-#  Outer Space is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  Outer Space is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with Outer Space; if not, write to the Free Software
-#  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-#
+
 
 import pygameui as ui
 from osci import client, res, gdata, sequip
-from . import FleetCommandDlg
-from . import FleetSpecsDlg
-from . import FleetSplitDlg
-from . import FleetScoutBloomDlg
-from . import ConfirmDlg
-from . import RenameFleetDlg
-from . import LocateDlg
+from FleetCommandDlg import FleetCommandDlg
+from FleetSpecsDlg import FleetSpecsDlg
+from FleetSplitDlg import FleetSplitDlg
+from FleetScoutBloomDlg import FleetScoutBloomDlg
+from ConfirmDlg import ConfirmDlg
+from RenameFleetDlg import RenameFleetDlg
+from LocateDlg import LocateDlg
 import ige.ospace.Const as Const
 from ige.ospace import Rules
 import ige
@@ -232,7 +214,7 @@ class FleetDlg:
                 self.update()
                 gdata.mainGameDlg.update()
             return 0
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(_(e.args[0]))
             return 1
 
@@ -262,7 +244,7 @@ class FleetDlg:
             self.update()
             gdata.mainGameDlg.update()
             return 0
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(_(e.args[0]))
             return 1
 
@@ -279,7 +261,7 @@ class FleetDlg:
             self.win.setStatus(_('Command has been executed.'))
             self.onSelectCommand(widget, action, None)
             gdata.mainGameDlg.update()
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(_(e.args[0]))
             return 1
 

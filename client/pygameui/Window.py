@@ -19,15 +19,15 @@
 #
 import pygame
 
-from . import Const
-from . import Widget
-from . import MetaWidget
-from . import Button
+import Const
+from Widget import widgets, registerWidget
+from MetaWidget import MetaWidget
+from Button import Button
 
-class Window(MetaWidget.MetaWidget):
+class Window(MetaWidget):
 
     def __init__(self, parent, **kwargs):
-        MetaWidget.MetaWidget.__init__(self, parent)
+        MetaWidget.__init__(self, parent)
         self.surface = None
         self.visible = 0
         # data
@@ -86,7 +86,7 @@ class Window(MetaWidget.MetaWidget):
     def draw(self, surface):
         if not self.surface or self.surface.get_size() != self.rect.size:
             self.surface = pygame.Surface(self.rect.size, self.app.windowSurfaceFlags)
-        changed = MetaWidget.MetaWidget.draw(self, self.surface)
+        changed = MetaWidget.draw(self, self.surface)
         if self._fullUpdate:
             changed = self.surface.get_rect()
             self._fullUpdate = False
@@ -189,4 +189,4 @@ class Window(MetaWidget.MetaWidget):
             self.app.setFocus(minWidget)
 
 
-Widget.registerWidget(Window, 'window')
+registerWidget(Window, 'window')

@@ -1,28 +1,11 @@
-#
-#  Copyright 2001 - 2016 Ludek Smid [http://www.ospace.net/]
-#
-#  This file is part of Outer Space.
-#
-#  Outer Space is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  Outer Space is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with Outer Space; if not, write to the Free Software
-#  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-#
+
 
 import traceback
 import time
 import os
-from . import log
-
+import log
+import ige
+import ige.version
 from medusa import igerpc_handler, http_server, asyncore, logger, status_handler
 from medusa import filesys, default_handler, counter, producers, xmlrpc_handler
 
@@ -63,21 +46,21 @@ class igerpc(igerpc_handler.igerpc_handler):
             packet.method = None
             packet.params = None
             return packet
-        except ige.NoAccountException as e:
+        except ige.NoAccountException, e:
             raise e
-        except ige.GameException as e:
+        except ige.GameException, e:
             raise e
-        except ige.SecurityException as e:
+        except ige.SecurityException, e:
             raise e
-        except ige.CreatePlayerException as e:
+        except ige.CreatePlayerException, e:
             raise e
-        except ige.ServerStatusException as e:
+        except ige.ServerStatusException, e:
             raise e
-        except ige.NoSuchObjectException as e:
+        except ige.NoSuchObjectException, e:
             raise e
-        except asyncore.ExitNow as e:
+        except asyncore.ExitNow, e:
             raise e
-        except Exception as e:
+        except Exception, e:
             log.warning('Cannot complete RPC call')
             self.seriousExcCounter.increment()
             raise e
@@ -110,17 +93,17 @@ class xmlrpc(xmlrpc_handler.xmlrpc_handler):
         try:
             instanceName, methodName = method.split('.')
             return getattr(objMap[instanceName], 'rpc_%s' % methodName)(*params)
-            #except ige.NoAccountException as e:
+            #except ige.NoAccountException, e:
             #    raise e
-            #except ige.GameException as e:
+            #except ige.GameException, e:
             #    raise e
-            #except ige.SecurityException as e:
+            #except ige.SecurityException, e:
             #    raise e
-            #except ige.ServerStatusException as e:
+            #except ige.ServerStatusException, e:
             #    raise e
-        except asyncore.ExitNow as e:
+        except asyncore.ExitNow, e:
             raise e
-        except Exception as e:
+        except Exception, e:
             log.warning('Cannot complete RPC call')
             self.seriousExcCounter.increment()
             raise e

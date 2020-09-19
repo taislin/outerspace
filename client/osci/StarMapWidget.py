@@ -1,33 +1,15 @@
 # -*- coding: utf-8 -*-
-#
-#  Copyright 2001 - 2016 Ludek Smid [http://www.ospace.net/]
-#
-#  This file is part of Outer Space.
-#
-#  Outer Space is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  Outer Space is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with Outer Space; if not, write to the Free Software
-#  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-#
+
 import bisect
 
-from pygameui.Widget import Widget
+from pygameui.Widget import Widget, registerWidget
 import pygameui as ui
 from pygameui import Fonts
 import ige.ospace.Const as Const
 import pygame, pygame.draw, pygame.key, pygame.image
-from .dialog.ShowBuoyDlg import ShowBuoyDlg
-from .dialog.KeyModHelp import KeyModHelp
-from . import gdata, client, res
+from dialog.ShowBuoyDlg import ShowBuoyDlg
+from dialog.KeyModHelp import KeyModHelp
+import gdata, client, res
 from ige import log
 from osci.dialog.SearchDlg import SearchDlg
 from osci.MiniMap import MiniMap
@@ -100,15 +82,15 @@ class StarMapWidget(Widget):
 
 
     def updateConfigModes(self):
-        self.control_modes['redirects'] = gdata.config.defaults.showredirects != 'no'
-        self.control_modes['coords'] = gdata.config.defaults.showcoords != 'no'
-        self.control_modes['map_grid'] = gdata.config.defaults.showmapgrid != 'no'
-        self.control_modes['scanners'] = gdata.config.defaults.showmapscanners != 'no'
-        self.control_modes['fleet_lines'] = gdata.config.defaults.showfleetlines != 'no'
-        self.control_modes['gate_systems'] = gdata.config.defaults.showgatesystems != 'no'
-        self.control_modes['alternative_mode'] = gdata.config.defaults.alternateviewmode != 'no'
-        self.control_modes['control_areas'] = gdata.config.defaults.showplayerzones != 'no'
-        self.control_modes['minimap'] = gdata.config.defaults.showminimap != 'yes'
+        self.control_modes['redirects'] = gdata.config.defaults.showredirects is not 'no'
+        self.control_modes['coords'] = gdata.config.defaults.showcoords is not 'no'
+        self.control_modes['map_grid'] = gdata.config.defaults.showmapgrid is not 'no'
+        self.control_modes['scanners'] = gdata.config.defaults.showmapscanners is not 'no'
+        self.control_modes['fleet_lines'] = gdata.config.defaults.showfleetlines is not 'no'
+        self.control_modes['gate_systems'] = gdata.config.defaults.showgatesystems is not 'no'
+        self.control_modes['alternative_mode'] = gdata.config.defaults.alternateviewmode is not 'no'
+        self.control_modes['control_areas'] = gdata.config.defaults.showplayerzones is not 'no'
+        self.control_modes['minimap'] = gdata.config.defaults.showminimap is not 'yes'
 
     def precompute(self):
         self.star_map.rect = self.rect
@@ -264,7 +246,7 @@ class StarMapWidget(Widget):
         sx = int((x - self.star_map.currX) * self.star_map.scale) + centerX + self.rect.left
         sy = maxY - (int((y - self.star_map.currY) * self.star_map.scale) + centerY) + self.rect.top
 
-        for i in range(1, turns / 6):
+        for i in xrange(1, turns / 6):
             rng = int(i * speed * self.star_map.scale)
             if rng > 1:
                 pygame.draw.circle(surface, (0x70, 0x70, 0x80), (sx, sy), rng, 1)
@@ -718,4 +700,5 @@ class StarMapWidget(Widget):
         self.repaint_map = 1
         self.processMiniMapRect()
 
-ui.Widget.registerWidget(StarMapWidget, 'starmapwidget')
+
+registerWidget(StarMapWidget, 'starmapwidget')

@@ -1,51 +1,33 @@
-#
-#  Copyright 2001 - 2016 Ludek Smid [http://www.ospace.net/]
-#
-#  This file is part of Outer Space.
-#
-#  Outer Space is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  Outer Space is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with Outer Space; if not, write to the Free Software
-#  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-#
+
 
 import pygameui as ui
 from osci import gdata, client, res
 from osci.StarMapWidget import StarMapWidget
-from . import StarSystemDlg
-from . import FleetDlg
-from . import ResearchDlg
-from . import MessagesDlg
-from . import ConstructionDlg
-from . import PlanetsOverviewDlg
-from . import SystemOverviewDlg
-from . import GlobalQueuesDlg
-from . import FleetsOverviewDlg
-from . import PlanetsAnalysisDlg
-from . import FleetsAnalysisDlg
-from . import GalaxyFinishDlg
-from . import ConfirmDlg
-from . import OptionsDlg
-from . import SearchDlg
-from . import ProblemsDlg
-from . import DiplomacyDlg
-from . import EmpireOverviewDlg
+from StarSystemDlg import StarSystemDlg
+from FleetDlg import FleetDlg
+from ResearchDlg import ResearchDlg
+from MessagesDlg import MessagesDlg
+from ConstructionDlg import ConstructionDlg
+from PlanetsOverviewDlg import PlanetsOverviewDlg
+from SystemOverviewDlg import SystemOverviewDlg
+from GlobalQueuesDlg import GlobalQueuesDlg
+from FleetsOverviewDlg import FleetsOverviewDlg
+from PlanetsAnalysisDlg import PlanetsAnalysisDlg
+from FleetsAnalysisDlg import FleetsAnalysisDlg
+from GalaxyFinishDlg import GalaxyFinishDlg
+from ConfirmDlg import ConfirmDlg
+from OptionsDlg import OptionsDlg
+from SearchDlg import SearchDlg
+import ProblemsDlg
+import DiplomacyDlg
+import EmpireOverviewDlg
 import ige.ospace.Const as Const
 from ige import log
 import resources
 import webbrowser, pygame
 import time
 import os.path
-from . import Utils
+import Utils
 
 class MainGameDlg:
 

@@ -1,10 +1,12 @@
+# -*- coding: utf-8 -*-
+#
 #  Copyright 2011 Sybren A. Stüvel <sybren@stuvel.eu>
 #
 #  Licensed under the Apache License, Version 2.0 (the "License");
 #  you may not use this file except in compliance with the License.
 #  You may obtain a copy of the License at
 #
-#      https://www.apache.org/licenses/LICENSE-2.0
+#      http://www.apache.org/licenses/LICENSE-2.0
 #
 #  Unless required by applicable law or agreed to in writing, software
 #  distributed under the License is distributed on an "AS IS" BASIS,
@@ -12,22 +14,20 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
-"""Functions for generating random numbers."""
+'''Functions for generating random numbers.'''
 
 # Source inspired by code by Yesudeep Mangalapilly <yesudeep@gmail.com>
 
 import os
-import struct
 
 from rsa import common, transform
 
-
-def read_random_bits(nbits: int) -> bytes:
-    """Reads 'nbits' random bits.
+def read_random_bits(nbits):
+    '''Reads 'nbits' random bits.
 
     If nbits isn't a whole number of bytes, an extra byte will be appended with
     only the lower bits set.
-    """
+    '''
 
     nbytes, rbits = divmod(nbits, 8)
 
@@ -38,12 +38,12 @@ def read_random_bits(nbits: int) -> bytes:
     if rbits > 0:
         randomvalue = ord(os.urandom(1))
         randomvalue >>= (8 - rbits)
-        randomdata = struct.pack("B", randomvalue) + randomdata
+        randomdata = chr(randomvalue) + randomdata
 
     return randomdata
 
 
-def read_random_int(nbits: int) -> int:
+def read_random_int(nbits):
     """Reads a random integer of approximately nbits bits.
     """
 
@@ -56,21 +56,7 @@ def read_random_int(nbits: int) -> int:
 
     return value
 
-
-def read_random_odd_int(nbits: int) -> int:
-    """Reads a random odd integer of approximately nbits bits.
-
-    >>> read_random_odd_int(512) & 1
-    1
-    """
-
-    value = read_random_int(nbits)
-
-    # Make sure it's odd
-    return value | 1
-
-
-def randint(maxvalue: int) -> int:
+def randint(maxvalue):
     """Returns a random integer x with 1 <= x <= maxvalue
 
     May take a very long time in specific situations. If maxvalue needs N bits
@@ -86,7 +72,7 @@ def randint(maxvalue: int) -> int:
         if value <= maxvalue:
             break
 
-        if tries % 10 == 0 and tries:
+        if tries and tries % 10 == 0:
             # After a lot of tries to get the right number of bits but still
             # smaller than maxvalue, decrease the number of bits by 1. That'll
             # dramatically increase the chances to get a large enough number.
@@ -94,3 +80,5 @@ def randint(maxvalue: int) -> int:
         tries += 1
 
     return value
+
+

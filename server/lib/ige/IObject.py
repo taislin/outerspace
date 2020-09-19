@@ -1,25 +1,8 @@
-#
-#  Copyright 2001 - 2016 Ludek Smid [http://www.ospace.net/]
-#
-#  This file is part of Outer Space.
-#
-#  Outer Space is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  Outer Space is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with Outer Space; if not, write to the Free Software
-#  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-#
+
 import types
 
-from . import Const, log
+import Const
+import log
 
 from ige import GameException, SecurityException
 from ige.IDataHolder import IDataHolder
@@ -93,17 +76,17 @@ class IObject:
         pass
 
     def loadDOMAttrs(self, obj, elem):
-        for index in range(0, elem.attributes.length):
+        for index in xrange(0, elem.attributes.length):
             attr = elem.attributes.item(index)
             if hasattr(obj, attr.nodeName):
                 attrType = type(getattr(obj, attr.nodeName))
-                if attrType == IntType:
+                if attrType == types.IntType:
                     value = int(attr.nodeValue)
-                elif attrType == FloatType:
+                elif attrType == types.FloatType:
                     value = float(attr.nodeValue)
-                elif attrType == type(str):
+                elif attrType == types.UnicodeType:
                     value = attr.nodeValue
-                elif attrType == type(str):
+                elif attrType == types.StringType:
                     value = attr.nodeValue
                 else:
                     raise 'Unsupported attribute type %s' % attrType

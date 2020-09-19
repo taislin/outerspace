@@ -1,29 +1,11 @@
-#
-#  Copyright 2001 - 2016 Ludek Smid [http://www.ospace.net/]
-#
-#  This file is part of Outer Space.
-#
-#  Outer Space is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  Outer Space is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with Outer Space; if not, write to the Free Software
-#  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-#
+
 
 import ige
 import ige.Authentication
-from ige.IMarshal import IMarshal
+from ige.IMarshal import IMarshal, IPacket
 from ige import ServerStatusException, log
-import http, urllib
-import http.client
+import httplib, urllib
+import exceptions
 import time
 from binascii import hexlify
 import threading
@@ -32,24 +14,6 @@ from ige.Const import OID_ADMIN
 
 MSG_CMD_BEGIN = -1000
 MSG_CMD_END = -1001
-
-class IPacket:
-
-    def __init__(self):
-        self.sid = None
-        self.method = None
-        self.params = None
-        self.result = None
-        self.messages = None
-        self.exception = None
-        self.clientAddr = None
-
-    def __repr__(self):
-        result = '<%s.%s %d ' % (self.__class__.__module__, self.__class__.__name__, id(self))
-        for key, value in self.__dict__.items():
-            result += '%s=%s, ' % (key, repr(value))
-        result += '>'
-        return result
 
 class IClientException(Exception):
     pass
@@ -242,12 +206,12 @@ class IProxy:
                 result = self.processCall(args)
                 ok = 1
                 break
-            except ServerStatusException as e:
+            except ServerStatusException, e:
                 log.warning("Cannot complete request - retrying...")
                 retries -= 1
                 time.sleep(1)
             # this was commented out
-            except Exception as e:
+            except Exception, e:
                 log.warning("Cannot complete request")
                 if self.client.msgHandler:
                     self.client.msgHandler(MSG_CMD_END, None)
@@ -276,21 +240,22 @@ class IProxy:
         log.debug('calling', packet.method, packet.params)
         # encode
         # V11
+        # data = self.marshal.encode(packet).encode('utf-8')
         data = self.marshal.encode(packet)
         self.client.statsBytesOut += len(data)
-        log.debug('->', data)
+        #@log.debug('->', data)
         # make call
         # init connection
         if self.client.proxy:
             # use urllib
             if not self.client.httpConn:
                 log.debug('Using proxy', self.client.proxy)
-                self.client.httpConn = urllib.request.urlopen({'http': self.client.proxy})
+                self.client.httpConn = urllib.FancyURLopener({'http': self.client.proxy})
         else:
             if self.client.httpConn:
                 h = self.client.httpConn
             else:
-                h = http.client.HTTPConnection(self.client.server)
+                h = httplib.HTTPConnection(self.client.server)
                 self.client.httpConn = h
         try:
             if self.client.proxy:
@@ -347,7 +312,7 @@ class IProxy:
                 else:
                     rspData = reader.result
                 # end of thread dispatcher
-        except Exception as e:
+        except Exception, e:
             log.warning('Cannot send request to the server')
             self.client.logged = 0
             self.client.connected = 0
@@ -383,5 +348,5 @@ class Reader(threading.Thread):
     def run(self):
         try:
             self.result = self.callable()
-        except Exception as e:
+        except Exception, e:
             self.exception = e

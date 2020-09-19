@@ -1,27 +1,11 @@
-#
-#  Copyright 2001 - 2016 Ludek Smid [http://www.ospace.net/]
-#
-#  This file is part of Outer Space.
-#
-#  Outer Space is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  Outer Space is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with Outer Space; if not, write to the Free Software
-#  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-#
+
 
 import copy
 import random
 
-from . import Const, Utils
+import Const
+import Rules
+import Utils
 
 from ige import GameException
 from ige import log
@@ -308,7 +292,7 @@ def makeShipFullSpec(player, name, hullID, eqIDs, improvements, raiseExs = True)
         techEff = Rules.techImprEff[player.techs.get(techID, Rules.techBaseImprovement)]
         if eqIDs[techID] < 0 and raiseExs:
             raise GameException("Invalid equipment count (less than 0).")
-        for i in range(0, eqIDs[techID]):
+        for i in xrange(0, eqIDs[techID]):
             counter[tech.subtype] = 1 + counter.get(tech.subtype, 0)
             installations[techID] = 1 + installations.get(techID, 0)
             _checkValidity(ship, tech, installations, equipCounter, raiseExs)
@@ -330,10 +314,10 @@ def makeShipFullSpec(player, name, hullID, eqIDs, improvements, raiseExs = True)
 
 # ROF tables
 rofTable = {}
-for i in range(0, 100):
+for i in xrange(0, 100):
     line = []
     level = i
-    for j in range(0, 100):
+    for j in xrange(0, 100):
         if level >= 100:
             line.append(1)
             level -= 100

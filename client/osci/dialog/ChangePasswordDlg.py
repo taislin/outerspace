@@ -50,7 +50,7 @@ class ChangePasswordDlg:
         self.win.hide()
         try:
             client.cmdProxy.changePassword(oldPassword, newPassword)
-        except SecurityException as e:
+        except SecurityException, e:
             # failed
             self.win.vMessage.text = _(e.args[0])
             self.win.show()

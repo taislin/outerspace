@@ -1,22 +1,4 @@
-#
-#  Copyright 2001 - 2016 Ludek Smid [http://www.ospace.net/]
-#
-#  This file is part of Outer Space.
-#
-#  Outer Space is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  Outer Space is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with Outer Space; if not, write to the Free Software
-#  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-#
+
 
 import types
 import pygameui as ui
@@ -219,7 +201,7 @@ class FleetSplitDlg:
 
     def groupShips(self, grouped, by):
         for key, item in grouped.items():
-            if type(item) == list:
+            if type(item) == types.ListType:
                 if by & DESIGN:
                     grouped[key] = groupShipsByDesign(item)
                     self.groupShips(grouped[key], by - DESIGN)
@@ -247,7 +229,7 @@ class FleetSplitDlg:
 
                 return
 
-            if type(item) == list:
+            if type(item) == types.ListType:
                 self.appendItem(item, items, player, checks)
             else:
                 self.appendShips(item, items, player, checks)
@@ -281,7 +263,7 @@ class FleetSplitDlg:
         self.win.vNEnMax.text = _('/ %d') % self.newEnMax
 
     def appendItem(self, ships, items, player, checks):
-        if type(ships[0]) == list:
+        if type(ships[0]) == types.ListType:
             count = len(ships)
             designName = ""
             listData = ships
@@ -346,7 +328,7 @@ class FleetSplitDlg:
             fleet = client.get(self.fleetDlg.fleetID, noUpdate = 1)
             newFleet, origFleet, fleets = client.cmdProxy.splitFleet(self.fleetDlg.fleetID,
                 self.newShips, self.newEn)
-        except ige.GameException as e:
+        except ige.GameException, e:
             self.win.setStatus(e.args[0])
             return
         # update related objects

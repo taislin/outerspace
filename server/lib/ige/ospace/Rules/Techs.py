@@ -1,29 +1,11 @@
-#
-#  Copyright 2001 - 2016 Ludek Smid [http://www.ospace.net/]
-#
-#  This file is part of Outer Space.
-#
-#  Outer Space is free software; you can redistribute it and/or modify
-#  it under the terms of the GNU General Public License as published by
-#  the Free Software Foundation; either version 2 of the License, or
-#  (at your option) any later version.
-#
-#  Outer Space is distributed in the hope that it will be useful,
-#  but WITHOUT ANY WARRANTY; without even the implied warranty of
-#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-#  GNU General Public License for more details.
-#
-#  You should have received a copy of the GNU General Public License
-#  along with Outer Space; if not, write to the Free Software
-#  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-#
+
 
 import sys, copy
 from ige import log
 from ige.ospace import Const
 import ige.ospace.Rules
 import hashlib, os.path
-import pickle as pickle
+import cPickle as pickle
 import types
 from ige.ospace import TechHandlers
 from xml.sax.handler import ContentHandler
@@ -184,23 +166,23 @@ class Technology:
     def set(self, key, value):
         if attrs.has_key(key):
             attrType = type(attrs[key])
-            if attrType == IntType:
+            if attrType == types.IntType:
                 value = int(value)
-            elif attrType == FloatType:
+            elif attrType == types.FloatType:
                 value = float(value)
-            elif attrType == type(str):
+            elif attrType == types.UnicodeType:
                 pass
-            elif attrType == type(str):
+            elif attrType == types.StringType:
                 value = str(value)
-            elif attrType == FunctionType:
+            elif attrType == types.FunctionType:
                 value = getattr(TechHandlers, value)
-            elif attrType == list:
+            elif attrType == types.ListType:
                 itemType = type(attrs[key][0])
-                if itemType == IntType:
+                if itemType == types.IntType:
                     convertFunc = int
-                elif itemType == type(str):
+                elif itemType == types.StringType:
                     convertFunc = str
-                elif itemType == FloatType:
+                elif itemType == types.FloatType:
                     convertFunc = float
                 else:
                     raise 'Unsupported attribute type %s' % repr(itemType)
@@ -209,24 +191,24 @@ class Technology:
                     if item:
                         result.append(convertFunc(item))
                 value = result
-            elif attrType == dict:
+            elif attrType == types.DictType:
                 # format is key:value,key2:value2
                 dict_key, dict_value = copy.copy(attrs[key]).popitem()
                 keyType = type(dict_key)
-                if keyType == IntType:
+                if keyType == types.IntType:
                     convertFuncKey = int
-                elif keyType == type(str):
+                elif keyType == types.StringType:
                     convertFuncKey = str
-                elif keyType == FloatType:
+                elif keyType == types.FloatType:
                     convertFuncKey = float
                 else:
                     raise 'Unsupported attribute type %s' % repr(keyType)
                 valueType = type(dict_value)
-                if valueType == IntType:
+                if valueType == types.IntType:
                     convertFuncValue = int
-                elif valueType == type(str):
+                elif valueType == types.StringType:
                     convertFuncValue = str
-                elif valueType == FloatType:
+                elif valueType == types.FloatType:
                     convertFuncValue = float
                 else:
                     raise 'Unsupported attribute type %s' % repr(valueType)
@@ -387,7 +369,7 @@ def init(configDir):
     # regular module
     moduleDirectory = os.path.dirname(moduleFile)
     chsum = hashlib.sha1()
-    os.walk(moduleDirectory, chsumDir, chsum)
+    os.path.walk(moduleDirectory, chsumDir, chsum)
 
     # read old checksum
     try:
@@ -408,8 +390,8 @@ def init(configDir):
 
         # clean up 'type' in lists
         for key in attrs.keys():
-            if type(attrs[key]) == list and len(attrs[key]) == 1:
-                log.debug("Cleaning up "+key)
+            if type(attrs[key]) == types.ListType and len(attrs[key]) == 1:
+                log.debug("Cleaning up", key)
                 attrs[key] = []
 
     else:
@@ -425,15 +407,15 @@ def init(configDir):
                     xml.sax.parse(os.path.join(dirname, filename), TechTreeContentHandler())
 
         # collect xml files
-        os.walk(moduleDirectory, processDir, None)
+        os.path.walk(moduleDirectory, processDir, None)
 
         # clean up 'type' in lists
         for key in attrs.keys():
-            if type(attrs[key]) == list and len(attrs[key]) == 1:
-                log.debug("Cleaning up "+key)
+            if type(attrs[key]) == types.ListType and len(attrs[key]) == 1:
+                log.debug("Cleaning up", key)
                 attrs[key] = []
-            elif type(attrs[key]) == dict and len(attrs[key]) == 1:
-                log.debug("Cleaning up "+key)
+            elif type(attrs[key]) == types.DictType and len(attrs[key]) == 1:
+                log.debug("Cleaning up", key)
                 attrs[key] = {}
 
 
@@ -523,7 +505,7 @@ def init(configDir):
         log.message('Saving specification...')
         pickle.dump(techs, open(os.path.join(configDir, 'techs.spf'), 'wb'), 1)
         pickle.dump(Tech, open(os.path.join(configDir, 'Tech.spf'), 'wb'), 1)
-        fh = open(os.path.join(configDir, 'checksum'), 'w')
+        fh = open(os.path.join(configDir, 'checksum'), 'wb')
         fh.write(chsum.hexdigest())
         fh.close()
 

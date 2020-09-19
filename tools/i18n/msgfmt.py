@@ -1,7 +1,7 @@
-
+#! /usr/bin/env python2
 # -*- coding: utf-8 -*-
 
-# Written by Martin v. Lï¿½wis <loewis@informatik.hu-berlin.de>
+# Written by Martin v. Löwis <loewis@informatik.hu-berlin.de>
 
 """Generate binary message catalog from textual translation description.
 
@@ -19,7 +19,7 @@ Options:
 
     -h
     --help
-        print(this message and exit.)
+        Print this message and exit.
 
     -V
     --version

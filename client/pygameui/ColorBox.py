@@ -1,10 +1,10 @@
-from . import Const
-from . import Widget
+import Const
+from Widget import Widget, registerWidget
 
-class ColorBox(Widget.Widget):
+class ColorBox(Widget):
 
     def __init__(self, parent, **kwargs):
-        Widget.Widget.__init__(self, parent)
+        Widget.__init__(self, parent)
         # data
         self.color = None
         self.margins = (0, 0, 0, 0)
@@ -19,4 +19,5 @@ class ColorBox(Widget.Widget):
         surface.fill(self.color)
         surface.set_clip(oldClip)
         return self.rect
-Widget.registerWidget(ColorBox, 'colorbox')
+
+registerWidget(ColorBox, 'colorbox')

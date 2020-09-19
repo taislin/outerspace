@@ -20,12 +20,15 @@ import asyncore
 import asynchat
 
 # medusa modules
-from . import http_date, producers, status_handler, logger
+import http_date
+import producers
+import status_handler
+import logger
 
 VERSION_STRING = "Outer Space"
 
-from . import counter
-from urllib.parse import unquote
+from counter import counter
+from urllib import unquote
 
 # ===========================================================================
 #                            Request Object
@@ -36,7 +39,7 @@ class http_request:
     # default reply code
     reply_code = 200
 
-    request_counter = counter.counter()
+    request_counter = counter()
 
     # Whether to automatically use chunked encoding when
     #
@@ -100,7 +103,7 @@ class http_request:
         if self._split_uri is None:
             m = self.path_regex.match (self.uri)
             if m.end() != len(self.uri):
-                raise ValueError("Broken URI")
+                raise ValueError, "Broken URI"
             else:
                 self._split_uri = m.groups()
         return self._split_uri
@@ -312,7 +315,19 @@ class http_request:
         }
 
     # Default error message
-    DEFAULT_ERROR_MESSAGE = '<head><title>Error response</title></head><body><h1>Error response</h1><p>Error code %(code)d.<p>Message: %(message)s.</body>\r\n'
+    DEFAULT_ERROR_MESSAGE = string.join (
+        ['<head>',
+         '<title>Error response</title>',
+         '</head>',
+         '<body>',
+         '<h1>Error response</h1>',
+         '<p>Error code %(code)d.',
+         '<p>Message: %(message)s.',
+         '</body>',
+         ''
+         ],
+        '\r\n'
+        )
 
 
 # ===========================================================================
@@ -325,11 +340,11 @@ class http_channel (asynchat.async_chat):
     ac_out_buffer_size = 1<<16
 
     current_request = None
-    channel_counter = counter.counter()
+    channel_counter = counter()
 
     def __init__ (self, server, conn, addr):
         self.channel_number = http_channel.channel_counter.increment()
-        self.request_counter = counter.counter()
+        self.request_counter = counter()
         asynchat.async_chat.__init__ (self, conn)
         self.server = server
         self.addr = addr
@@ -394,7 +409,7 @@ class http_channel (asynchat.async_chat):
     def handle_error (self):
         t, v = sys.exc_info()[:2]
         if t is SystemExit:
-            raise t(v)
+            raise t, v
         else:
             asynchat.async_chat.handle_error (self)
 
@@ -538,11 +553,11 @@ class http_server (asyncore.dispatcher):
             self.server_name = ip       # use the IP address as the "hostname"
 
         self.server_port = port
-        self.total_clients = counter.counter()
-        self.total_requests = counter.counter()
-        self.exceptions = counter.counter()
-        self.bytes_out = counter.counter()
-        self.bytes_in  = counter.counter()
+        self.total_clients = counter()
+        self.total_requests = counter()
+        self.exceptions = counter()
+        self.bytes_out = counter()
+        self.bytes_in  = counter()
 
         if not logger_object:
             logger_object = logger.file_logger (sys.stdout)
@@ -613,7 +628,7 @@ class http_server (asyncore.dispatcher):
         handler_stats = filter (None, map (maybe_status, self.handlers))
 
         if self.total_clients:
-            ratio = self.total_requests.as_int() / float(self.total_clients.as_int())
+            ratio = self.total_requests.as_long() / float(self.total_clients.as_long())
         else:
             ratio = 0.0
 
@@ -626,8 +641,8 @@ class http_server (asyncore.dispatcher):
                  '<li>Total <b>Clients:</b> %s'            % self.total_clients,
                  '<b>Requests:</b> %s'                    % self.total_requests,
                  '<b>Requests/Client:</b> %.1f'            % (ratio),
-                 '<li>Total <b>Bytes In:</b> %s'    % (nice_bytes (self.bytes_in.as_int())),
-                 '<b>Bytes Out:</b> %s'                % (nice_bytes (self.bytes_out.as_int())),
+                 '<li>Total <b>Bytes In:</b> %s'    % (nice_bytes (self.bytes_in.as_long())),
+                 '<b>Bytes Out:</b> %s'                % (nice_bytes (self.bytes_out.as_long())),
                  '<li>Total <b>Exceptions:</b> %s'        % self.exceptions,
                  '</ul><p>'
                  '<b>Extension List</b><ul>',
@@ -731,7 +746,7 @@ tz_for_log = compute_timezone_for_log()
 if __name__ == '__main__':
     import sys
     if len(sys.argv) < 2:
-        print('usage: %s <root> <port>' % (sys.argv[0]))
+        print 'usage: %s <root> <port>' % (sys.argv[0])
     else:
         import monitor
         import filesys

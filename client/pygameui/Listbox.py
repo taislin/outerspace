@@ -23,34 +23,34 @@ import types
 
 import pygame
 
-from . import Const
-from . import Widget
-from . import MetaWidget
-from . import Scrollbar
-from . import Entry
-from . import Button
+import Const
+from Widget import registerWidget
+from MetaWidget import MetaWidget
+from Scrollbar import Scrollbar
+from Entry import Entry
+from Button import Button
 
-class Listbox(MetaWidget.MetaWidget):
+class Listbox(MetaWidget):
 
     def __init__(self, parent, **kwargs):
-        MetaWidget.MetaWidget.__init__(self, parent)
+        MetaWidget.__init__(self, parent)
         # data
-        setattr(self,"items",[])
-        setattr(self,"labels",[])
-        setattr(self,"action",None)
-        setattr(self,"rmbAction",None)
-        setattr(self,"hoverAction",None)
-        setattr(self,"multiselection",0)
-        setattr(self,"selection",[])
-        setattr(self,"highlight",None)
-        setattr(self,"columns",[('Item', 'text', 0, Const.ALIGN_W)])
-        setattr(self,"columnLabels",0)
-        setattr(self,"scrollBar",1)
-        setattr(self,"sortedBy",(None, 1))
-        setattr(self,"sortable",1)
-        setattr(self,"_labels",[])
-        setattr(self,"_buttons",[])
-        setattr(self,"_entries",[])
+        self.__dict__["items"] = []
+        self.__dict__["labels"] = []
+        self.__dict__["action"] = None
+        self.__dict__["rmbAction"] = None
+        self.__dict__["hoverAction"] = None
+        self.__dict__["multiselection"] = 0
+        self.__dict__["selection"] = []
+        self.__dict__["highlight"] = None
+        self.__dict__["columns"] = [('Item', 'text', 0, Const.ALIGN_W)]
+        self.__dict__["columnLabels"] = 0
+        self.__dict__["scrollBar"] = 1
+        self.__dict__["sortedBy"] = (None, 1)
+        self.__dict__["sortable"] = 1
+        self.__dict__["_labels"] = []
+        self.__dict__["_buttons"] = []
+        self.__dict__["_entries"] = []
         # flags
         self.processKWArguments(kwargs)
         parent.registerWidget(self)
@@ -69,7 +69,7 @@ class Listbox(MetaWidget.MetaWidget):
             label = Button(self, action = 'onSortByColumn')
             label.subscribeAction('*', self)
             self._buttons.append(label)
-            for i in range(0, rows):
+            for i in xrange(0, rows):
                 label = Button(self, action = 'onItemSelect', rmbAction = "onRmbItemSelect", hoverAction = "onItemHighlight", style = "listitem", toggle = 1)
                 label.subscribeAction('*', self)
                 self._labels.append(label)
@@ -104,7 +104,7 @@ class Listbox(MetaWidget.MetaWidget):
                 x += width * gx
                 remains -= width
             startRow = 1
-        for row in range(startRow, rows):
+        for row in xrange(startRow, rows):
             rowLabels = []
             y = row * gy
             x = 0
@@ -209,11 +209,11 @@ class Listbox(MetaWidget.MetaWidget):
         value = widget.text
         t = type(getattr(widget.data, widget._listboxColumn))
         try:
-            if t == IntType: value = int(value)
-            elif t == FloatType: value = float(value)
-            elif t == type(str): value = str(value)
-            elif t == type(str): pass
-            elif t == LongType: value = int(value)
+            if t == types.IntType: value = int(value)
+            elif t == types.FloatType: value = float(value)
+            elif t == types.StringType: value = str(value)
+            elif t == types.UnicodeType: pass
+            elif t == types.LongType: value = long(value)
             else:
                 self._setListIndex(widget.data.index, widget.data)
                 return
@@ -283,7 +283,7 @@ class Listbox(MetaWidget.MetaWidget):
         pos = int(self.bar.slider.position)
         if pos >= len(self.items) - len(self.labels): pos = max(0, len(self.items) - len(self.labels))
         # clear selection without triggering widget update
-        setattr(self,'selection',[])
+        self.__dict__['selection'] = []
         for item in self.items:
             item.index = None
             # reconstruct selection
@@ -370,4 +370,4 @@ class Listbox(MetaWidget.MetaWidget):
     def drawMetaWidget(self, surface):
         return self.theme.drawListbox(surface, self)
 
-Widget.registerWidget(Listbox, 'listbox')
+registerWidget(Listbox, 'listbox')

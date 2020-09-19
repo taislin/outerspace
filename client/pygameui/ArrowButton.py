@@ -18,14 +18,14 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-from . import Const
-from . import Widget
-from . import Button
+import Const
+from Widget import registerWidget
+from Button import Button
 
-class ArrowButton(Button.Button):
+class ArrowButton(Button):
 
     def __init__(self, parent, **kwargs):
-        Button.Button.__init__(self, parent)
+        Button.__init__(self, parent)
         # data
         self.direction = Const.ALIGN_N
         # del
@@ -33,10 +33,10 @@ class ArrowButton(Button.Button):
         del self.icons
         # flags
         self.processKWArguments(kwargs)
-        parent.Widget.registerWidget(self)
+        parent.registerWidget(self)
 
     def draw(self, surface):
         self.theme.drawArrowButton(surface, self)
         return self.rect
 
-Widget.registerWidget(ArrowButton, 'arrowbutton')
+registerWidget(ArrowButton, 'arrowbutton')

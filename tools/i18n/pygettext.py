@@ -1,4 +1,4 @@
-
+#! /usr/bin/env python2
 # -*- coding: utf-8 -*-
 # Originally written by Barry Warsaw <barry@zope.com>
 #
@@ -68,7 +68,7 @@ Options:
 
     -h
     --help
-        print(this help message and exit.)
+        Print this help message and exit.
 
     -k word
     --keyword=word
@@ -113,11 +113,11 @@ Options:
 
     -v
     --verbose
-        print(the names of the files being processed.)
+        Print the names of the files being processed.
 
     -V
     --version
-        print(the version of pygettext and exit.)
+        Print the version of pygettext and exit.
 
     -w columns
     --width=columns
@@ -197,7 +197,7 @@ def make_escapes(pass_iso8859):
     global escapes
     if pass_iso8859:
         # Allow iso-8859 characters to pass through so that e.g. 'msgid
-        # "Hï¿½he"' would result not result in 'msgid "H\366he"'.  Otherwise we
+        # "Höhe"' would result not result in 'msgid "H\366he"'.  Otherwise we
         # escape any character outside the 32..126 range.
         mod = 128
     else:
@@ -457,7 +457,7 @@ def main():
         elif opt in ('-v', '--verbose'):
             options.verbose = 1
         elif opt in ('-V', '--version'):
-            print(_('pygettext.py (xgettext for Python) %s') % __version__)
+            print _('pygettext.py (xgettext for Python) %s') % __version__
             sys.exit(0)
         elif opt in ('-w', '--width'):
             try:
@@ -501,19 +501,19 @@ def main():
     for filename in args:
         if filename == '-':
             if options.verbose:
-                print(_('Reading standard input'))
+                print _('Reading standard input')
             fp = sys.stdin
             closep = 0
         else:
             if options.verbose:
-                print(_('Working on %s') % filename)
+                print _('Working on %s') % filename
             fp = open(filename)
             closep = 1
         try:
             eater.set_filename(filename)
             try:
                 tokenize.tokenize(fp.readline, eater)
-            except tokenize.TokenError as e:
+            except tokenize.TokenError, e:
                 print >> sys.stderr, '%s: %s, line %d, column %d' % (
                     e[0], filename, e[1][0], e[1][1])
         finally:

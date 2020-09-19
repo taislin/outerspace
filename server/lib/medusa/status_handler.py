@@ -8,13 +8,16 @@ import string
 import time
 import re
 
-from . import http_server, asyncore, medusa_gif, producers, counter
+import asyncore
+import http_server
+import medusa_gif
+import producers
+from counter import counter
 
-
-START_TIME = int(time.time())
+START_TIME = long(time.time())
 
 class status_extension:
-    hit_counter = counter.counter()
+    hit_counter = counter()
 
     def __init__ (self, objects, statusdir='/status', allow_emergency_debug=0):
         self.objects = objects
@@ -58,7 +61,7 @@ class status_extension:
         path, params, query, fragment = request.split_uri()
         self.hit_counter.increment()
         if path == self.statusdir:          # and not a subdirectory
-            up_time = string.join (english_time (int(time.time()) - START_TIME))
+            up_time = string.join (english_time (long(time.time()) - START_TIME))
             request['Content-Type'] = 'text/html'
             request.push (
                 '<html>'
@@ -173,7 +176,7 @@ class status_extension:
         if not object in self.hyper_objects:
             self.hyper_objects.append (object)
 
-from . import logger
+import logger
 
 class logger_for_status (logger.tail_logger):
 

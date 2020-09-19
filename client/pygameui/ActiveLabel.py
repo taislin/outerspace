@@ -18,11 +18,11 @@
 #  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 #
 
-from . import Const
-from . import Widget
-from . import Button
+import Const
+from Widget import registerWidget
+from Button import Button
 
-class ActiveLabel(Button.Button):
+class ActiveLabel(Button):
 
     def draw(self, surface):
         if self.mouseOver:
@@ -31,4 +31,4 @@ class ActiveLabel(Button.Button):
             self.theme.drawLabel(surface, self, 0)
         return self.rect
 
-Widget.registerWidget(ActiveLabel, 'activelabel')
+registerWidget(ActiveLabel, 'activelabel')

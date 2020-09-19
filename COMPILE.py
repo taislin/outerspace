@@ -22,7 +22,7 @@ if __name__ == '__main__':
     if os.path.isfile('outerspace.zip'):
         os.remove('outerspace.zip')
     print("Compiling the game into an executable...")
-    os.system('python2 -m nuitka --mingw64 outerspace.py --standalone --follow-imports --plugin-enable=multiprocessing')
+    os.system('python2 -m nuitka --mingw64 outerspace.py --standalone --follow-imports --plugin-enable=multiprocessing --windows-icon="client\\resources\\icon48.ico"')
     print("Copying dependencies...")
     shutil.copytree('server', 'outerspace.dist\\server')
     shutil.copytree('client', 'outerspace.dist\\client')
@@ -31,7 +31,7 @@ if __name__ == '__main__':
     zipf = zipfile.ZipFile('outerspace.zip', 'w', zipfile.ZIP_DEFLATED)
     zipdir('outerspace/', zipf)
     zipf.close()
-    print("Cleaning existing temp files...")
+    print("Cleaning used temp files...")
     if os.path.isdir('outerspace.dist'):
         shutil.rmtree('outerspace.dist')
     if os.path.isdir('outerspace.build'):
